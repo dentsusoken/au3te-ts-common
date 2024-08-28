@@ -15,54 +15,39 @@
  * License.
  */
 
-import { PushedAuthReqRequest } from '../dto/PushedAuthReqRequest';
-import { PushedAuthReqResponse } from '../dto/PushedAuthReqResponse';
-import { AuthorizationIssueRequest } from '../dto/AuthorizationIssueRequest';
-import { AuthorizationIssueResponse } from '../dto/AuthorizationIssueResponse';
-import { AuthorizationRequest } from '../dto/AuthorizationRequest';
-import { AuthorizationResponse } from '../dto/AuthorizationResponse';
-import { CredentialIssuerMetadataRequest } from '../dto/CredentialIssuerMetadataRequest';
-import { CredentialIssuerMetadataResponse } from '../dto/CredentialIssuerMetadataResponse';
-import { CredentialSingleIssueRequest } from '../dto/CredentialSingleIssueRequest';
-import { CredentialSingleIssueResponse } from '../dto/CredentialSingleIssueResponse';
-import { CredentialSingleParseRequest } from '../dto/CredentialSingleParseRequest';
-import { CredentialSingleParseResponse } from '../dto/CredentialSingleParseResponse';
-import { IntrospectionRequest } from '../dto/IntrospectionRequest';
-import { IntrospectionResponse } from '../dto/IntrospectionResponse';
-import { ServiceConfigurationRequest } from '../dto/ServiceConfigurationRequest';
-import { TokenRequest } from '../dto/TokenRequest';
-import { TokenResponse } from '../dto/TokenResponse';
+import { PushedAuthReqRequest } from '../schemas/par/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../schemas/par/PushedAuthReqResponse';
 
 /**
  * Represents the Authlete API interface.
  * @interface AuthleteApi
  */
 export interface AuthleteApi {
-  /**
-   * Performs an authorization request.
-   * @param {AuthorizationRequest} request - The authorization request.
-   * @returns {Promise<AuthorizationResponse>} A promise that resolves to the authorization response.
-   */
-  authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
+  // /**
+  //  * Performs an authorization request.
+  //  * @param {AuthorizationRequest} request - The authorization request.
+  //  * @returns {Promise<AuthorizationResponse>} A promise that resolves to the authorization response.
+  //  */
+  // authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
+
+  // /**
+  //  * Issues an authorization.
+  //  * @param {AuthorizationIssueRequest} request - The authorization issue request.
+  //  * @returns {Promise<AuthorizationIssueResponse>} A promise that resolves to the authorization issue response.
+  //  */
+  // authorizationIssue(
+  //   request: AuthorizationIssueRequest
+  // ): Promise<AuthorizationIssueResponse>;
+
+  // /**
+  //  * Performs a token request.
+  //  * @param {TokenRequest} request - The token request.
+  //  * @returns {Promise<TokenResponse>} A promise that resolves to the token response.
+  //  */
+  // token(request: TokenRequest): Promise<TokenResponse>;
 
   /**
-   * Issues an authorization.
-   * @param {AuthorizationIssueRequest} request - The authorization issue request.
-   * @returns {Promise<AuthorizationIssueResponse>} A promise that resolves to the authorization issue response.
-   */
-  authorizationIssue(
-    request: AuthorizationIssueRequest
-  ): Promise<AuthorizationIssueResponse>;
-
-  /**
-   * Performs a token request.
-   * @param {TokenRequest} request - The token request.
-   * @returns {Promise<TokenResponse>} A promise that resolves to the token response.
-   */
-  token(request: TokenRequest): Promise<TokenResponse>;
-
-  /**
-   * Pushes an authorization request.
+   * Call Authlete's {@code /api/pushed_auth_req} API..
    * @param {PushedAuthReqRequest} request - The pushed authorization request.
    * @returns {Promise<PushedAuthReqResponse>} A promise that resolves to the pushed authorization request response.
    */
@@ -70,48 +55,48 @@ export interface AuthleteApi {
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse>;
 
-  /**
-   * Performs an introspection request.
-   * @param {IntrospectionRequest} request - The introspection request.
-   * @returns {Promise<IntrospectionResponse>} A promise that resolves to the introspection response.
-   */
-  introspection(request: IntrospectionRequest): Promise<IntrospectionResponse>;
+  // /**
+  //  * Performs an introspection request.
+  //  * @param {IntrospectionRequest} request - The introspection request.
+  //  * @returns {Promise<IntrospectionResponse>} A promise that resolves to the introspection response.
+  //  */
+  // introspection(request: IntrospectionRequest): Promise<IntrospectionResponse>;
 
-  /**
-   * Parses a single credential.
-   * @param {CredentialSingleParseRequest} request - The credential single parse request.
-   * @returns {Promise<CredentialSingleParseResponse>} A promise that resolves to the credential single parse response.
-   */
-  credentialSingleParse(
-    request: CredentialSingleParseRequest
-  ): Promise<CredentialSingleParseResponse>;
+  // /**
+  //  * Parses a single credential.
+  //  * @param {CredentialSingleParseRequest} request - The credential single parse request.
+  //  * @returns {Promise<CredentialSingleParseResponse>} A promise that resolves to the credential single parse response.
+  //  */
+  // credentialSingleParse(
+  //   request: CredentialSingleParseRequest
+  // ): Promise<CredentialSingleParseResponse>;
 
-  /**
-   * Issues a single credential.
-   * @param {CredentialSingleIssueRequest} request - The credential single issue request.
-   * @returns {Promise<CredentialSingleIssueResponse>} A promise that resolves to the credential single issue response.
-   */
-  credentialSingleIssue(
-    request: CredentialSingleIssueRequest
-  ): Promise<CredentialSingleIssueResponse>;
+  // /**
+  //  * Issues a single credential.
+  //  * @param {CredentialSingleIssueRequest} request - The credential single issue request.
+  //  * @returns {Promise<CredentialSingleIssueResponse>} A promise that resolves to the credential single issue response.
+  //  */
+  // credentialSingleIssue(
+  //   request: CredentialSingleIssueRequest
+  // ): Promise<CredentialSingleIssueResponse>;
 
-  /**
-   * Retrieves the service configuration.
-   * @param {ServiceConfigurationRequest} [request] - The service configuration request.
-   * @param {boolean} [pretty=false] - Whether to format the response in a pretty way.
-   * @returns {Promise<string>} A promise that resolves to the service configuration.
-   */
-  getServiceConfiguration(
-    request?: ServiceConfigurationRequest,
-    pretty?: boolean
-  ): Promise<string>;
+  // /**
+  //  * Retrieves the service configuration.
+  //  * @param {ServiceConfigurationRequest} [request] - The service configuration request.
+  //  * @param {boolean} [pretty=false] - Whether to format the response in a pretty way.
+  //  * @returns {Promise<string>} A promise that resolves to the service configuration.
+  //  */
+  // getServiceConfiguration(
+  //   request?: ServiceConfigurationRequest,
+  //   pretty?: boolean
+  // ): Promise<string>;
 
-  /**
-   * Retrieves the credential issuer metadata.
-   * @param {CredentialIssuerMetadataRequest} request - The credential issuer metadata request.
-   * @returns {Promise<CredentialIssuerMetadataResponse>} A promise that resolves to the credential issuer metadata response.
-   */
-  credentialIssuerMetadata(
-    request: CredentialIssuerMetadataRequest
-  ): Promise<CredentialIssuerMetadataResponse>;
+  // /**
+  //  * Retrieves the credential issuer metadata.
+  //  * @param {CredentialIssuerMetadataRequest} request - The credential issuer metadata request.
+  //  * @returns {Promise<CredentialIssuerMetadataResponse>} A promise that resolves to the credential issuer metadata response.
+  //  */
+  // credentialIssuerMetadata(
+  //   request: CredentialIssuerMetadataRequest
+  // ): Promise<CredentialIssuerMetadataResponse>;
 }

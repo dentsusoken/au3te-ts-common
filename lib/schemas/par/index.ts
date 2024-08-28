@@ -15,7 +15,5 @@
  * License.
  */
 
-export * from './ClientAuthMethod';
-export * from './Prompt';
-export * from './SubjectType';
-export * from './User';
+export * from './PushedAuthReqRequest';
+export * from './PushedAuthReqResponse';

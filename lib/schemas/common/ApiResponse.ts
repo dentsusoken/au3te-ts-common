@@ -15,19 +15,15 @@
  * License.
  */
 
-/**
- * Represents a response from an API.
- */
-export class ApiResponse {
-  /**
-   * The result code of the API response.
-   * @type {string | undefined}
-   */
-  resultCode?: string;
+import { z } from 'zod';
 
-  /**
-   * The result message of the API response.
-   * @type {string | undefined}
-   */
-  resultMessage?: string;
-}
+/**
+ * Zod schema for API response.
+ * @typedef {Object} ApiResponseSchema
+ * @property {string} [resultCode] - The result code of the API response.
+ * @property {string} [resultMessage] - The result message of the API response.
+ */
+export const apiResponseSchema = z.object({
+  resultCode: z.string().optional(),
+  resultMessage: z.string().optional(),
+});

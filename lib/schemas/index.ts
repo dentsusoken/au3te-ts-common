@@ -15,10 +15,4 @@
  * License.
  */
 
-import { z } from 'zod';
-
-export const serviceSchema = z.object({
-  serviceName: z.string().optional(),
-});
-
-export type Service = z.infer<typeof serviceSchema>;
+export * as par from './par';
