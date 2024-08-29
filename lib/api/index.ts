@@ -18,6 +18,7 @@
 export * from './AuthleteApi';
 export * from './AuthleteApiError';
 export * from './AuthleteApiFactory';
+export * from './ApiCall';
 export * from './HttpCall';
 export * from './PostHttpCall';
 export * from './GetHttpCall';
