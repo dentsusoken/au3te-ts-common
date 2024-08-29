@@ -16,5 +16,8 @@
  */
 
 export * from './AuthleteApi';
-export * from './AuthleteApiException';
+export * from './AuthleteApiError';
 export * from './AuthleteApiFactory';
+export * from './HttpCall';
+export * from './PostHttpCall';
+export * from './GetHttpCall';

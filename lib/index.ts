@@ -16,5 +16,4 @@
  */
 
 export * as schema from './schemas';
-export * as conf from './conf';
 export * as api from './api';

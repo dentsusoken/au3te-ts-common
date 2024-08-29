@@ -15,4 +15,26 @@
  * License.
  */
 
-export * from './AuthleteConfiguration';
+/**
+ * Represents an HTTP call that can be executed.
+ */
+export interface HttpCall {
+  /**
+   * The URL to make the HTTP request to.
+   * @type {URL}
+   */
+  url: URL;
+
+  /**
+   * The options for the HTTP request.
+   * @type {RequestInit}
+   */
+  requestInit: RequestInit;
+
+  /**
+   * Executes the HTTP call.
+   *
+   * @returns {Promise<Response>} A Promise that resolves to a Response object.
+   */
+  call(): Promise<Response>;
+}
