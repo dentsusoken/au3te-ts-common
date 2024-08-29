@@ -19,9 +19,23 @@ import { z } from 'zod';
 import { HttpCall } from './HttpCall';
 import { AuthleteApiError } from './AuthleteApiError';
 
+/**
+ * Represents an API call that can be executed.
+ * @template T - The type of the response data.
+ */
 export class ApiCall<T> {
+  /**
+   * Creates a new instance of ApiCall.
+   * @param {HttpCall} httpCall - The HttpCall instance to use for the request.
+   * @param {z.ZodType<T>} schema - The Zod schema to validate the response data against.
+   */
   constructor(private httpCall: HttpCall, private schema: z.ZodType<T>) {}
 
+  /**
+   * Executes the API call.
+   * @returns {Promise<T>} A Promise that resolves to the validated response data.
+   * @throws {AuthleteApiError} If the API call fails or the response data does not match the schema.
+   */
   async call(): Promise<T> {
     let response: Response;
 
@@ -30,6 +44,7 @@ export class ApiCall<T> {
 
       if (response.ok) {
         const json = await response.json();
+
         return this.schema.parse(json);
       }
     } catch (e: unknown) {
@@ -38,6 +53,7 @@ export class ApiCall<T> {
       }
 
       const cause = e instanceof Error ? e : new Error(String(e));
+
       throw new AuthleteApiError(
         this.httpCall.url,
         this.httpCall.requestInit,

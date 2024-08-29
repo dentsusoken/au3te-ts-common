@@ -15,6 +15,11 @@
  * License.
  */
 
+/**
+ * Stringifies a Response object for logging purposes.
+ * @param {Response} [response] - The Response object to stringify.
+ * @returns {string} The stringified Response object, or 'undefined' if response is undefined.
+ */
 const stringifyResponse = (response?: Response): string => {
   if (!response) {
     return 'undefined';
@@ -25,6 +30,14 @@ const stringifyResponse = (response?: Response): string => {
   return JSON.stringify({ status, statusText, headers }, undefined, 2);
 };
 
+/**
+ * Creates an error message for AuthleteApiError.
+ * @param {URL} url - The URL of the failed request.
+ * @param {RequestInit} requestInit - The options of the failed request.
+ * @param {Error} [cause] - The cause of the error, if any.
+ * @param {Response} [response] - The Response object of the failed request, if any.
+ * @returns {string} The error message.
+ */
 const createMessage = (
   url: URL,
   requestInit: RequestInit,
@@ -37,11 +50,22 @@ const createMessage = (
     2
   )}, cause: ${cause}, response: ${stringifyResponse(response)}`;
 
+/**
+ * Custom error class for Authlete API failures.
+ * @extends Error
+ */
 export class AuthleteApiError extends Error {
   static {
     this.prototype.name = 'AuthleteApiError';
   }
 
+  /**
+   * Creates a new instance of AuthleteApiError.
+   * @param {URL} url - The URL of the failed request.
+   * @param {RequestInit} requestInit - The options of the failed request.
+   * @param {Error} [cause] - The cause of the error, if any.
+   * @param {Response} [response] - The Response object of the failed request, if any.
+   */
   constructor(
     public url: URL,
     public requestInit: RequestInit,
@@ -49,6 +73,5 @@ export class AuthleteApiError extends Error {
     public response?: Response
   ) {
     super(createMessage(url, requestInit, cause, response));
-    console.log('AuthleteApiError response:', this.response);
   }
 }
