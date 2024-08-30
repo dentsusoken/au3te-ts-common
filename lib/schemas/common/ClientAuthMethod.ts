@@ -18,36 +18,37 @@
 import { z } from 'zod';
 
 /**
- * Zod schema for the client authentication method.
- * Accepts the following values (case-insensitive) and transforms to lowercase:
- * - 'none'
- * - 'client_secret_basic'
- * - 'client_secret_post'
- * - 'client_secret_jwt'
- * - 'private_key_jwt'
- * - 'tls_client_auth'
- * - 'self_signed_tls_client_auth'
- * - 'attest_jwt_client_auth'
+ * Array of valid client authentication methods.
+ * @readonly
+ * @type {readonly string[]}
+ */
+const clientAuthMethods = [
+  'none',
+  'client_secret_basic',
+  'client_secret_post',
+  'client_secret_jwt',
+  'private_key_jwt',
+  'tls_client_auth',
+  'self_signed_tls_client_auth',
+  'attest_jwt_client_auth',
+] as const;
+
+/**
+ * Type representing valid client authentication methods.
+ * @typedef {typeof clientAuthMethods[number]} ClientAuthMethod
+ */
+export type ClientAuthMethod = (typeof clientAuthMethods)[number];
+
+/**
+ * Zod schema for validating and transforming client authentication methods.
+ * This schema accepts a string input, transforms it to lowercase,
+ * and validates it against the list of valid client authentication methods.
+ *
+ * @type {z.ZodType<ClientAuthMethod>}
  */
 export const clientAuthMethodSchema = z
   .string()
-  .transform((v) => v.toLowerCase())
-  .pipe(
-    z.union([
-      z.literal('none'),
-      z.literal('client_secret_basic'),
-      z.literal('client_secret_post'),
-      z.literal('client_secret_jwt'),
-      z.literal('private_key_jwt'),
-      z.literal('tls_client_auth'),
-      z.literal('self_signed_tls_client_auth'),
-      z.literal('attest_jwt_client_auth'),
-    ])
-  );
-
-/**
- * Type representing the valid client authentication methods.
- * Inferred from the `clientAuthMethodSchema`.
- * @typedef {string} ClientAuthMethod
- */
-export type ClientAuthMethod = z.infer<typeof clientAuthMethodSchema>;
+  .transform((v) => v.toLowerCase() as ClientAuthMethod)
+  .refine((v): v is ClientAuthMethod => clientAuthMethods.includes(v), {
+    message: 'Invalid client authentication method',
+  }) as z.ZodType<ClientAuthMethod>;

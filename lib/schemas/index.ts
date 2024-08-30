@@ -15,4 +15,4 @@
  * License.
  */
 
-export * as par from './par';
+export * from './par';

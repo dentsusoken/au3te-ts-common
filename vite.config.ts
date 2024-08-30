@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: './lib/index.ts',
-      name: 'Au3te',
+      name: 'au3te-ts-common',
       fileName: 'index',
     },
   },

@@ -15,5 +15,5 @@
  * License.
  */
 
-export * as schema from './schemas';
-export * as api from './api';
+export * from './schemas';
+export * from './api';
