@@ -197,20 +197,26 @@ const actionSchema = z.union([
 ]);
 
 /**
- * Zod schema for a pushed authorization request response.
- * Extends the `apiResponseSchema` with additional properties.
- * @property {string} action - The action of the pushed authorization request response.
- * @property {string} [responseContent] - The optional response content.
- * @property {ClientAuthMethod} [clientAuthMethod] - The optional client authentication method.
- * @property {string} [requestUri] - The optional request URI (must be a valid URL).
- * @property {string} [dpopNonce] - The optional DPoP (Demonstration of Proof-of-Possession) nonce.
+ * Zod schema for validating the response of a pushed authorization request.
+ * This schema extends the base API response schema with additional fields specific to the pushed authorization request.
+ *
+ * @typedef {Object} PushedAuthReqResponse
+ * @property {string} action - The action to be taken. Validated by the {@link actionSchema}.
+ * @property {string|null|undefined} responseContent - The content of the response. Can be a string, null, or undefined.
+ * @property {import('../common/ClientAuthMethod').ClientAuthMethod|null|undefined} clientAuthMethod - The client authentication method.
+ *           Can be a valid ClientAuthMethod, null, or undefined. Validated by the {@link clientAuthMethodSchema}.
+ * @property {string|null|undefined} requestUri - The request URI. Must be a valid URL if present.
+ * @property {string|null|undefined} dpopNonce - The DPoP nonce. Can be a string, null, or undefined.
+ *
+ * @see {@link actionSchema} for details on the action validation.
+ * @see {@link clientAuthMethodSchema} from '../common/ClientAuthMethod' for details on the client authentication method validation.
  */
 export const pushedAuthReqResponseSchema = apiResponseSchema.extend({
   action: actionSchema,
-  responseContent: z.string().optional(),
-  clientAuthMethod: z.optional(clientAuthMethodSchema),
-  requestUri: z.string().url().optional(),
-  dpopNonce: z.string().optional(),
+  responseContent: z.string().nullish(),
+  clientAuthMethod: z.optional(clientAuthMethodSchema).nullable(),
+  requestUri: z.string().url().nullish(),
+  dpopNonce: z.string().nullish(),
 });
 
 /**

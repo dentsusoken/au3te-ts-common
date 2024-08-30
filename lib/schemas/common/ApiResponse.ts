@@ -24,6 +24,6 @@ import { z } from 'zod';
  * @property {string} [resultMessage] - The result message of the API response.
  */
 export const apiResponseSchema = z.object({
-  resultCode: z.string().optional(),
-  resultMessage: z.string().optional(),
+  resultCode: z.string().nullish(),
+  resultMessage: z.string().nullish(),
 });
