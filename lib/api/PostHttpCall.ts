@@ -16,6 +16,7 @@
  */
 
 import { HttpCall } from './HttpCall';
+import { APPLICATION_JSON_UTF8_CONTENT_TYPE } from '../utils/contentType';
 
 /**
  * Represents a POST HTTP call.
@@ -51,7 +52,7 @@ export class PostHttpCall implements HttpCall {
     this.requestInit = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': APPLICATION_JSON_UTF8_CONTENT_TYPE,
         Authorization: this.auth,
       },
       body: JSON.stringify(this.request),

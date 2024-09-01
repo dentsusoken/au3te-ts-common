@@ -15,8 +15,17 @@
  * License.
  */
 
-export * from './schemas';
-export * from './api';
-export * from './utils';
-export * from './conf';
-export * from './extractor';
+type CertificateAndPath = {
+  clientCertificate: string | undefined;
+  clientCertificatePath: string[] | undefined;
+};
+
+export const extractClientCertificateAndPathFromChain = (
+  chain: string[] | undefined
+): CertificateAndPath => {
+  if (!chain || chain.length === 0) {
+    return { clientCertificate: undefined, clientCertificatePath: undefined };
+  }
+
+  return { clientCertificate: chain[0], clientCertificatePath: chain.slice(1) };
+};

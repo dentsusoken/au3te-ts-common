@@ -15,8 +15,26 @@
  * License.
  */
 
-export * from './schemas';
-export * from './api';
-export * from './utils';
-export * from './conf';
-export * from './extractor';
+import { parseBasicCredentials } from '../utils/basicCredentials';
+
+type ClientCredentials = {
+  clientId: string | undefined;
+  clientSecret: string | undefined;
+};
+
+const emptyClientCredentials: ClientCredentials = {
+  clientId: undefined,
+  clientSecret: undefined,
+};
+
+export const extractClientCredentialsFromAuthHeader = (
+  authorization: string | undefined
+): ClientCredentials => {
+  if (!authorization) {
+    return { ...emptyClientCredentials };
+  }
+
+  const { userId, password } = parseBasicCredentials(authorization);
+
+  return { clientId: userId, clientSecret: password };
+};
