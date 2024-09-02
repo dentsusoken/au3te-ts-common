@@ -57,7 +57,7 @@ export const MediaType = {
 /**
  * Type representing all possible media types.
  */
-export type MediaTypeString = (typeof MediaType)[keyof typeof MediaType];
+export type MediaType = (typeof MediaType)[keyof typeof MediaType];
 
 /**
  * Compares two media types for equality.
