@@ -16,7 +16,7 @@
  */
 
 import { HttpCall } from './HttpCall';
-import { APPLICATION_JSON_UTF8_CONTENT_TYPE } from '../utils/contentType';
+import { MediaType } from '../utils/mediaType';
 
 /**
  * Represents a GET HTTP call.
@@ -59,7 +59,7 @@ export class GetHttpCall implements HttpCall {
     this.requestInit = {
       method: 'GET',
       headers: {
-        'Content-Type': APPLICATION_JSON_UTF8_CONTENT_TYPE,
+        'Content-Type': MediaType.APPLICATION_JSON_UTF8,
         Authorization: this.auth,
       },
     };

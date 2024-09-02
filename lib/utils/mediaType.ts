@@ -16,35 +16,48 @@
  */
 
 /**
- * Standard media type for JSON content.
+ * Media types (MIME types) for HTTP content.
+ *
+ * This object contains constants for commonly used media types in HTTP communications.
+ * These types are used in Content-Type headers and for content negotiation.
+ *
+ * @see https://www.iana.org/assignments/media-types/media-types.xhtml
  */
-export const APPLICATION_JSON_MEDIA_TYPE = 'application/json';
+export const MediaType = {
+  /** Media type for JSON data */
+  APPLICATION_JSON: 'application/json',
+  /** Media type for JSON data with UTF-8 encoding */
+  APPLICATION_JSON_UTF8: 'application/json;charset=utf-8',
+  /** Media type for URL-encoded form data */
+  APPLICATION_FORM_URLENCODED: 'application/x-www-form-urlencoded',
+  /** Media type for HTML content */
+  TEXT_HTML: 'text/html',
+  /** Media type for plain text content */
+  TEXT_PLAIN: 'text/plain',
+  /** Media type for plain text content  with UTF-8 encoding */
+  TEXT_PLAIN_UTF8: 'text/plain;charset=utf-8',
+  /** Media type for XML data */
+  APPLICATION_XML: 'application/xml',
+  /** Media type for binary data */
+  APPLICATION_OCTET_STREAM: 'application/octet-stream',
+  /** Media type for PDF documents */
+  APPLICATION_PDF: 'application/pdf',
+  /** Media type for JPEG images */
+  IMAGE_JPEG: 'image/jpeg',
+  /** Media type for PNG images */
+  IMAGE_PNG: 'image/png',
+  /** Media type for SVG images */
+  IMAGE_SVG: 'image/svg+xml',
+  /** Media type for CSS stylesheets */
+  TEXT_CSS: 'text/css',
+  /** Media type for JavaScript code */
+  APPLICATION_JAVASCRIPT: 'application/javascript',
+} as const;
 
 /**
- * Content type for JSON with UTF-8 encoding.
+ * Type representing all possible media types.
  */
-export const APPLICATION_JSON_UTF8_CONTENT_TYPE = `${APPLICATION_JSON_MEDIA_TYPE};charset=utf-8`;
-
-/**
- * Media type for URL-encoded form data.
- */
-export const APPLICATION_FORM_URLENCODED_MEDIA_TYPE =
-  'application/x-www-form-urlencoded';
-
-/**
- * Media type for HTML content.
- */
-export const TEXT_HTML_MEDIA_TYPE = 'text/html';
-
-/**
- * Media type for plain text content.
- */
-export const TEXT_PLAIN_MEDIA_TYPE = 'text/plain';
-
-/**
- * Media type for JWT (JSON Web Token) content.
- */
-export const APPLICATION_JWT_MEDIA_TYPE = 'application/jwt';
+export type MediaTypeString = (typeof MediaType)[keyof typeof MediaType];
 
 /**
  * Compares two media types for equality.
@@ -80,7 +93,7 @@ export const isMediaTypeEqual = (
  * @returns {boolean} True if the type is JSON, false otherwise.
  */
 export const isJsonType = (type: string | undefined) =>
-  isMediaTypeEqual(APPLICATION_JSON_MEDIA_TYPE, type);
+  isMediaTypeEqual(MediaType.APPLICATION_JSON, type);
 
 /**
  * Checks if the given media type is URL-encoded form data.
@@ -89,4 +102,4 @@ export const isJsonType = (type: string | undefined) =>
  * @returns {boolean} True if the type is URL-encoded form data, false otherwise.
  */
 export const isFormUrlEncodedType = (type: string | undefined) =>
-  isMediaTypeEqual(APPLICATION_FORM_URLENCODED_MEDIA_TYPE, type);
+  isMediaTypeEqual(MediaType.APPLICATION_FORM_URLENCODED, type);

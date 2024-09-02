@@ -15,5 +15,6 @@
  * License.
  */
 
-export * from './contentType';
+export * from './mediaType';
 export * from './urlUtils';
+export * from './httpStatus';
