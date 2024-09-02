@@ -17,7 +17,7 @@
 
 import { z } from 'zod';
 import { HttpCall } from './HttpCall';
-import { AuthleteApiError } from './AuthleteApiError';
+import { ResponseError } from './ResponseError';
 
 /**
  * Represents an API call that can be executed.
@@ -31,41 +31,19 @@ export class ApiCall<T> {
    */
   constructor(private httpCall: HttpCall, private schema: z.ZodType<T>) {}
 
-  /**
-   * Executes the API call.
-   * @returns {Promise<T>} A Promise that resolves to the validated response data.
-   * @throws {AuthleteApiError} If the API call fails or the response data does not match the schema.
-   */
   async call(): Promise<T> {
-    let response: Response;
+    const response = await this.httpCall.call();
 
-    try {
-      response = await this.httpCall.call();
-
-      if (response.ok) {
-        const json = await response.json();
-
-        return this.schema.parse(json);
-      }
-    } catch (e: unknown) {
-      if (e instanceof AuthleteApiError) {
-        throw e;
+    if (response.ok) {
+      if (response.status === 204) {
+        return this.schema.parse({});
       }
 
-      const cause = e instanceof Error ? e : new Error(String(e));
+      const json = await response.json();
 
-      throw new AuthleteApiError(
-        this.httpCall.url,
-        this.httpCall.requestInit,
-        cause
-      );
+      return this.schema.parse(json);
     }
 
-    throw new AuthleteApiError(
-      this.httpCall.url,
-      this.httpCall.requestInit,
-      undefined,
-      response
-    );
+    throw new ResponseError(response);
   }
 }

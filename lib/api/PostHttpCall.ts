@@ -24,18 +24,6 @@ import { MediaType } from '../utils/mediaType';
  */
 export class PostHttpCall implements HttpCall {
   /**
-   * The URL to make the HTTP request to.
-   * @type {URL}
-   */
-  url: URL;
-
-  /**
-   * The options for the HTTP request.
-   * @type {RequestInit}
-   */
-  requestInit: RequestInit;
-
-  /**
    * Creates a new instance of PostHttpCall.
    * @param {string} baseUrl - The base URL for the request.
    * @param {string} path - The path to append to the base URL.
@@ -47,9 +35,15 @@ export class PostHttpCall implements HttpCall {
     protected path: string,
     protected auth: string,
     protected request: object
-  ) {
-    this.url = new URL(`${this.baseUrl}${this.path}`);
-    this.requestInit = {
+  ) {}
+
+  /**
+   * Executes the HTTP POST request.
+   * @returns {Promise<Response>} A Promise that resolves to the Response object.
+   */
+  async call(): Promise<Response> {
+    const url = new URL(`${this.baseUrl}${this.path}`);
+    const requestInit = {
       method: 'POST',
       headers: {
         'Content-Type': MediaType.APPLICATION_JSON_UTF8,
@@ -57,13 +51,7 @@ export class PostHttpCall implements HttpCall {
       },
       body: JSON.stringify(this.request),
     };
-  }
 
-  /**
-   * Executes the HTTP POST request.
-   * @returns {Promise<Response>} A Promise that resolves to the Response object.
-   */
-  async call(): Promise<Response> {
-    return fetch(this.url, this.requestInit);
+    return fetch(url, requestInit);
   }
 }

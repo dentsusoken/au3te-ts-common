@@ -1,41 +1,91 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MediaType } from '../utils';
 import { GetHttpCall } from './GetHttpCall';
 
 describe('GetHttpCall', () => {
   const baseUrl = 'https://api.example.com';
-  const path = '/data';
-  const auth = 'Bearer token';
-  const request = { key1: 'value1', key2: { nested: 'value' } };
+  const path = '/users';
+  const auth = 'Bearer token123';
+  const request = { id: 1, filter: 'active' };
 
-  it('should create a valid URL with search params', () => {
-    const getHttpCall = new GetHttpCall(baseUrl, path, auth, request);
-    expect(getHttpCall.url.href).toEqual(
-      'https://api.example.com/data?key1=value1&key2=%7B%22nested%22%3A%22value%22%7D'
-    );
+  let getHttpCall: GetHttpCall;
+
+  const fetch = vi.fn();
+  global.fetch = fetch;
+
+  beforeEach(() => {
+    getHttpCall = new GetHttpCall(baseUrl, path, auth, request);
+    vi.resetAllMocks();
   });
 
-  it('should have the correct request options', () => {
-    const getHttpCall = new GetHttpCall(baseUrl, path, auth, request);
-    expect(getHttpCall.requestInit).toEqual({
+  it('should construct with correct parameters', () => {
+    expect(getHttpCall['baseUrl']).toBe(baseUrl);
+    expect(getHttpCall['path']).toBe(path);
+    expect(getHttpCall['auth']).toBe(auth);
+    expect(getHttpCall['request']).toEqual(request);
+  });
+
+  it('should call fetch with correct URL and options', async () => {
+    const mockResponse = new Response(JSON.stringify({ data: 'success' }), {
+      status: 200,
+    });
+    fetch.mockResolvedValue(mockResponse);
+
+    await getHttpCall.call();
+
+    const expectedUrl = new URL(`${baseUrl}${path}`);
+    expectedUrl.searchParams.append('id', '1');
+    expectedUrl.searchParams.append('filter', 'active');
+
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': MediaType.APPLICATION_JSON_UTF8,
         Authorization: auth,
       },
     });
   });
 
-  it('should execute the HTTP GET request', async () => {
-    const mockResponse = new Response('{"data": "test"}');
-    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+  it('should handle complex request parameters', async () => {
+    const complexRequest = {
+      simple: 'value',
+      array: [1, 2, 3],
+      object: { key: 'value' },
+    };
+    getHttpCall = new GetHttpCall(baseUrl, path, auth, complexRequest);
 
-    const getHttpCall = new GetHttpCall(baseUrl, path, auth, request);
+    const mockResponse = new Response(JSON.stringify({ data: 'success' }), {
+      status: 200,
+    });
+    fetch.mockResolvedValue(mockResponse);
+
+    await getHttpCall.call();
+
+    const expectedUrl = new URL(`${baseUrl}${path}`);
+    expectedUrl.searchParams.append('simple', 'value');
+    expectedUrl.searchParams.append('array', JSON.stringify([1, 2, 3]));
+    expectedUrl.searchParams.append('object', JSON.stringify({ key: 'value' }));
+
+    expect(fetch).toHaveBeenCalledWith(expectedUrl, expect.any(Object));
+  });
+
+  it('should return the Response from fetch', async () => {
+    const mockResponse = new Response(JSON.stringify({ data: 'success' }), {
+      status: 200,
+    });
+    fetch.mockResolvedValue(mockResponse);
+
     const response = await getHttpCall.call();
 
-    expect(global.fetch).toHaveBeenCalledWith(
-      getHttpCall.url,
-      getHttpCall.requestInit
-    );
-    expect(response).toEqual(mockResponse);
+    expect(response).toBe(mockResponse);
+    expect(await response.json()).toEqual({ data: 'success' });
+    expect(response.status).toBe(200);
+  });
+
+  it('should throw an error if fetch fails', async () => {
+    const errorMessage = 'Network error';
+    fetch.mockRejectedValue(new Error(errorMessage));
+
+    await expect(getHttpCall.call()).rejects.toThrow(errorMessage);
   });
 });

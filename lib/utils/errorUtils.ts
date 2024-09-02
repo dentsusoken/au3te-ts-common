@@ -15,14 +15,5 @@
  * License.
  */
 
-/**
- * Represents an HTTP call that can be executed.
- */
-export interface HttpCall {
-  /**
-   * Executes the HTTP call.
-   *
-   * @returns {Promise<Response>} A Promise that resolves to a Response object.
-   */
-  call(): Promise<Response>;
-}
+export const getErrorMessage = (e: unknown): string =>
+  e instanceof Error ? e.message : String(e);

@@ -2,15 +2,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { z } from 'zod';
 import { ApiCall } from './ApiCall';
 import { HttpCall } from './HttpCall';
-import { AuthleteApiError } from './AuthleteApiError';
+import { ResponseError } from './ResponseError';
 
 describe('ApiCall', () => {
   const call = vi.fn();
   const httpCall: HttpCall = {
-    url: new URL('https://api.example.com/endpoint'),
-    requestInit: {
-      method: 'GET',
-    },
     call,
   };
 
@@ -35,50 +31,70 @@ describe('ApiCall', () => {
     expect(result).toEqual(data);
   });
 
-  it('should throw AuthleteApiError with response on non-2xx status', async () => {
-    const response = new Response('Not Found', { status: 404 });
+  it('should throw ResponseError on non-ok status', async () => {
+    const response = new Response(undefined, {
+      status: 404,
+      statusText: 'Not Found',
+    });
     call.mockResolvedValueOnce(response);
 
+    try {
+      const apiCall = new ApiCall(httpCall, schema);
+      await apiCall.call();
+      expect.fail('error');
+    } catch (e) {
+      if (e instanceof Error) {
+        expect(e).instanceof(ResponseError);
+        expect(e.message).toBe(
+          'Response Error: {\n  "status": 404,\n  "statusText": "Not Found"\n}'
+        );
+      } else {
+        expect.fail('Expected error to be an instance of Error');
+      }
+    }
+
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+
+  it('should propagate error on httpCall.call failure', async () => {
+    const networkError = new Error('Network error');
+    call.mockRejectedValueOnce(networkError);
+
     const apiCall = new ApiCall(httpCall, schema);
 
     try {
       await apiCall.call();
+      expect.fail('Expected ApiCall to throw an error, but it did not');
     } catch (error) {
-      expect(error).toBeInstanceOf(AuthleteApiError);
-      expect((error as AuthleteApiError).response).toBe(response);
-      expect((error as AuthleteApiError).cause).toBeUndefined();
+      if (error instanceof Error) {
+        expect(error).toBe(networkError);
+        expect(error.message).toBe('Network error');
+      } else {
+        expect.fail('Expected error to be an instance of Error');
+      }
     }
+
+    expect(call).toHaveBeenCalledTimes(1);
   });
 
-  it('should throw AuthleteApiError with cause on httpCall.call failure', async () => {
-    const cause = new Error('Network error');
-    call.mockRejectedValueOnce(cause);
-
-    const apiCall = new ApiCall(httpCall, schema);
-
-    try {
-      await apiCall.call();
-    } catch (error) {
-      expect(error).toBeInstanceOf(AuthleteApiError);
-      expect((error as AuthleteApiError).cause).toBe(cause);
-      expect((error as AuthleteApiError).response).toBeUndefined();
-    }
-  });
-
-  it('should throw AuthleteApiError with cause on schema parse failure', async () => {
+  it('should throw ZodError on schema parse failure', async () => {
     const data = { id: '1', name: 'John' }; // id is string, not number
     const response = new Response(JSON.stringify(data), { status: 200 });
     call.mockResolvedValueOnce(response);
 
     const apiCall = new ApiCall(httpCall, schema);
 
-    try {
-      await apiCall.call();
-      expect.fail();
-    } catch (error) {
-      expect(error).toBeInstanceOf(AuthleteApiError);
-      expect((error as AuthleteApiError).cause).toBeInstanceOf(z.ZodError);
-      expect((error as AuthleteApiError).response).toBeUndefined();
-    }
+    await expect(apiCall.call()).rejects.toThrow(z.ZodError);
+  });
+
+  it('should handle empty response bodies', async () => {
+    const response = new Response(undefined, { status: 204 });
+    call.mockResolvedValueOnce(response);
+
+    const emptySchema = z.object({});
+    const apiCall = new ApiCall(httpCall, emptySchema);
+
+    const result = await apiCall.call();
+    expect(result).toEqual({});
   });
 });

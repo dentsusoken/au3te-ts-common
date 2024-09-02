@@ -1,40 +1,65 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MediaType } from '../utils';
 import { PostHttpCall } from './PostHttpCall';
 
 describe('PostHttpCall', () => {
   const baseUrl = 'https://api.example.com';
-  const path = '/data';
-  const auth = 'Bearer token';
-  const request = { key: 'value' };
+  const path = '/users';
+  const auth = 'Bearer token123';
+  const request = { name: 'John Doe', email: 'john@example.com' };
 
-  it('should create the correct URL', () => {
-    const postHttpCall = new PostHttpCall(baseUrl, path, auth, request);
-    expect(postHttpCall.url.href).toEqual('https://api.example.com/data');
+  let postHttpCall: PostHttpCall;
+
+  const fetch = vi.fn();
+  global.fetch = fetch;
+
+  beforeEach(() => {
+    postHttpCall = new PostHttpCall(baseUrl, path, auth, request);
+    vi.resetAllMocks();
   });
 
-  it('should have the correct request options', () => {
-    const postHttpCall = new PostHttpCall(baseUrl, path, auth, request);
-    expect(postHttpCall.requestInit).toEqual({
+  it('should construct with correct parameters', () => {
+    expect(postHttpCall['baseUrl']).toBe(baseUrl);
+    expect(postHttpCall['path']).toBe(path);
+    expect(postHttpCall['auth']).toBe(auth);
+    expect(postHttpCall['request']).toEqual(request);
+  });
+
+  it('should call fetch with correct URL and options', async () => {
+    const mockResponse = new Response(JSON.stringify({ id: 1 }), {
+      status: 201,
+    });
+    fetch.mockResolvedValue(mockResponse);
+
+    await postHttpCall.call();
+
+    expect(fetch).toHaveBeenCalledWith(new URL(`${baseUrl}${path}`), {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': MediaType.APPLICATION_JSON_UTF8,
         Authorization: auth,
       },
       body: JSON.stringify(request),
     });
   });
 
-  it('should execute the HTTP POST request', async () => {
-    const mockResponse = new Response('{"data": "test"}');
-    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+  it('should return the Response from fetch', async () => {
+    const mockResponse = new Response(JSON.stringify({ id: 1 }), {
+      status: 201,
+    });
+    fetch.mockResolvedValue(mockResponse);
 
-    const postHttpCall = new PostHttpCall(baseUrl, path, auth, request);
     const response = await postHttpCall.call();
 
-    expect(global.fetch).toHaveBeenCalledWith(
-      postHttpCall.url,
-      postHttpCall.requestInit
-    );
-    expect(response).toEqual(mockResponse);
+    expect(response).toBe(mockResponse);
+    expect(await response.json()).toEqual({ id: 1 });
+    expect(response.status).toBe(201);
+  });
+
+  it('should throw an error if fetch fails', async () => {
+    const errorMessage = 'Network error';
+    fetch.mockRejectedValue(new Error(errorMessage));
+
+    await expect(postHttpCall.call()).rejects.toThrow(errorMessage);
   });
 });
