@@ -20,6 +20,17 @@
  */
 export interface HttpCall {
   /**
+   * The Request object representing the HTTP request to be made.
+   *
+   * This property contains all the necessary information for the HTTP request,
+   * including the URL, method, headers, and body (if applicable).
+   *
+   * @type {Request}
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Request
+   */
+  request: Request;
+
+  /**
    * Executes the HTTP call.
    *
    * @returns {Promise<Response>} A Promise that resolves to a Response object.

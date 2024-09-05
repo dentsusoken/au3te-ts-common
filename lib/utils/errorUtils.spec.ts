@@ -1,55 +1,75 @@
 import { describe, it, expect } from 'vitest';
 import { getErrorMessage } from './errorUtils';
 
-describe('getErrorMessage', () => {
-  it('should return the message when input is an Error object', () => {
-    const error = new Error('Test error message');
-    expect(getErrorMessage(error)).toBe('Test error message');
-  });
+describe('errorUtils', () => {
+  describe('getErrorMessage', () => {
+    it('should return the message of an Error object', () => {
+      const error = new Error('Test error message');
+      expect(getErrorMessage(error)).toBe('Test error message');
+    });
 
-  it('should return the message for custom Error objects', () => {
-    class CustomError extends Error {
-      constructor(message: string) {
-        super(message);
-        this.name = 'CustomError';
+    it('should return the string itself for string input', () => {
+      expect(getErrorMessage('Test string')).toBe('Test string');
+    });
+
+    it('should handle null', () => {
+      expect(getErrorMessage(null)).toBe('null');
+    });
+
+    it('should handle undefined', () => {
+      console.log(JSON.stringify(undefined));
+      expect(getErrorMessage(undefined)).toBe('undefined');
+    });
+
+    it('should handle numbers', () => {
+      expect(getErrorMessage(42)).toBe('42');
+      expect(getErrorMessage(0)).toBe('0');
+      expect(getErrorMessage(NaN)).toBe('null');
+    });
+
+    it('should handle booleans', () => {
+      expect(getErrorMessage(true)).toBe('true');
+      expect(getErrorMessage(false)).toBe('false');
+    });
+
+    it('should handle objects without toString method', () => {
+      const obj = { key: 'value' };
+      expect(getErrorMessage(obj)).toBe('{"key":"value"}');
+    });
+
+    it('should handle arrays', () => {
+      expect(getErrorMessage([1, 2, 3])).toBe('[1,2,3]');
+      expect(getErrorMessage([])).toBe('[]');
+    });
+
+    it('should handle custom error classes', () => {
+      class CustomError extends Error {
+        constructor(message: string) {
+          super(message);
+          this.name = 'CustomError';
+        }
       }
-    }
-    const customError = new CustomError('Custom error message');
-    expect(getErrorMessage(customError)).toBe('Custom error message');
-  });
+      const customError = new CustomError('Custom error message');
+      expect(getErrorMessage(customError)).toBe('Custom error message');
+    });
 
-  it('should convert string to string', () => {
-    const errorMessage = 'This is an error message';
-    expect(getErrorMessage(errorMessage)).toBe(errorMessage);
-  });
+    it('should handle complex objects', () => {
+      const complexObj = {
+        a: 1,
+        b: 'string',
+        c: { nested: true },
+        d: [1, 2, 3],
+      };
+      expect(getErrorMessage(complexObj)).toBe(
+        '{"a":1,"b":"string","c":{"nested":true},"d":[1,2,3]}'
+      );
+    });
 
-  it('should convert number to string', () => {
-    const numberError = 404;
-    expect(getErrorMessage(numberError)).toBe('404');
-  });
-
-  it('should convert boolean to string', () => {
-    expect(getErrorMessage(true)).toBe('true');
-    expect(getErrorMessage(false)).toBe('false');
-  });
-
-  it('should convert null to string', () => {
-    expect(getErrorMessage(null)).toBe('null');
-  });
-
-  it('should convert undefined to string', () => {
-    expect(getErrorMessage(undefined)).toBe('undefined');
-  });
-
-  it('should convert object to string', () => {
-    const obj = { key: 'value' };
-    expect(getErrorMessage(obj)).toBe('[object Object]');
-  });
-
-  it('should handle objects with custom toString method', () => {
-    const customObj = {
-      toString: () => 'Custom object string',
-    };
-    expect(getErrorMessage(customObj)).toBe('Custom object string');
+    it('should handle objects with circular references', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const circularObj: any = { a: 1 };
+      circularObj.self = circularObj;
+      expect(() => getErrorMessage(circularObj)).toThrow();
+    });
   });
 });

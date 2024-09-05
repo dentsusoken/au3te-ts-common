@@ -44,6 +44,6 @@ export class ApiCall<T> {
       return this.schema.parse(json);
     }
 
-    throw new ResponseError(response);
+    throw new ResponseError(response, this.httpCall.request);
   }
 }

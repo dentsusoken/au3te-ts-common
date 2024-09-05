@@ -7,6 +7,7 @@ import { ResponseError } from './ResponseError';
 describe('ApiCall', () => {
   const call = vi.fn();
   const httpCall: HttpCall = {
+    request: new Request('https://example.com'),
     call,
   };
 
@@ -43,11 +44,12 @@ describe('ApiCall', () => {
       await apiCall.call();
       expect.fail('error');
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof ResponseError) {
         expect(e).instanceof(ResponseError);
         expect(e.message).toBe(
-          'Response Error: {\n  "status": 404,\n  "statusText": "Not Found"\n}'
+          'ResponseError: {\n  "status": 404,\n  "statusText": "Not Found"\n}'
         );
+        expect(e.request).toBe(httpCall.request);
       } else {
         expect.fail('Expected error to be an instance of Error');
       }
@@ -91,7 +93,9 @@ describe('ApiCall', () => {
     const response = new Response(undefined, { status: 204 });
     call.mockResolvedValueOnce(response);
 
-    const emptySchema = z.object({});
+    const emptySchema = z.object({
+      id: z.number().optional(),
+    });
     const apiCall = new ApiCall(httpCall, emptySchema);
 
     const result = await apiCall.call();

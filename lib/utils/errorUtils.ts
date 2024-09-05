@@ -15,5 +15,22 @@
  * License.
  */
 
-export const getErrorMessage = (e: unknown): string =>
-  e instanceof Error ? e.message : String(e);
+export const getErrorMessage = (e: unknown): string => {
+  if (e === undefined) {
+    return 'undefined';
+  }
+
+  if (e === null) {
+    return 'null';
+  }
+
+  if (e instanceof Error) {
+    return e.message;
+  }
+
+  if (typeof e === 'string') {
+    return e;
+  }
+
+  return JSON.stringify(e);
+};

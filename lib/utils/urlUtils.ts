@@ -38,10 +38,10 @@ const toString = (value: unknown): string =>
  * const queryString = jsonToQueryString(json);
  * console.log(queryString); // Output: "name=John&age=30&hobbies=reading&hobbies=swimming"
  */
-export const jsonToQueryString = (json: Record<string, unknown>): string => {
+export const urlEncodeFormData = (data: Record<string, unknown>): string => {
   const searchParams = new URLSearchParams();
 
-  Object.entries(json).forEach(([key, value]) => {
+  Object.entries(data).forEach(([key, value]) => {
     if (value != null) {
       if (Array.isArray(value)) {
         value.forEach((v) => {

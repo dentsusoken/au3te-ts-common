@@ -6,8 +6,6 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   process.env = { ...process.env, ...loadEnv(mode, __dirname, '') };
-  console.log('Current mode:', mode);
-  console.log('Current working directory:', process.cwd());
 
   return {
     plugins: [

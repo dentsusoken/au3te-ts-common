@@ -18,3 +18,5 @@
 export * from './mediaType';
 export * from './urlUtils';
 export * from './httpStatus';
+export * from './errorUtils';
+export * from './result';

@@ -6,7 +6,7 @@ describe('PostHttpCall', () => {
   const baseUrl = 'https://api.example.com';
   const path = '/users';
   const auth = 'Bearer token123';
-  const request = { name: 'John Doe', email: 'john@example.com' };
+  const parameters = { name: 'John Doe', email: 'john@example.com' };
 
   let postHttpCall: PostHttpCall;
 
@@ -14,7 +14,7 @@ describe('PostHttpCall', () => {
   global.fetch = fetch;
 
   beforeEach(() => {
-    postHttpCall = new PostHttpCall(baseUrl, path, auth, request);
+    postHttpCall = new PostHttpCall(baseUrl, path, auth, parameters);
     vi.resetAllMocks();
   });
 
@@ -22,10 +22,20 @@ describe('PostHttpCall', () => {
     expect(postHttpCall['baseUrl']).toBe(baseUrl);
     expect(postHttpCall['path']).toBe(path);
     expect(postHttpCall['auth']).toBe(auth);
-    expect(postHttpCall['request']).toEqual(request);
+    expect(postHttpCall['parameters']).toEqual(parameters);
   });
 
-  it('should call fetch with correct URL and options', async () => {
+  it('should initialize request property correctly', () => {
+    expect(postHttpCall.request).toBeInstanceOf(Request);
+    expect(postHttpCall.request.url).toBe(`${baseUrl}${path}`);
+    expect(postHttpCall.request.method).toBe('POST');
+    expect(postHttpCall.request.headers.get('Content-Type')).toBe(
+      MediaType.APPLICATION_JSON_UTF8
+    );
+    expect(postHttpCall.request.headers.get('Authorization')).toBe(auth);
+  });
+
+  it('should call fetch with correct request when call() is invoked', async () => {
     const mockResponse = new Response(JSON.stringify({ id: 1 }), {
       status: 201,
     });
@@ -33,14 +43,7 @@ describe('PostHttpCall', () => {
 
     await postHttpCall.call();
 
-    expect(fetch).toHaveBeenCalledWith(new URL(`${baseUrl}${path}`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': MediaType.APPLICATION_JSON_UTF8,
-        Authorization: auth,
-      },
-      body: JSON.stringify(request),
-    });
+    expect(fetch).toHaveBeenCalledWith(postHttpCall.request);
   });
 
   it('should return the Response from fetch', async () => {
@@ -61,5 +64,21 @@ describe('PostHttpCall', () => {
     fetch.mockRejectedValue(new Error(errorMessage));
 
     await expect(postHttpCall.call()).rejects.toThrow(errorMessage);
+  });
+
+  it('should handle empty parameters object', () => {
+    const emptyPostHttpCall = new PostHttpCall(baseUrl, path, auth, {});
+    expect(emptyPostHttpCall.request.url).toBe(`${baseUrl}${path}`);
+  });
+
+  it('should handle special characters in URL', () => {
+    const specialPath = '/users?id=123&type=special';
+    const specialPostHttpCall = new PostHttpCall(
+      baseUrl,
+      specialPath,
+      auth,
+      parameters
+    );
+    expect(specialPostHttpCall.request.url).toBe(`${baseUrl}${specialPath}`);
   });
 });
