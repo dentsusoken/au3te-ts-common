@@ -17,16 +17,34 @@
 
 import { parseBasicCredentials } from '../utils/basicCredentials';
 
-type ClientCredentials = {
+/**
+ * Type representing client credentials.
+ *
+ * @typedef {Object} ClientCredentials
+ * @property {string | undefined} clientId - The client ID.
+ * @property {string | undefined} clientSecret - The client secret.
+ */
+export type ClientCredentials = {
   clientId: string | undefined;
   clientSecret: string | undefined;
 };
 
+/**
+ * Empty client credentials object.
+ *
+ * @type {ClientCredentials}
+ */
 const emptyClientCredentials: ClientCredentials = {
   clientId: undefined,
   clientSecret: undefined,
 };
 
+/**
+ * Extracts client credentials from the Authorization header.
+ *
+ * @param {string | undefined} authorization - The value of the Authorization header.
+ * @returns {ClientCredentials} The extracted client credentials.
+ */
 export const extractClientCredentialsFromAuthHeader = (
   authorization: string | undefined
 ): ClientCredentials => {

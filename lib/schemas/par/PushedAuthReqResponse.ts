@@ -181,7 +181,14 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { clientAuthMethodSchema } from '../common/ClientAuthMethod';
+import {
+  clientAuthMethodSchema,
+  nullableButOptionalClientAuthMethodSchema,
+} from '../common/ClientAuthMethod';
+import {
+  nullableButOptionalStringSchema,
+  nullableButOptionalUrlStringSchema,
+} from '../common/stringSchema';
 
 /**
  * Zod schema for the action of a pushed authorization request response.
@@ -213,10 +220,10 @@ const actionSchema = z.union([
  */
 export const pushedAuthReqResponseSchema = apiResponseSchema.extend({
   action: actionSchema,
-  responseContent: z.string().nullish(),
-  clientAuthMethod: z.optional(clientAuthMethodSchema).nullable(),
-  requestUri: z.string().url().nullish(),
-  dpopNonce: z.string().nullish(),
+  responseContent: nullableButOptionalStringSchema,
+  clientAuthMethod: nullableButOptionalClientAuthMethodSchema,
+  requestUri: nullableButOptionalUrlStringSchema,
+  dpopNonce: nullableButOptionalStringSchema,
 });
 
 /**

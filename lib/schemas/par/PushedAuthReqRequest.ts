@@ -94,64 +94,64 @@ export const pushedAuthReqRequestSchema = z.object({
   /**
    * Client ID extracted from the Authorization header.
    */
-  clientId: z.string().optional(),
+  clientId: z.string().nullish(),
 
   /**
    * Client secret extracted from the Authorization header.
    */
-  clientSecret: z.string().optional(),
+  clientSecret: z.string().nullish(),
 
   /**
    * Client certificate.
    */
-  clientCertificate: z.string().optional(),
+  clientCertificate: z.string().nullish(),
 
   /**
    * Client certificate path.
    */
-  clientCertificatePath: z.array(z.string()).optional(),
+  clientCertificatePath: z.array(z.string()).nullish(),
 
   /**
    * DPoP Header
    *
    * @see RFC 9449 OAuth 2.0 Demonstrating Proof of Possession (DPoP)
    */
-  dpop: z.string().optional(),
+  dpop: z.string().nullish(),
 
   /**
    * HTTP Method (for DPoP validation).
    *
    * @see RFC 9449 OAuth 2.0 Demonstrating Proof of Possession (DPoP)
    */
-  htm: z.string().optional(),
+  htm: z.string().nullish(),
 
   /**
    * HTTP URL base (for DPoP validation).
    *
    * @see RFC 9449 OAuth 2.0 Demonstrating Proof of Possession (DPoP)
    */
-  htu: z.string().optional(),
+  htu: z.string().nullish(),
 
   /**
    * Whether to check if the DPoP proof JWT includes the expected nonce value.
    *
    * @since Authlete 3.0
    */
-  dpopNonceRequired: z.boolean().optional(),
+  dpopNonceRequired: z.boolean().nullish(),
 
   /**
    * The value of the OAuth-Client-Attestation HTTP header.
    *
    * @see OAuth 2.0 Attestation-Based Client Authentication
    */
-  oauthClientAttestation: z.string().optional(),
+  oauthClientAttestation: z.string().nullish(),
 
   /**
    * The value of the OAuth-Client-Attestation-PoP HTTP header.
    *
    * @see OAuth 2.0 Attestation-Based Client Authentication
    */
-  oauthClientAttestationPop: z.string().optional(),
+  oauthClientAttestationPop: z.string().nullish(),
 });
 
 /**

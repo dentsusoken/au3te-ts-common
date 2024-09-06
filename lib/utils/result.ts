@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { getErrorMessage } from './errorUtils';
+
 /**
  * Represents the result of an operation that can either be successful or fail with an error.
  * @template T The type of the value returned on success.
@@ -197,7 +199,7 @@ export const runCatching = <T, A extends unknown[]>(
       return Result.failure(e);
     }
 
-    return Result.failure(new Error(String(e)));
+    return Result.failure(new Error(getErrorMessage(e)));
   }
 };
 
@@ -226,6 +228,6 @@ export const runAsyncCatching = async <T, A extends unknown[]>(
       return Result.failure(e);
     }
 
-    return Result.failure(new Error(String(e)));
+    return Result.failure(new Error(getErrorMessage(e)));
   }
 };

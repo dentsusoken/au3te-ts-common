@@ -23,16 +23,16 @@ describe('AuthleteApiFactory', () => {
     AuthleteApiFactory.registerDefaultApi(undefined as unknown as AuthleteApi);
   });
 
-  it('should return the registered default API', async () => {
-    const api = await AuthleteApiFactory.getDefaultApi();
+  it('should return the registered default API', () => {
+    const api = AuthleteApiFactory.getDefaultApi();
     expect(api).toBeInstanceOf(MockAuthleteApi);
   });
 
-  it('should throw an error if the default API is not registered', async () => {
+  it('should throw an error if the default API is not registered', () => {
     // Clear the registered default API
     AuthleteApiFactory.registerDefaultApi(undefined as unknown as AuthleteApi);
 
-    await expect(AuthleteApiFactory.getDefaultApi()).rejects.toThrowError(
+    expect(() => AuthleteApiFactory.getDefaultApi()).toThrowError(
       'The default API not registered'
     );
   });

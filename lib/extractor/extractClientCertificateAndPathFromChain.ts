@@ -15,14 +15,14 @@
  * License.
  */
 
-type CertificateAndPath = {
+export type ClientCertificateAndPath = {
   clientCertificate: string | undefined;
   clientCertificatePath: string[] | undefined;
 };
 
 export const extractClientCertificateAndPathFromChain = (
   chain: string[] | undefined
-): CertificateAndPath => {
+): ClientCertificateAndPath => {
   if (!chain || chain.length === 0) {
     return { clientCertificate: undefined, clientCertificatePath: undefined };
   }

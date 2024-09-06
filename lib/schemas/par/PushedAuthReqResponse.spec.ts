@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import {
   PushedAuthReqResponse,
   pushedAuthReqResponseSchema,
@@ -56,5 +57,73 @@ describe('pushedAuthReqResponseSchema', () => {
 
     const result = pushedAuthReqResponseSchema.safeParse(invalidResponse);
     expect(result.success).toBe(false);
+  });
+
+  it('should allow null and undefined values for optional fields', () => {
+    const validResponse = {
+      action: 'CREATED',
+      responseContent: null,
+      clientAuthMethod: null,
+      requestUri: null,
+      dpopNonce: null,
+    };
+
+    const result = pushedAuthReqResponseSchema.safeParse(validResponse);
+    expect(result.success).toBe(true);
+    expect(result.data).toEqual({
+      action: 'CREATED',
+      responseContent: undefined,
+      clientAuthMethod: undefined,
+      requestUri: undefined,
+      dpopNonce: undefined,
+    });
+  });
+
+  it('should invalidate a response with an invalid response content type', () => {
+    const invalidResponse = {
+      action: 'PAYLOAD_TOO_LARGE',
+      responseContent: 123,
+    };
+
+    const result = pushedAuthReqResponseSchema.safeParse(invalidResponse);
+    expect(result.success).toBe(false);
+  });
+
+  it('should invalidate a response with an invalid client authentication method type', () => {
+    const invalidResponse = {
+      action: 'INTERNAL_SERVER_ERROR',
+      clientAuthMethod: 123,
+    };
+
+    const result = pushedAuthReqResponseSchema.safeParse(invalidResponse);
+    expect(result.success).toBe(false);
+  });
+
+  it('should invalidate a response with an invalid request URI type', () => {
+    const invalidResponse = {
+      action: 'CREATED',
+      requestUri: 123,
+    };
+
+    const result = pushedAuthReqResponseSchema.safeParse(invalidResponse);
+    expect(result.success).toBe(false);
+  });
+
+  it('should invalidate a response with an invalid DPoP nonce type', () => {
+    const invalidResponse = {
+      action: 'BAD_REQUEST',
+      dpopNonce: 123,
+    };
+
+    const result = pushedAuthReqResponseSchema.safeParse(invalidResponse);
+    expect(result.success).toBe(false);
+  });
+
+  it('should infer the correct output type', () => {
+    type SchemaType = z.infer<typeof pushedAuthReqResponseSchema>;
+    type ExpectedType = PushedAuthReqResponse;
+
+    const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;
+    expect(assertTypeCompatibility).toBeDefined();
   });
 });

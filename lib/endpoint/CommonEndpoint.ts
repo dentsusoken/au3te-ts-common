@@ -29,27 +29,32 @@ import {
 } from './outputErrorMessage';
 
 /**
- * Interface for the constructor options of the CommonEndpoint class.
+ * Interface representing the constructor options for the CommonEndpoint class.
+ *
  * @interface
- * @property {BuildErrorMessage} buildErrorMessage - Function to build the original error message.
- * @property {BuildEndpointErrorMessage} buildEndpointErrorMessage - Function to build the endpoint-specific error message.
- * @property {OutputErrorMessage} outputErrorMessage - Function to output the error message.
+ * @property {BuildErrorMessage} [buildErrorMessage] - Optional function to build the error message.
+ * If not provided, the default implementation will be used.
+ * @property {BuildEndpointErrorMessage} [buildEndpointErrorMessage] - Optional function to build the endpoint-specific error message.
+ * If not provided, the default implementation will be used.
+ * @property {OutputErrorMessage} [outputErrorMessage] - Optional function to output the error message.
+ * If not provided, the default implementation will be used.
  */
 export interface CommonEndpointConstructorOptions {
-  buildErrorMessage: BuildErrorMessage;
-  buildEndpointErrorMessage: BuildEndpointErrorMessage;
-  outputErrorMessage: OutputErrorMessage;
+  buildErrorMessage?: BuildErrorMessage;
+  buildEndpointErrorMessage?: BuildEndpointErrorMessage;
+  outputErrorMessage?: OutputErrorMessage;
 }
 
 /**
  * Default constructor options for the CommonEndpoint class.
  * @type {CommonEndpointConstructorOptions}
  */
-const defaultConstructorOptions: CommonEndpointConstructorOptions = {
-  buildErrorMessage: defaultBuildErrorMessage,
-  buildEndpointErrorMessage: defaultBuildEndpointErrorMessage,
-  outputErrorMessage: defaultOutputErrorMessage,
-};
+export const defaultCommonEndpointConstructorOptions: CommonEndpointConstructorOptions =
+  {
+    buildErrorMessage: defaultBuildErrorMessage,
+    buildEndpointErrorMessage: defaultBuildEndpointErrorMessage,
+    outputErrorMessage: defaultOutputErrorMessage,
+  };
 
 /**
  * Common endpoint class for handling errors.
@@ -88,11 +93,11 @@ export class CommonEndpoint {
    * Creates an instance of the CommonEndpoint class.
    * @constructor
    * @param {string} path - The path of the endpoint.
-   * @param {CommonEndpointConstructorOptions} [options=defaultConstructorOptions] - The constructor options.
+   * @param {CommonEndpointConstructorOptions} [options=defaultCommonEndpointConstructorOptions] - The constructor options.
    */
   constructor(
     path: string,
-    options: CommonEndpointConstructorOptions = defaultConstructorOptions
+    options: CommonEndpointConstructorOptions = defaultCommonEndpointConstructorOptions
   ) {
     this.path = path;
     this.buildErrorMessage =
@@ -107,14 +112,16 @@ export class CommonEndpoint {
    * Processes the error for the endpoint.
    * @async
    * @param {unknown} e - The error object.
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    */
-  async processError(e: unknown): Promise<void> {
+  async processError(e: unknown): Promise<string> {
     const originalMessage = await this.buildErrorMessage(e);
     const errorMessage = this.buildEndpointErrorMessage(
       this.path,
       originalMessage
     );
     await this.outputErrorMessage(errorMessage);
+
+    return errorMessage;
   }
 }

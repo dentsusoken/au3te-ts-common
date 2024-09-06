@@ -53,7 +53,7 @@ describe('CommonEndpoint', () => {
       endpoint['buildEndpointErrorMessage'] = buildEndpointErrorMessageMock;
       endpoint['outputErrorMessage'] = outputErrorMessageMock;
 
-      await endpoint.processError(error);
+      const result = await endpoint.processError(error);
 
       expect(buildErrorMessageMock).toHaveBeenCalledWith(error);
       expect(buildEndpointErrorMessageMock).toHaveBeenCalledWith(
@@ -61,6 +61,7 @@ describe('CommonEndpoint', () => {
         originalMessage
       );
       expect(outputErrorMessageMock).toHaveBeenCalledWith(errorMessage);
+      expect(result).toBe(errorMessage);
     });
   });
 });

@@ -22,7 +22,7 @@ import { z } from 'zod';
  * @readonly
  * @type {readonly string[]}
  */
-const clientAuthMethods = [
+export const clientAuthMethods = [
   'none',
   'client_secret_basic',
   'client_secret_post',
@@ -34,21 +34,31 @@ const clientAuthMethods = [
 ] as const;
 
 /**
- * Type representing valid client authentication methods.
- * @typedef {typeof clientAuthMethods[number]} ClientAuthMethod
+ * Zod schema for client authentication methods.
+ *
+ * @type {z.ZodSchema<ClientAuthMethod>}
+ * @description This schema preprocesses the input value by converting it to lowercase if it's a string,
+ * and then validates it against the predefined client authentication methods using `z.enum`.
+ * The resulting schema accepts values of type `ClientAuthMethod`, which is a union of the predefined methods.
+ *
+ * @example
+ * const validMethod = clientAuthMethodSchema.parse('client_secret_basic');
+ * // validMethod: 'client_secret_basic'
+ *
+ * const validMethodCaseInsensitive = clientAuthMethodSchema.parse('CLIENT_SECRET_BASIC');
+ * // validMethodCaseInsensitive: 'client_secret_basic'
+ *
+ * const invalidMethod = clientAuthMethodSchema.parse('invalid_method');
+ * // throws a ZodError
  */
 export type ClientAuthMethod = (typeof clientAuthMethods)[number];
 
-/**
- * Zod schema for validating and transforming client authentication methods.
- * This schema accepts a string input, transforms it to lowercase,
- * and validates it against the list of valid client authentication methods.
- *
- * @type {z.ZodType<ClientAuthMethod>}
- */
-export const clientAuthMethodSchema = z
-  .string()
-  .transform((v) => v.toLowerCase() as ClientAuthMethod)
-  .refine((v): v is ClientAuthMethod => clientAuthMethods.includes(v), {
-    message: 'Invalid client authentication method',
-  }) as z.ZodType<ClientAuthMethod>;
+export const clientAuthMethodSchema = z.preprocess(
+  (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
+  z.enum(clientAuthMethods)
+);
+
+export const nullableButOptionalClientAuthMethodSchema = z.preprocess(
+  (v) => (v === null ? undefined : v),
+  z.optional(clientAuthMethodSchema)
+);

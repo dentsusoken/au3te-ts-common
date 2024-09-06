@@ -35,11 +35,14 @@ export class AuthleteApiFactory {
   private constructor() {}
 
   /**
-   * Retrieves the default instance of AuthleteApi.
-   * @returns {Promise<AuthleteApi>} A promise that resolves to the default AuthleteApi instance.
+   * Returns the default AuthleteApi instance.
+   *
+   * @static
+   * @returns {AuthleteApi} The default AuthleteApi instance.
    * @throws {Error} If the default API is not registered.
+   * @memberof AuthleteApiFactory
    */
-  static async getDefaultApi(): Promise<AuthleteApi> {
+  static getDefaultApi(): AuthleteApi {
     if (this.defaultApi) {
       return this.defaultApi;
     }
