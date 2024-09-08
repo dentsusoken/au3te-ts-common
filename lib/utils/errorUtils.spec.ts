@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getErrorMessage } from './errorUtils';
+import { getErrorMessage, convertToError } from './errorUtils';
 
 describe('errorUtils', () => {
   describe('getErrorMessage', () => {
@@ -70,6 +70,54 @@ describe('errorUtils', () => {
       const circularObj: any = { a: 1 };
       circularObj.self = circularObj;
       expect(() => getErrorMessage(circularObj)).toThrow();
+    });
+  });
+
+  describe('convertToError', () => {
+    it('should return the same error if the input is already an instance of Error', () => {
+      const error = new Error('Test error');
+      const result = convertToError(error);
+      expect(result).toBe(error);
+    });
+
+    it('should convert a string to an Error with the string as the message', () => {
+      const errorMessage = 'Something went wrong';
+      const result = convertToError(errorMessage);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe(errorMessage);
+    });
+
+    it('should convert a number to an Error with the number as the message', () => {
+      const errorNumber = 404;
+      const result = convertToError(errorNumber);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe(String(errorNumber));
+    });
+
+    it('should convert a boolean to an Error with the boolean as the message', () => {
+      const errorBoolean = true;
+      const result = convertToError(errorBoolean);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe(String(errorBoolean));
+    });
+
+    it('should convert an object to an Error with the stringified object as the message', () => {
+      const errorObject = { code: 'ERR_INVALID_DATA' };
+      const result = convertToError(errorObject);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe(JSON.stringify(errorObject));
+    });
+
+    it('should convert null to an Error with "null" as the message', () => {
+      const result = convertToError(null);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe('null');
+    });
+
+    it('should convert undefined to an Error with "undefined" as the message', () => {
+      const result = convertToError(undefined);
+      expect(result).toBeInstanceOf(Error);
+      expect(result.message).toBe('undefined');
     });
   });
 });

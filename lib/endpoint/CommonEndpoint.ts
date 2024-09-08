@@ -111,10 +111,10 @@ export class CommonEndpoint {
   /**
    * Processes the error for the endpoint.
    * @async
-   * @param {unknown} e - The error object.
+   * @param {Error} e - The error object.
    * @returns {Promise<string>}
    */
-  async processError(e: unknown): Promise<string> {
+  async processError(e: Error): Promise<string> {
     const originalMessage = await this.buildErrorMessage(e);
     const errorMessage = this.buildEndpointErrorMessage(
       this.path,

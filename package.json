@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "vite build && tsc",
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

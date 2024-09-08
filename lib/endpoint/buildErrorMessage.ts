@@ -15,63 +15,46 @@
  * License.
  */
 
-import { getErrorMessage } from '../utils/errorUtils';
 import { ResponseError } from '../api/ResponseError';
 import { runAsyncCatching } from '../utils/result';
 
 /**
- * Represents a function that builds an error message from any type of error.
+ * Type definition for a function that builds an error message from an Error object.
+ *
+ * @param {Error} error - The Error object to build the message from.
+ * @returns {Promise<string>} A promise that resolves to the built error message.
  */
-export type BuildErrorMessage = (error: unknown) => Promise<string>;
+export type BuildErrorMessage = (error: Error) => Promise<string>;
 
 /**
- * Builds a detailed error message for ResponseError.
- * Attempts to use buildMessageWithBody, falling back to the error message if that fails.
+ * Builds an error message for a ResponseError object.
  *
- * @param {ResponseError} error - The ResponseError to process
- * @returns {Promise<string>} A promise that resolves to the error message
+ * @param {ResponseError} error - The ResponseError object to build the message from.
+ * @returns {Promise<string>} A promise that resolves to the built error message.
+ * @description This function attempts to build the error message with the response body using the `buildMessageWithBody` method of the ResponseError object.
+ * If the `buildMessageWithBody` method fails, it falls back to the `message` property of the ResponseError object.
  */
 export const buildResponseErrorMessage = async (
   error: ResponseError
-): Promise<string> =>
-  (await runAsyncCatching(() => error.buildMessageWithBody()))
-    .recover(() => error.message)
-    .getOrThrow();
+): Promise<string> => {
+  const result = await runAsyncCatching(() => error.buildMessageWithBody());
+
+  return result.getOrDefault(error.message);
+};
 
 /**
  * Default implementation of the BuildErrorMessage function.
  *
- * This function provides a standard way to build error messages for different types of errors.
- * It handles ResponseError instances specially, using a dedicated method to build the message.
- * For all other error types, it uses a generic error message getter.
- *
- * @type {BuildErrorMessage}
- * @async
- * @param {unknown} error - The error to process. This can be of any type.
- * @returns {Promise<string>} A promise that resolves to the formatted error message.
- *
- * @example
- * // Using with a ResponseError
- * const responseError = new ResponseError(response, request);
- * const message = await defaultBuildErrorMessage(responseError);
- * console.log(message); // Outputs a formatted message specific to ResponseError
- *
- * @example
- * // Using with a standard Error
- * const error = new Error("Something went wrong");
- * const message = await defaultBuildErrorMessage(error);
- * console.log(message); // Outputs "Something went wrong"
- *
- * @example
- * // Using with a non-Error object
- * const nonError = { message: "Unexpected issue" };
- * const message = await defaultBuildErrorMessage(nonError);
- * console.log(message); // Outputs a string representation of the object
+ * @param {Error} error - The Error object to build the message from.
+ * @returns {Promise<string>} A promise that resolves to the built error message.
+ * @description This function checks if the provided error is an instance of ResponseError.
+ * If it is, it calls the `buildResponseErrorMessage` function to build the error message.
+ * If it is not, it returns the `message` property of the Error object.
  */
 export const defaultBuildErrorMessage: BuildErrorMessage = async (error) => {
   if (error instanceof ResponseError) {
     return buildResponseErrorMessage(error);
   }
 
-  return getErrorMessage(error);
+  return error.message;
 };

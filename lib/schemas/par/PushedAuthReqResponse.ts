@@ -181,10 +181,7 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import {
-  clientAuthMethodSchema,
-  nullableButOptionalClientAuthMethodSchema,
-} from '../common/ClientAuthMethod';
+import { nullableButOptionalClientAuthMethodSchema } from '../common/ClientAuthMethod';
 import {
   nullableButOptionalStringSchema,
   nullableButOptionalUrlStringSchema,

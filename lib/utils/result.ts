@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { getErrorMessage } from './errorUtils';
+import { convertToError } from './errorUtils';
 
 /**
  * Represents the result of an operation that can either be successful or fail with an error.
@@ -115,62 +115,11 @@ export class Result<T> {
   }
 
   /**
-   * Returns the value if the result is successful, or the value returned by the specified function if it is a failure.
-   * @param {(error: Error) => T} failure A function that takes the error and returns a value to be used if the result is a failure.
-   * @returns {T} The value, if the result is successful, or the value returned by the onFailure function if it is a failure.
-   */
-  getOrElse(failure: (error: Error) => T): T {
-    return this.isSuccess ? this.value! : failure(this.error!);
-  }
-
-  /**
    * Returns the error if the result is a failure, or undefined if it is successful.
    * @returns {Error | undefined} The error, or undefined.
    */
   errorOrUndefined(): Error | undefined {
     return this.error;
-  }
-
-  /**
-   * Transforms the successful value using the specified function.
-   * @template R The type of the transformed value.
-   * @param {(value: T) => R} transform A function that takes the successful value and returns the transformed value.
-   * @returns {Result<R>} A new result containing the transformed value if the current result is successful, or the current failure otherwise.
-   */
-  map<R>(transform: (value: T) => R): Result<R> {
-    return this.isSuccess
-      ? Result.success(transform(this.value!))
-      : Result.failure(this.error!);
-  }
-
-  /**
-   * Transforms the successful value using the specified function, catching any errors that may occur.
-   * @template R The type of the transformed value.
-   * @param {(value: T) => R} transform A function that takes the successful value and returns the transformed value.
-   * @returns {Result<R>} A new result containing the transformed value if the current result is successful and the transformation succeeds, or a failure result if an error occurs during the transformation or if the current result is a failure.
-   */
-  mapCatching<R>(transform: (value: T) => R): Result<R> {
-    return this.isSuccess
-      ? runCatching(() => transform(this.value!))
-      : Result.failure(this.error!);
-  }
-
-  /**
-   * Recovers from a failure by applying the specified function to the error.
-   * @param {(error: Error) => T} transform A function that takes the error and returns a value to recover with.
-   * @returns {Result<T>} A new successful result containing the recovered value if the current result is a failure, or the current successful result otherwise.
-   */
-  recover(transform: (error: Error) => T): Result<T> {
-    return this.isFailure ? Result.success(transform(this.error!)) : this;
-  }
-
-  /**
-   * Recovers from a failure by applying the specified function to the error, catching any errors that may occur.
-   * @param {(error: Error) => T} transform A function that takes the error and returns a value to recover with.
-   * @returns {Result<T>} A new result containing the recovered value if the current result is a failure and the recovery succeeds, or a failure result if an error occurs during the recovery or if the current result is successful.
-   */
-  recoverCatching(transform: (error: Error) => T): Result<T> {
-    return this.isFailure ? runCatching(() => transform(this.error!)) : this;
   }
 }
 
@@ -195,11 +144,7 @@ export const runCatching = <T, A extends unknown[]>(
 
     return Result.success(value);
   } catch (e) {
-    if (e instanceof Error) {
-      return Result.failure(e);
-    }
-
-    return Result.failure(new Error(getErrorMessage(e)));
+    return Result.failure(convertToError(e));
   }
 };
 
@@ -224,10 +169,6 @@ export const runAsyncCatching = async <T, A extends unknown[]>(
 
     return Result.success(value);
   } catch (e) {
-    if (e instanceof Error) {
-      return Result.failure(e);
-    }
-
-    return Result.failure(new Error(getErrorMessage(e)));
+    return Result.failure(convertToError(e));
   }
 };

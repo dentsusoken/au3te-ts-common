@@ -65,11 +65,4 @@ describe('defaultBuildErrorMessage', () => {
     const result = await defaultBuildErrorMessage(error);
     expect(result).toBe('Regular error');
   });
-
-  it('should handle non-Error objects', async () => {
-    const nonError = { message: 'Not an error' };
-
-    const result = await defaultBuildErrorMessage(nonError);
-    expect(result).toBe('{"message":"Not an error"}');
-  });
 });
