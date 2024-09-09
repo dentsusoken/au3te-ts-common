@@ -14,10 +14,30 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+    "./schemas": {
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.js",
+      "require": "./dist/schemas/index.cjs"
+    },
+    "./endpoint": {
+      "types": "./dist/endpoint/index.d.ts",
+      "import": "./dist/endpoint/index.js",
+      "require": "./dist/endpoint/index.cjs"
+    },
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "import": "./dist/api/index.js",
+      "require": "./dist/api/index.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.cjs"
+    },
+    "./conf": {
+      "types": "./dist/conf/index.d.ts",
+      "import": "./dist/conf/index.js",
+      "require": "./dist/conf/index.cjs"
     }
   },
   "scripts": {

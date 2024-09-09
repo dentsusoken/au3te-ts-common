@@ -20,4 +20,3 @@ export * from './endpoint';
 export * from './api';
 export * from './utils';
 export * from './conf';
-export * from './extractor';

@@ -15,113 +15,23 @@
  * License.
  */
 
-import {
-  BuildEndpointErrorMessage,
-  defaultBuildEndpointErrorMessage,
-} from './buildEndpointErrorMessage';
-import {
-  BuildErrorMessage,
-  defaultBuildErrorMessage,
-} from './buildErrorMessage';
-import {
-  defaultOutputErrorMessage,
-  OutputErrorMessage,
-} from './outputErrorMessage';
+import { ProcessError, defaultProcessError } from './processError';
 
-/**
- * Interface representing the constructor options for the CommonEndpoint class.
- *
- * @interface
- * @property {BuildErrorMessage} [buildErrorMessage] - Optional function to build the error message.
- * If not provided, the default implementation will be used.
- * @property {BuildEndpointErrorMessage} [buildEndpointErrorMessage] - Optional function to build the endpoint-specific error message.
- * If not provided, the default implementation will be used.
- * @property {OutputErrorMessage} [outputErrorMessage] - Optional function to output the error message.
- * If not provided, the default implementation will be used.
- */
 export interface CommonEndpointConstructorOptions {
-  buildErrorMessage?: BuildErrorMessage;
-  buildEndpointErrorMessage?: BuildEndpointErrorMessage;
-  outputErrorMessage?: OutputErrorMessage;
+  processError?: ProcessError;
 }
 
-/**
- * Default constructor options for the CommonEndpoint class.
- * @type {CommonEndpointConstructorOptions}
- */
 export const defaultCommonEndpointConstructorOptions: CommonEndpointConstructorOptions =
   {
-    buildErrorMessage: defaultBuildErrorMessage,
-    buildEndpointErrorMessage: defaultBuildEndpointErrorMessage,
-    outputErrorMessage: defaultOutputErrorMessage,
+    processError: defaultProcessError,
   };
 
-/**
- * Common endpoint class for handling errors.
- * @class
- */
 export class CommonEndpoint {
-  /**
-   * The path of the endpoint.
-   * @type {string}
-   * @protected
-   */
-  protected path: string;
+  processError: ProcessError;
 
-  /**
-   * Function to build the original error message.
-   * @type {BuildErrorMessage}
-   * @protected
-   */
-  protected buildErrorMessage: BuildErrorMessage;
-
-  /**
-   * Function to build the endpoint-specific error message.
-   * @type {BuildEndpointErrorMessage}
-   * @protected
-   */
-  protected buildEndpointErrorMessage: BuildEndpointErrorMessage;
-
-  /**
-   * Function to output the error message.
-   * @type {OutputErrorMessage}
-   * @protected
-   */
-  protected outputErrorMessage: OutputErrorMessage;
-
-  /**
-   * Creates an instance of the CommonEndpoint class.
-   * @constructor
-   * @param {string} path - The path of the endpoint.
-   * @param {CommonEndpointConstructorOptions} [options=defaultCommonEndpointConstructorOptions] - The constructor options.
-   */
-  constructor(
-    path: string,
-    options: CommonEndpointConstructorOptions = defaultCommonEndpointConstructorOptions
-  ) {
-    this.path = path;
-    this.buildErrorMessage =
-      options.buildErrorMessage ?? defaultBuildErrorMessage;
-    this.buildEndpointErrorMessage =
-      options.buildEndpointErrorMessage ?? defaultBuildEndpointErrorMessage;
-    this.outputErrorMessage =
-      options.outputErrorMessage ?? defaultOutputErrorMessage;
-  }
-
-  /**
-   * Processes the error for the endpoint.
-   * @async
-   * @param {Error} e - The error object.
-   * @returns {Promise<string>}
-   */
-  async processError(e: Error): Promise<string> {
-    const originalMessage = await this.buildErrorMessage(e);
-    const errorMessage = this.buildEndpointErrorMessage(
-      this.path,
-      originalMessage
-    );
-    await this.outputErrorMessage(errorMessage);
-
-    return errorMessage;
+  constructor({
+    processError,
+  }: CommonEndpointConstructorOptions = defaultCommonEndpointConstructorOptions) {
+    this.processError = processError ?? defaultProcessError;
   }
 }

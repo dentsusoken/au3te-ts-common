@@ -16,7 +16,7 @@
  */
 
 export * from './mediaType';
-export * from './urlUtils';
+export * from './basicCredentials';
 export * from './httpStatus';
 export * from './errorUtils';
 export * from './result';

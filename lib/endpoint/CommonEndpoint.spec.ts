@@ -1,67 +1,36 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { CommonEndpoint } from './CommonEndpoint';
-import { defaultBuildErrorMessage } from './buildErrorMessage';
-import { defaultBuildEndpointErrorMessage } from './buildEndpointErrorMessage';
-import { defaultOutputErrorMessage } from './outputErrorMessage';
+import { defaultProcessError } from './processError';
 
 describe('CommonEndpoint', () => {
-  let endpoint: CommonEndpoint;
+  it('should initialize with default processError when no options are provided', () => {
+    const endpoint = new CommonEndpoint();
 
-  beforeEach(() => {
-    endpoint = new CommonEndpoint('/test');
+    expect(endpoint.processError).toBe(defaultProcessError);
   });
 
-  it('should initialize with default options when not provided', () => {
-    expect(endpoint['buildErrorMessage']).toBe(defaultBuildErrorMessage);
-    expect(endpoint['buildEndpointErrorMessage']).toBe(
-      defaultBuildEndpointErrorMessage
-    );
-    expect(endpoint['outputErrorMessage']).toBe(defaultOutputErrorMessage);
+  it('should initialize with default processError when not provided', () => {
+    const endpoint = new CommonEndpoint({});
+
+    expect(endpoint.processError).toBe(defaultProcessError);
   });
 
-  it('should initialize with provided options', () => {
-    const buildErrorMessage = vi.fn();
-    const buildEndpointErrorMessage = vi.fn();
-    const outputErrorMessage = vi.fn();
+  it('should initialize with provided processError', () => {
+    const mockProcessError = vi.fn().mockResolvedValue('Mock error message');
+    const endpoint = new CommonEndpoint({ processError: mockProcessError });
 
-    endpoint = new CommonEndpoint('/test', {
-      buildErrorMessage,
-      buildEndpointErrorMessage,
-      outputErrorMessage,
-    });
-
-    expect(endpoint['buildErrorMessage']).toBe(buildErrorMessage);
-    expect(endpoint['buildEndpointErrorMessage']).toBe(
-      buildEndpointErrorMessage
-    );
-    expect(endpoint['outputErrorMessage']).toBe(outputErrorMessage);
+    expect(endpoint.processError).toBe(mockProcessError);
   });
 
-  describe('processError', () => {
-    it('should process the error correctly', async () => {
-      const error = new Error('Test error');
-      const originalMessage = 'Original error message';
-      const errorMessage = 'Endpoint error message';
+  it('should call processError with error and path', async () => {
+    const mockProcessError = vi.fn().mockResolvedValue('Mock error message');
+    const endpoint = new CommonEndpoint({ processError: mockProcessError });
+    const error = new Error('Test error');
+    const path = '/test';
 
-      const buildErrorMessageMock = vi.fn().mockResolvedValue(originalMessage);
-      const buildEndpointErrorMessageMock = vi
-        .fn()
-        .mockReturnValue(errorMessage);
-      const outputErrorMessageMock = vi.fn();
+    await endpoint.processError(error, path);
 
-      endpoint['buildErrorMessage'] = buildErrorMessageMock;
-      endpoint['buildEndpointErrorMessage'] = buildEndpointErrorMessageMock;
-      endpoint['outputErrorMessage'] = outputErrorMessageMock;
-
-      const result = await endpoint.processError(error);
-
-      expect(buildErrorMessageMock).toHaveBeenCalledWith(error);
-      expect(buildEndpointErrorMessageMock).toHaveBeenCalledWith(
-        '/test',
-        originalMessage
-      );
-      expect(outputErrorMessageMock).toHaveBeenCalledWith(errorMessage);
-      expect(result).toBe(errorMessage);
-    });
+    expect(mockProcessError).toHaveBeenCalledTimes(1);
+    expect(mockProcessError).toHaveBeenCalledWith(error, path);
   });
 });

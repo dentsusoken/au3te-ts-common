@@ -93,19 +93,6 @@ export class ResponseError extends Error {
    * status is NO_CONTENT or if parsing fails, an empty object is used for the body.
    *
    * @returns {Promise<string>} A promise that resolves to the detailed error message.
-   *
-   * @example
-   * const error = new ResponseError(response, request);
-   * const detailedMessage = await error.buildMessageWithBody();
-   * console.log(detailedMessage);
-   * // Output:
-   * // ResponseError: {
-   * //   "status": 404,
-   * //   "statusText": "Not Found",
-   * //   "body": {
-   * //     "message": "The requested resource was not found"
-   * //   }
-   * // }
    */
   async buildMessageWithBody(): Promise<string> {
     const status = this.response.status;

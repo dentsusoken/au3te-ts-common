@@ -22,12 +22,6 @@ import { convertToError } from './errorUtils';
  */
 export class Result<T> {
   /**
-   * Indicates whether the result is a success.
-   * @type {boolean}
-   */
-  public readonly isSuccess: boolean;
-
-  /**
    * Creates a successful result with the specified value.
    * @template T The type of the value.
    * @param {T} value The value to be wrapped in the successful result.
@@ -40,48 +34,42 @@ export class Result<T> {
   /**
    * Creates a failure result with the specified error.
    * @template T The type of the value.
-   * @param {Error} exception The error to be wrapped in the failure result.
+   * @param {Error} error The error to be wrapped in the failure result.
    * @returns {Result<T>} A failure result containing the error.
    */
-  static failure<T>(exception: Error): Result<T> {
-    return new Result<T>(undefined, exception);
+  static failure<T>(error: Error): Result<T> {
+    return new Result<T>(undefined, error);
   }
 
   /**
    * Constructs a new instance of the Result class.
    * @param {T | undefined} value The value associated with the result, if successful.
    * @param {Error | undefined} error The error associated with the result, if failed.
+   * @throws {Error} If both value and error are provided.
    */
   private constructor(
-    private value: T | undefined,
-    private error: Error | undefined
+    public value: T | undefined,
+    public error: Error | undefined
   ) {
-    this.isSuccess = error === undefined;
-
     if (value && error) {
       throw new Error('Result cannot be both success and failure');
     }
   }
 
   /**
-   * Indicates whether the result is a failure.
-   *
-   * This is a computed property that returns the opposite of `isSuccess`.
-   * It provides a convenient way to check if the result represents a failure state.
-   *
-   * @type {boolean}
-   * @readonly
-   *
-   * @example
-   * const result = Result.failure(new Error('Something went wrong'));
-   * console.log(result.isFailure); // Output: true
-   *
-   * @example
-   * const result = Result.success(42);
-   * console.log(result.isFailure); // Output: false
+   * Checks if the result is successful.
+   * @returns {this is { value: T }} True if the result is successful, false otherwise.
    */
-  get isFailure(): boolean {
-    return !this.isSuccess;
+  isSuccess(): this is { value: T } {
+    return this.error === undefined;
+  }
+
+  /**
+   * Checks if the result is a failure.
+   * @returns {this is { error: Error }} True if the result is a failure, false otherwise.
+   */
+  isFailure(): this is { error: Error } {
+    return !this.isSuccess();
   }
 
   /**
@@ -90,36 +78,82 @@ export class Result<T> {
    * @throws {Error} The error, if the result is a failure.
    */
   getOrThrow(): T {
-    if (this.isSuccess) {
-      return this.value!;
+    if (this.isSuccess()) {
+      return this.value;
     }
 
     throw this.error;
   }
 
   /**
-   * Returns the value if the result is successful, or undefined if it is a failure.
-   * @returns {T | undefined} The value, or undefined.
-   */
-  getOrUndefined(): T | undefined {
-    return this.value;
-  }
-
-  /**
    * Returns the value if the result is successful, or the specified default value if it is a failure.
-   * @param {T} defaultValue The default value to return if the result is a failure.
-   * @returns {T} The value, if the result is successful, or the default value if it is a failure.
+   *
+   * @param {T} defaultValue - The default value to return if the result is a failure.
+   * @returns {T} The value if the result is successful, or the default value if it is a failure.
    */
   getOrDefault(defaultValue: T): T {
-    return this.isSuccess ? this.value! : defaultValue;
+    if (this.isSuccess()) {
+      return this.value;
+    }
+
+    return defaultValue;
   }
 
   /**
-   * Returns the error if the result is a failure, or undefined if it is successful.
-   * @returns {Error | undefined} The error, or undefined.
+   * Returns the value if the result is successful, or the result of the transfer function if it is a failure.
+   * @param {(error: Error) => T} transfer A function that transfers the error to a value.
+   * @returns {T} The value, if the result is successful, or the result of the transfer function if it is a failure.
    */
-  errorOrUndefined(): Error | undefined {
-    return this.error;
+  getOrElse(transfer: (error: Error) => T): T {
+    return this.isSuccess() ? this.value : transfer(this.error!);
+  }
+
+  /**
+   * Executes the specified function if the result is successful.
+   * @param {(value: T) => void} f A function to be executed if the result is successful.
+   * @returns {Result<T>} The current result instance.
+   */
+  onSuccess(f: (value: T) => void): Result<T> {
+    if (this.isSuccess()) {
+      f(this.value);
+    }
+
+    return this;
+  }
+
+  /**
+   * Executes the specified function if the result is a failure.
+   * @param {(error: Error) => void} f A function to be executed if the result is a failure.
+   * @returns {Result<T>} The current result instance.
+   */
+  onFailure(f: (error: Error) => void): Result<T> {
+    if (this.isFailure()) {
+      f(this.error);
+    }
+
+    return this;
+  }
+
+  /**
+   * Recovers from a failure by applying the specified transform function.
+   * @param {(error: Error) => T} transform A function that transforms the error to a value.
+   * @returns {Result<T>} A new successful result with the transformed value if the current result is a failure, or the current result if it is already successful.
+   */
+  recover(transform: (error: Error) => T): Result<T> {
+    return this.isFailure() ? runCatching(() => transform(this.error)) : this;
+  }
+
+  /**
+   * Recovers from a failure by applying the specified asynchronous transform function.
+   * @param {(error: Error) => Promise<T>} transform An asynchronous function that transforms the error to a value.
+   * @returns {Promise<Result<T>>} A promise that resolves to a new successful result with the transformed value if the current result is a failure, or the current result if it is already successful.
+   */
+  async recoverAsync(
+    transform: (error: Error) => Promise<T>
+  ): Promise<Result<T>> {
+    return this.isFailure()
+      ? runAsyncCatching(() => transform(this.error))
+      : this;
   }
 }
 
