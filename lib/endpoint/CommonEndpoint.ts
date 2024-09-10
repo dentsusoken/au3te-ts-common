@@ -24,6 +24,10 @@ import {
   defaultBuildErrorMessage,
 } from './buildErrorMessage';
 import {
+  BuildUnknownActionMessage,
+  createBuildUnknownActionMessage,
+} from './buildUnknownActionMessage';
+import {
   defaultOutputErrorMessage,
   OutputErrorMessage,
 } from './outputErrorMessage';
@@ -34,6 +38,7 @@ export type CommonEndpointConstructorOptions = {
   buildEndpointErrorMessage?: BuildEndpointErrorMessage;
   outputErrorMessage?: OutputErrorMessage;
   processError?: ProcessError;
+  buildUnknownActionMessage?: BuildUnknownActionMessage;
 };
 
 export class CommonEndpoint {
@@ -42,6 +47,7 @@ export class CommonEndpoint {
   readonly buildEndpointErrorMessage: BuildEndpointErrorMessage;
   readonly outputErrorMessage: OutputErrorMessage;
   readonly processError: ProcessError;
+  readonly buildUnknownActionMessage: BuildUnknownActionMessage;
 
   constructor(
     path: string,
@@ -50,6 +56,7 @@ export class CommonEndpoint {
       buildEndpointErrorMessage,
       outputErrorMessage,
       processError,
+      buildUnknownActionMessage,
     }: CommonEndpointConstructorOptions = {}
   ) {
     this.path = path;
@@ -64,6 +71,12 @@ export class CommonEndpoint {
         buildErrorMessage: this.buildErrorMessage,
         buildEndpointErrorMessage: this.buildEndpointErrorMessage,
         outputErrorMessage: this.outputErrorMessage,
+      });
+    this.buildUnknownActionMessage =
+      buildUnknownActionMessage ??
+      createBuildUnknownActionMessage({
+        path: this.path,
+        buildEndpointErrorMessage: this.buildEndpointErrorMessage,
       });
   }
 }
