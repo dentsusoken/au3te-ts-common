@@ -15,7 +15,7 @@
  * License.
  */
 
-import { BuildEndpointErrorMessage } from 'au3te-ts-common/endpoint';
+import { BuildEndpointErrorMessage } from './buildEndpointErrorMessage';
 
 export type BuildUnknownActionMessage = (action: string) => string;
 

@@ -5,6 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
+        main: './lib/index.ts',
         api: './lib/api/index.ts',
         conf: './lib/conf/index.ts',
         endpoint: './lib/endpoint/index.ts',
