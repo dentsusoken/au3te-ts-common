@@ -16,7 +16,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./lib",
 
     /* Linting */
     "strict": true,
