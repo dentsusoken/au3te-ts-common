@@ -15,23 +15,55 @@
  * License.
  */
 
-import { ProcessError, defaultProcessError } from './processError';
+import {
+  BuildEndpointErrorMessage,
+  defaultBuildEndpointErrorMessage,
+} from './buildEndpointErrorMessage';
+import {
+  BuildErrorMessage,
+  defaultBuildErrorMessage,
+} from './buildErrorMessage';
+import {
+  defaultOutputErrorMessage,
+  OutputErrorMessage,
+} from './outputErrorMessage';
+import { ProcessError, createProcessError } from './processError';
 
-export interface CommonEndpointConstructorOptions {
+export type CommonEndpointConstructorOptions = {
+  buildErrorMessage?: BuildErrorMessage;
+  buildEndpointErrorMessage?: BuildEndpointErrorMessage;
+  outputErrorMessage?: OutputErrorMessage;
   processError?: ProcessError;
-}
-
-export const defaultCommonEndpointConstructorOptions: CommonEndpointConstructorOptions =
-  {
-    processError: defaultProcessError,
-  };
+};
 
 export class CommonEndpoint {
-  processError: ProcessError;
+  readonly path: string;
+  readonly buildErrorMessage: BuildErrorMessage;
+  readonly buildEndpointErrorMessage: BuildEndpointErrorMessage;
+  readonly outputErrorMessage: OutputErrorMessage;
+  readonly processError: ProcessError;
 
-  constructor({
-    processError,
-  }: CommonEndpointConstructorOptions = defaultCommonEndpointConstructorOptions) {
-    this.processError = processError ?? defaultProcessError;
+  constructor(
+    path: string,
+    {
+      buildErrorMessage,
+      buildEndpointErrorMessage,
+      outputErrorMessage,
+      processError,
+    }: CommonEndpointConstructorOptions = {}
+  ) {
+    this.path = path;
+    this.buildErrorMessage = buildErrorMessage ?? defaultBuildErrorMessage;
+    this.buildEndpointErrorMessage =
+      buildEndpointErrorMessage ?? defaultBuildEndpointErrorMessage;
+    this.outputErrorMessage = outputErrorMessage ?? defaultOutputErrorMessage;
+    this.processError =
+      processError ??
+      createProcessError({
+        path: this.path,
+        buildErrorMessage: this.buildErrorMessage,
+        buildEndpointErrorMessage: this.buildEndpointErrorMessage,
+        outputErrorMessage: this.outputErrorMessage,
+      });
   }
 }

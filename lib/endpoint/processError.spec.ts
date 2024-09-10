@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 
 describe('createProcessError', () => {
   it('should build and output the error message successfully', async () => {
+    const path = '/test';
     const buildErrorMessage = vi
       .fn()
       .mockResolvedValue('Original error message');
@@ -13,14 +14,14 @@ describe('createProcessError', () => {
     const outputErrorMessage = vi.fn().mockResolvedValue(undefined);
 
     const processError = createProcessError({
+      path,
       buildErrorMessage,
       buildEndpointErrorMessage,
       outputErrorMessage,
     });
 
     const error = new Error('Test error');
-    const path = '/test';
-    const result = await processError(error, path);
+    const result = await processError(error);
 
     expect(buildErrorMessage).toHaveBeenCalledTimes(1);
     expect(buildErrorMessage).toHaveBeenCalledWith(error);
@@ -35,6 +36,7 @@ describe('createProcessError', () => {
   });
 
   it('should handle errors during building the error message', async () => {
+    const path = '/test';
     const buildErrorMessage = vi
       .fn()
       .mockRejectedValue(new Error('Build error'));
@@ -44,14 +46,14 @@ describe('createProcessError', () => {
     const outputErrorMessage = vi.fn().mockResolvedValue(undefined);
 
     const processError = createProcessError({
+      path,
       buildErrorMessage,
       buildEndpointErrorMessage,
       outputErrorMessage,
     });
 
     const error = new Error('Test error');
-    const path = '/test';
-    const result = await processError(error, path);
+    const result = await processError(error);
 
     expect(buildErrorMessage).toHaveBeenCalledTimes(1);
     expect(buildErrorMessage).toHaveBeenCalledWith(error);
@@ -62,6 +64,7 @@ describe('createProcessError', () => {
   });
 
   it('should handle errors during outputting the error message', async () => {
+    const path = '/test';
     const buildErrorMessage = vi
       .fn()
       .mockResolvedValue('Original error message');
@@ -73,14 +76,14 @@ describe('createProcessError', () => {
       .mockRejectedValue(new Error('Output error'));
 
     const processError = createProcessError({
+      path,
       buildErrorMessage,
       buildEndpointErrorMessage,
       outputErrorMessage,
     });
 
     const error = new Error('Test error');
-    const path = '/test';
-    const result = await processError(error, path);
+    const result = await processError(error);
 
     expect(buildErrorMessage).toHaveBeenCalledTimes(1);
     expect(buildErrorMessage).toHaveBeenCalledWith(error);
@@ -95,6 +98,7 @@ describe('createProcessError', () => {
   });
 
   it('should handle errors during outputting the error message and log the error', async () => {
+    const path = '/test';
     const buildErrorMessage = vi
       .fn()
       .mockResolvedValue('Original error message');
@@ -107,14 +111,14 @@ describe('createProcessError', () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
 
     const processError = createProcessError({
+      path,
       buildErrorMessage,
       buildEndpointErrorMessage,
       outputErrorMessage,
     });
 
     const error = new Error('Test error');
-    const path = '/test';
-    const result = await processError(error, path);
+    const result = await processError(error);
 
     expect(buildErrorMessage).toHaveBeenCalledTimes(1);
     expect(buildErrorMessage).toHaveBeenCalledWith(error);

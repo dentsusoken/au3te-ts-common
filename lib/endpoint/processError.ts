@@ -15,70 +15,75 @@
  * License.
  */
 
-import {
-  BuildErrorMessage,
-  defaultBuildErrorMessage,
-} from './buildErrorMessage';
-import {
-  BuildEndpointErrorMessage,
-  defaultBuildEndpointErrorMessage,
-} from './buildEndpointErrorMessage';
-import {
-  OutputErrorMessage,
-  defaultOutputErrorMessage,
-} from './outputErrorMessage';
-import { runAsyncCatching } from '../utils';
+import { BuildErrorMessage } from './buildErrorMessage';
+import { BuildEndpointErrorMessage } from './buildEndpointErrorMessage';
+import { OutputErrorMessage } from './outputErrorMessage';
+import { runAsyncCatching } from '../utils/result';
 
 /**
- * Type definition for a function that processes an error and returns a promise that resolves to the error message.
- * @param {Error} error The error to process.
- * @param {string} path The path associated with the error.
+ * Parameters for creating a ProcessError function.
+ * @typedef {Object} CreateProcessErrorParams
+ * @property {string} path - The path associated with the error processing.
+ * @property {BuildErrorMessage} buildErrorMessage - Function to build the initial error message.
+ * @property {BuildEndpointErrorMessage} buildEndpointErrorMessage - Function to build the endpoint-specific error message.
+ * @property {OutputErrorMessage} outputErrorMessage - Function to output the final error message.
+ */
+export type CreateProcessErrorParams = {
+  path: string;
+  buildErrorMessage: BuildErrorMessage;
+  buildEndpointErrorMessage: BuildEndpointErrorMessage;
+  outputErrorMessage: OutputErrorMessage;
+};
+
+/**
+ * A function that processes an error and returns a promise resolving to an error message.
+ * @typedef {Function} ProcessError
+ * @param {Error} error - The error to process.
  * @returns {Promise<string>} A promise that resolves to the processed error message.
  */
-export type ProcessError = (error: Error, path: string) => Promise<string>;
-
-/**
- * Interface for parameters to create a ProcessError function.
- */
-export interface CreateProcessErrorParams {
-  /**
-   * Function to build the error message from the error.
-   * @param {Error} error The error to build the message from.
-   * @returns {Promise<string>} A promise that resolves to the built error message.
-   */
-  buildErrorMessage: BuildErrorMessage;
-
-  /**
-   * Function to build the endpoint error message from the path and original error message.
-   * @param {string} path The path of the endpoint.
-   * @param {string} originalMessage The original error message.
-   * @returns {string} The built endpoint error message.
-   */
-  buildEndpointErrorMessage: BuildEndpointErrorMessage;
-
-  /**
-   * Function to output the error message.
-   * @param {string} errorMessage The error message to output.
-   * @returns {Promise<void>} A promise that resolves when the output is complete.
-   */
-  outputErrorMessage: OutputErrorMessage;
-}
+export type ProcessError = (error: Error) => Promise<string>;
 
 /**
  * Creates a ProcessError function based on the provided parameters.
- * @param {CreateProcessErrorParams} params Parameters to create the ProcessError function.
+ *
+ * @function createProcessError
+ * @param {CreateProcessErrorParams} params - Parameters to create the ProcessError function.
  * @returns {ProcessError} The created ProcessError function.
+ *
+ * @description
+ * This function creates a ProcessError function that handles error processing in the following steps:
+ * 1. Builds an initial error message using the provided buildErrorMessage function.
+ * 2. Constructs an endpoint-specific error message using the buildEndpointErrorMessage function.
+ * 3. Attempts to output the error message using the outputErrorMessage function.
+ * 4. If any step fails, it falls back to using the original error message.
+ * 5. Any failure in outputting the error message is logged to the console.
+ *
+ * @example
+ * const processError = createProcessError({
+ *   path: '/api/endpoint',
+ *   buildErrorMessage: async (e) => e.message,
+ *   buildEndpointErrorMessage: (path, msg) => `Error at ${path}: ${msg}`,
+ *   outputErrorMessage: async (msg) => console.log(msg)
+ * });
+ *
+ * // Usage
+ * try {
+ *   // ... some code that might throw an error
+ * } catch (error) {
+ *   const errorMessage = await processError(error);
+ *   // Handle the processed error message
+ * }
  */
 export const createProcessError =
   ({
+    path,
     buildErrorMessage,
     buildEndpointErrorMessage,
     outputErrorMessage,
   }: CreateProcessErrorParams): ProcessError =>
-  async (e, path) => {
+  async (e) => {
     const errorMessageResult = await runAsyncCatching(async () => {
       const originalMessage = await buildErrorMessage(e);
-
       return buildEndpointErrorMessage(path, originalMessage);
     });
     const errorMessage = errorMessageResult.getOrDefault(e.message);
@@ -90,12 +95,3 @@ export const createProcessError =
 
     return errorMessage;
   };
-
-/**
- * Default implementation of the ProcessError function.
- */
-export const defaultProcessError: ProcessError = createProcessError({
-  buildErrorMessage: defaultBuildErrorMessage,
-  buildEndpointErrorMessage: defaultBuildEndpointErrorMessage,
-  outputErrorMessage: defaultOutputErrorMessage,
-});
