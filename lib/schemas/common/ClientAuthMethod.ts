@@ -36,7 +36,6 @@ export const clientAuthMethods = [
 /**
  * Zod schema for client authentication methods.
  *
- * @type {z.ZodSchema<ClientAuthMethod>}
  * @description This schema preprocesses the input value by converting it to lowercase if it's a string,
  * and then validates it against the predefined client authentication methods using `z.enum`.
  * The resulting schema accepts values of type `ClientAuthMethod`, which is a union of the predefined methods.
@@ -53,12 +52,51 @@ export const clientAuthMethods = [
  */
 export type ClientAuthMethod = (typeof clientAuthMethods)[number];
 
+/**
+ * Zod schema for client authentication methods.
+ * This schema validates and normalizes client authentication method strings.
+ *
+ * Behavior:
+ * - If the input is a non-empty string, it will be converted to lowercase.
+ * - The lowercased string must match one of the predefined client authentication methods.
+ * - If the input is not a string or is an empty string, it will be passed through as-is
+ *   (which will likely result in a validation error).
+ * - Any input that doesn't match a predefined client authentication method will result in a validation error.
+ *
+ * @example
+ * clientAuthMethodSchema.parse("NONE") // => "none"
+ * clientAuthMethodSchema.parse("CLIENT_SECRET_BASIC") // => "client_secret_basic"
+ * clientAuthMethodSchema.parse("none") // => "none"
+ * clientAuthMethodSchema.parse("INVALID_METHOD") // => throws ZodError
+ * clientAuthMethodSchema.parse("") // => throws ZodError
+ * clientAuthMethodSchema.parse(null) // => throws ZodError
+ */
 export const clientAuthMethodSchema = z.preprocess(
   (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
   z.enum(clientAuthMethods)
-);
+) as z.ZodType<ClientAuthMethod>;
 
+/**
+ * Zod schema for a nullable but optional client authentication method.
+ * This schema accepts null, undefined, or a valid client authentication method.
+ *
+ *
+ * Behavior:
+ * - If the input is null, it will be transformed to undefined.
+ * - If the input is undefined, it will be passed through as-is.
+ * - If the input is a valid client authentication method string:
+ *   - It will be converted to lowercase.
+ *   - It must match one of the predefined client authentication methods.
+ * - Any other input will result in a validation error.
+ *
+ * @example
+ * nullableButOptionalClientAuthMethodSchema.parse("NONE") // => "none"
+ * nullableButOptionalClientAuthMethodSchema.parse("CLIENT_SECRET_BASIC") // => "client_secret_basic"
+ * nullableButOptionalClientAuthMethodSchema.parse(null) // => undefined
+ * nullableButOptionalClientAuthMethodSchema.parse(undefined) // => undefined
+ * nullableButOptionalClientAuthMethodSchema.parse("INVALID_METHOD") // => throws ZodError
+ */
 export const nullableButOptionalClientAuthMethodSchema = z.preprocess(
   (v) => (v === null ? undefined : v),
   z.optional(clientAuthMethodSchema)
-);
+) as z.ZodType<ClientAuthMethod | undefined>;

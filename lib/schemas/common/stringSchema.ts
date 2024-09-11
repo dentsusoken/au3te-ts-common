@@ -18,53 +18,42 @@
 import { z } from 'zod';
 
 /**
- * Zod schema for a string that can be undefined or null.
- *
- * @type {z.ZodSchema<string | undefined>}
- * @description This schema preprocesses the input value by converting null to undefined,
- * and then validates it as an optional string using `z.string().optional()`.
- * The resulting schema accepts values of type `string | undefined`.
+ * Represents a string that can be either a string value or undefined.
+ * This type is used in scenarios where a value is optional but cannot be null.
+ */
+type OptionalString = string | undefined;
+
+/**
+ * Zod schema for a nullable but optional string.
+ * This schema accepts null, undefined, or a string value.
+ * - If the input is null, it will be transformed to undefined.
+ * - If the input is a string or undefined, it will be passed through as-is.
  *
  * @example
- * const validString = nullableButOptionalStringSchema.parse('hello');
- * // validString: 'hello'
- *
- * const validUndefined = nullableButOptionalStringSchema.parse(undefined);
- * // validUndefined: undefined
- *
- * const validNull = nullableButOptionalStringSchema.parse(null);
- * // validNull: undefined
- *
- * const invalidValue = nullableButOptionalStringSchema.parse(123);
- * // throws a ZodError
+ * nullableButOptionalStringSchema.parse("hello") // => "hello"
+ * nullableButOptionalStringSchema.parse(null) // => undefined
+ * nullableButOptionalStringSchema.parse(undefined) // => undefined
  */
 export const nullableButOptionalStringSchema = z.preprocess(
   (value) => (value === null ? undefined : value),
   z.string().optional()
-);
+) as z.ZodType<OptionalString>;
 
 /**
- * Zod schema for a URL string that can be undefined or null.
- *
- * @type {z.ZodSchema<string | undefined>}
- * @description This schema preprocesses the input value by converting null to undefined,
- * and then validates it as an optional URL string using `z.string().url().optional()`.
- * The resulting schema accepts values of type `string | undefined`, where the string must be a valid URL.
+ * Zod schema for a nullable but optional URL string.
+ * This schema accepts null, undefined, or a valid URL string.
+ * - If the input is null, it will be transformed to undefined.
+ * - If the input is a valid URL string, it will be passed through as-is.
+ * - If the input is undefined, it will be passed through as-is.
+ * - If the input is an invalid URL string, it will throw an error.
  *
  * @example
- * const validUrl = nullableButOptionalUrlStringSchema.parse('https://example.com');
- * // validUrl: 'https://example.com'
- *
- * const validUndefined = nullableButOptionalUrlStringSchema.parse(undefined);
- * // validUndefined: undefined
- *
- * const validNull = nullableButOptionalUrlStringSchema.parse(null);
- * // validNull: undefined
- *
- * const invalidUrl = nullableButOptionalUrlStringSchema.parse('invalid-url');
- * // throws a ZodError
+ * nullableButOptionalUrlStringSchema.parse("https://example.com") // => "https://example.com"
+ * nullableButOptionalUrlStringSchema.parse(null) // => undefined
+ * nullableButOptionalUrlStringSchema.parse(undefined) // => undefined
+ * nullableButOptionalUrlStringSchema.parse("not a url") // => throws ZodError
  */
 export const nullableButOptionalUrlStringSchema = z.preprocess(
   (value) => (value === null ? undefined : value),
   z.string().url().optional()
-);
+) as z.ZodType<OptionalString>;
