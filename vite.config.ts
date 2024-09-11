@@ -9,13 +9,16 @@ export default defineConfig({
         api: './lib/api/index.ts',
         conf: './lib/conf/index.ts',
         endpoint: './lib/endpoint/index.ts',
-        schemas: './lib/schemas/index.ts',
+        'schemas/par': './lib/schemas/par/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',
       fileName: (format, entry) => {
         const ext = format === 'es' ? 'js' : format;
-        return `${entry}/index.${ext}`;
+        const indexFile = `index.${ext}`;
+
+        return entry === 'main' ? indexFile : `${entry}/${indexFile}`;
+        //return `${dir}/index.${ext}`;
       },
     },
   },

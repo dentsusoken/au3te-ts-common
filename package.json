@@ -10,15 +10,7 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    "./schemas": {
-      "types": "./dist/schemas/index.d.ts",
-      "import": "./dist/schemas/index.js",
-      "require": "./dist/schemas/index.cjs"
-    },
     "./endpoint": {
       "types": "./dist/endpoint/index.d.ts",
       "import": "./dist/endpoint/index.js",
@@ -38,10 +30,15 @@
       "types": "./dist/conf/index.d.ts",
       "import": "./dist/conf/index.js",
       "require": "./dist/conf/index.cjs"
+    },
+    "./schemas.par": {
+      "types": "./dist/schemas/par/index.d.ts",
+      "import": "./dist/schemas/par/index.js",
+      "require": "./dist/schemas/par/index.cjs"
     }
   },
   "scripts": {
-    "build": "vite build && tsc",
+    "build": "vite build && tsc --emitDeclarationOnly",
     "test": "vitest --run"
   },
   "devDependencies": {
@@ -57,7 +54,6 @@
   "dependencies": {
     "base64-ts": "^2.0.1",
     "dotenv": "^16.4.5",
-    "hono": "^4.2.7",
     "memfs": "^4.8.2",
     "properties-file": "^3.5.4",
     "react": "^18.2.0",

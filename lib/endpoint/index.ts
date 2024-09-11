@@ -19,3 +19,5 @@ export * from './CommonEndpoint';
 export * from './buildEndpointErrorMessage';
 export * from './buildErrorMessage';
 export * from './outputErrorMessage';
+export * from './buildUnknownActionMessage';
+export * from './processError';
