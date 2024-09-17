@@ -71,4 +71,27 @@ describe('nullableButOptionalClientSchema', () => {
       expect(result.success).toBe(false);
     });
   });
+
+  it('should accept additional properties due to passthrough', () => {
+    const clientWithExtra = {
+      clientName: 'TestClient',
+      extraProperty: 'This is an extra property',
+      anotherExtra: 123,
+      nestedExtra: {
+        foo: 'bar',
+        baz: [1, 2, 3],
+      },
+    };
+    const result = clientSchema.safeParse(clientWithExtra);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual(clientWithExtra);
+      expect(result.data.extraProperty).toBe('This is an extra property');
+      expect(result.data.anotherExtra).toBe(123);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((result.data?.nestedExtra as any).foo).toBe('bar');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((result.data?.nestedExtra as any).baz).toEqual([1, 2, 3]);
+    }
+  });
 });

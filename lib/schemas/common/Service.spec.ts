@@ -84,4 +84,17 @@ describe('nullableButOptionalServiceSchema', () => {
       expect(result.success).toBe(false);
     });
   });
+
+  it('should accept additional properties due to passthrough', () => {
+    const serviceWithExtra = {
+      serviceName: 'TestService',
+      extraProperty: 'This is an extra property',
+      anotherExtra: 123,
+    };
+    const result = serviceSchema.safeParse(serviceWithExtra);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual(serviceWithExtra);
+    }
+  });
 });

@@ -42,15 +42,17 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  * This schema represents information about a client application, which may include
  * properties corresponding to client metadata defined in related standard specifications.
  *
- * @property {string|null} [clientName] - The name of the client application. This field is optional and can be null.
+ * @property {string|undefined} [clientName] - The name of the client application. This field is optional and can be null.
  *
  * @see {@link https://openid.net/specs/openid-connect-registration-1_0.html|OpenID Connect Dynamic Client Registration 1.0}
  * @see {@link https://www.rfc-editor.org/rfc/rfc7591.html|RFC 7591 OAuth 2.0 Dynamic Client Registration Protocol}
  * @see {@link https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#client-metadata|IANA OAuth Parameters / OAuth Dynamic Client Registration Metadata}
  */
-export const clientSchema = z.object({
-  clientName: nullableButOptionalStringSchema,
-});
+export const clientSchema = z
+  .object({
+    clientName: nullableButOptionalStringSchema,
+  })
+  .passthrough();
 
 /**
  * Represents a client application with properties defined by the clientSchema.

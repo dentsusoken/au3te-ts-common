@@ -39,9 +39,11 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  * @see {@link https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata|OpenID Provider Metadata}
  * @see {@link https://openid.net/specs/openid-connect-discovery-1_0.html|OpenID Connect Discovery 1.0}
  */
-export const serviceSchema = z.object({
-  serviceName: nullableButOptionalStringSchema,
-});
+export const serviceSchema = z
+  .object({
+    serviceName: nullableButOptionalStringSchema,
+  })
+  .passthrough();
 
 /**
  * Represents a service with properties defined by the serviceSchema.
