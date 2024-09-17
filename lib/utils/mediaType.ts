@@ -26,30 +26,46 @@
 export const MediaType = {
   /** Media type for JSON data */
   APPLICATION_JSON: 'application/json',
+
   /** Media type for JSON data with UTF-8 encoding */
   APPLICATION_JSON_UTF8: 'application/json;charset=utf-8',
+
   /** Media type for URL-encoded form data */
   APPLICATION_FORM_URLENCODED: 'application/x-www-form-urlencoded',
+
   /** Media type for HTML content */
   TEXT_HTML: 'text/html',
+
+  /** Media type for HTML content with UTF-8 encoding */
+  TEXT_HTML_UTF8: 'text/html;charset=utf-8',
+
   /** Media type for plain text content */
   TEXT_PLAIN: 'text/plain',
-  /** Media type for plain text content  with UTF-8 encoding */
+
+  /** Media type for plain text content with UTF-8 encoding */
   TEXT_PLAIN_UTF8: 'text/plain;charset=utf-8',
+
   /** Media type for XML data */
   APPLICATION_XML: 'application/xml',
+
   /** Media type for binary data */
   APPLICATION_OCTET_STREAM: 'application/octet-stream',
+
   /** Media type for PDF documents */
   APPLICATION_PDF: 'application/pdf',
+
   /** Media type for JPEG images */
   IMAGE_JPEG: 'image/jpeg',
+
   /** Media type for PNG images */
   IMAGE_PNG: 'image/png',
+
   /** Media type for SVG images */
   IMAGE_SVG: 'image/svg+xml',
+
   /** Media type for CSS stylesheets */
   TEXT_CSS: 'text/css',
+
   /** Media type for JavaScript code */
   APPLICATION_JAVASCRIPT: 'application/javascript',
 } as const;

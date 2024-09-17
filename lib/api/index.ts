@@ -15,6 +15,7 @@
  * License.
  */
 
+export * from './AbstractAuthleteApi';
 export * from './AuthleteApi';
 export * from './ResponseError';
 export * from './AuthleteApiFactory';

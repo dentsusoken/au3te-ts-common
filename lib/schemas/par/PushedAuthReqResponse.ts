@@ -191,13 +191,13 @@ import {
  * Zod schema for the action of a pushed authorization request response.
  * Allowed values: 'CREATED', 'BAD_REQUEST', 'UNAUTHORIZED', 'FORBIDDEN', 'PAYLOAD_TOO_LARGE', 'INTERNAL_SERVER_ERROR'.
  */
-const actionSchema = z.union([
-  z.literal('CREATED'),
-  z.literal('BAD_REQUEST'),
-  z.literal('UNAUTHORIZED'),
-  z.literal('FORBIDDEN'),
-  z.literal('PAYLOAD_TOO_LARGE'),
-  z.literal('INTERNAL_SERVER_ERROR'),
+const actionSchema = z.enum([
+  'CREATED',
+  'BAD_REQUEST',
+  'UNAUTHORIZED',
+  'FORBIDDEN',
+  'PAYLOAD_TOO_LARGE',
+  'INTERNAL_SERVER_ERROR',
 ]);
 
 /**

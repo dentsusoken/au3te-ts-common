@@ -24,6 +24,40 @@ import { z } from 'zod';
 type OptionalString = string | undefined;
 
 /**
+ * Represents an optional array of strings.
+ *
+ * @typedef {string[]|undefined} OptionalStringArray
+ */
+type OptionalStringArray = string[] | undefined;
+
+/**
+ * Schema for a string array object.
+ *
+ * This schema defines an object with a single property 'array'
+ * which is an array of strings.
+ */
+export const stringArraySchema = z.object({
+  array: z.array(z.string()),
+});
+
+/**
+ * Represents a string array object.
+ *
+ * @typedef {Object} StringArray
+ * @property {string[]} array - An array of strings.
+ */
+export type StringArray = z.infer<typeof stringArraySchema>;
+
+/**
+ * Represents an optional array of StringArray objects.
+ *
+ * This type can be either an array of StringArray objects or undefined.
+ *
+ * @typedef {StringArray[]|undefined} OptionalStringArrayArray
+ */
+type OptionalStringArrayArray = StringArray[] | undefined;
+
+/**
  * Zod schema for a nullable but optional string.
  * This schema accepts null, undefined, or a string value.
  * - If the input is null, it will be transformed to undefined.
@@ -38,6 +72,60 @@ export const nullableButOptionalStringSchema = z.preprocess(
   (value) => (value === null ? undefined : value),
   z.string().optional()
 ) as z.ZodType<OptionalString>;
+
+/**
+ * Schema for a nullable but optional array of strings.
+ *
+ * This schema preprocesses the input to convert null values to undefined,
+ * and then applies an optional array of strings schema. This allows the schema to
+ * accept null, undefined, or a valid array of strings.
+ *
+ * @type {z.ZodType<OptionalStringArray>}
+ *
+ * @example
+ * // Valid inputs
+ * nullableButOptionalStringArraySchema.parse(null); // returns undefined
+ * nullableButOptionalStringArraySchema.parse(undefined); // returns undefined
+ * nullableButOptionalStringArraySchema.parse(['a', 'b', 'c']); // returns ['a', 'b', 'c']
+ *
+ * @example
+ * // Invalid inputs
+ * nullableButOptionalStringArraySchema.parse('not an array'); // throws ZodError
+ * nullableButOptionalStringArraySchema.parse([1, 2, 3]); // throws ZodError
+ */
+export const nullableButOptionalStringArraySchema = z.preprocess(
+  (value) => (value === null ? undefined : value),
+  z.array(z.string()).optional()
+) as z.ZodType<OptionalStringArray>;
+
+/**
+ * Schema for a nullable but optional array of StringArray objects.
+ *
+ * This schema preprocesses the input to convert null values to undefined,
+ * and then applies an optional array of stringArraySchema. This allows the schema to
+ * accept null, undefined, or a valid array of StringArray objects.
+ *
+ * @type {z.ZodType<OptionalStringArrayArray>}
+ *
+ * @example
+ * // Valid inputs
+ * nullableButOptionalStringArrayArraySchema.parse(null); // returns undefined
+ * nullableButOptionalStringArrayArraySchema.parse(undefined); // returns undefined
+ * nullableButOptionalStringArrayArraySchema.parse([
+ *   { array: ['a', 'b'] },
+ *   { array: ['c', 'd'] }
+ * ]); // returns the array of StringArray objects
+ *
+ * @example
+ * // Invalid input
+ * nullableButOptionalStringArrayArraySchema.parse('not an array'); // throws ZodError
+ *
+ * @see {@link stringArraySchema} for the underlying StringArray schema
+ */
+export const nullableButOptionalStringArrayArraySchema = z.preprocess(
+  (value) => (value === null ? undefined : value),
+  z.array(stringArraySchema).optional()
+) as z.ZodType<OptionalStringArrayArray>;
 
 /**
  * Zod schema for a nullable but optional URL string.
