@@ -24,11 +24,17 @@ import {
   PushedAuthReqResponse,
   pushedAuthReqResponseSchema,
 } from '../schemas/par/PushedAuthReqResponse';
+import { AuthorizationRequest } from '../schemas/authorization/AuthorizationRequest';
+import {
+  AuthorizationResponse,
+  authorizationResponseSchema,
+} from '../schemas/authorization/AuthorizationResponse';
 
 export abstract class AbstractAuthleteApi implements AuthleteApi {
   protected abstract baseUrl: string;
   protected abstract auth: string;
   protected abstract pushAuthorizationRequestPath: string;
+  protected abstract authorizationPath: string;
 
   async callPostApi<REQ extends object, RES>(
     path: string,
@@ -48,6 +54,16 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
       this.pushAuthorizationRequestPath,
       request,
       pushedAuthReqResponseSchema
+    );
+  }
+
+  async authorization(
+    request: AuthorizationRequest
+  ): Promise<AuthorizationResponse> {
+    return this.callPostApi(
+      this.authorizationPath,
+      request,
+      authorizationResponseSchema
     );
   }
 }

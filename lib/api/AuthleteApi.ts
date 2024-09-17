@@ -17,19 +17,14 @@
 
 import { PushedAuthReqRequest } from '../schemas/par/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../schemas/par/PushedAuthReqResponse';
+import { AuthorizationRequest } from '../schemas/authorization/AuthorizationRequest';
+import { AuthorizationResponse } from '../schemas/authorization/AuthorizationResponse';
 
 /**
  * Represents the Authlete API interface.
  * @interface AuthleteApi
  */
 export interface AuthleteApi {
-  // /**
-  //  * Performs an authorization request.
-  //  * @param {AuthorizationRequest} request - The authorization request.
-  //  * @returns {Promise<AuthorizationResponse>} A promise that resolves to the authorization response.
-  //  */
-  // authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
-
   // /**
   //  * Issues an authorization.
   //  * @param {AuthorizationIssueRequest} request - The authorization issue request.
@@ -54,6 +49,13 @@ export interface AuthleteApi {
   pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse>;
+
+  /**
+   * Performs an authorization request.
+   * @param {AuthorizationRequest} request - The authorization request.
+   * @returns {Promise<AuthorizationResponse>} A promise that resolves to the authorization response.
+   */
+  authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
 
   // /**
   //  * Performs an introspection request.
