@@ -10,6 +10,7 @@ export default defineConfig({
         conf: './lib/conf/index.ts',
         endpoint: './lib/endpoint/index.ts',
         'schemas/par': './lib/schemas/par/index.ts',
+        'schemas/authorization': './lib/schemas/authorization/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',

@@ -59,8 +59,8 @@ describe('AbstractAuthleteApi', () => {
     }, 10000);
   });
 
-  describe('pushAuthorizationRequest', () => {
-    it('should successfully post an authorization request', async () => {
+  describe('authorization', () => {
+    it('should successfully post an authorization', async () => {
       const parRequest: PushedAuthReqRequest = {
         parameters:
           'scope=org.iso.18013.5.1.mDL+openid&redirect_uri=eudi-openid4ci%3A%2F%2Fauthorize%2F&response_type=code&client_id=tw24.wallet.dentsusoken.com',

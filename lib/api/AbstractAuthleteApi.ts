@@ -30,12 +30,35 @@ import {
   authorizationResponseSchema,
 } from '../schemas/authorization/AuthorizationResponse';
 
+/**
+ * Abstract base class for Authlete API implementations.
+ *
+ * @abstract
+ * @implements {AuthleteApi}
+ */
 export abstract class AbstractAuthleteApi implements AuthleteApi {
+  /** @protected @abstract The base URL for API calls */
   protected abstract baseUrl: string;
+
+  /** @protected @abstract The authentication string for API calls */
   protected abstract auth: string;
+
+  /** @protected @abstract The path for push authorization requests */
   protected abstract pushAuthorizationRequestPath: string;
+
+  /** @protected @abstract The path for authorization requests */
   protected abstract authorizationPath: string;
 
+  /**
+   * Makes a POST API call to the specified path.
+   *
+   * @template REQ - The type of the request object
+   * @template RES - The type of the response object
+   * @param {string} path - The API endpoint path
+   * @param {REQ} request - The request object
+   * @param {z.ZodType<RES>} schema - The Zod schema for response validation
+   * @returns {Promise<RES>} A promise that resolves with the API response
+   */
   async callPostApi<REQ extends object, RES>(
     path: string,
     request: REQ,
@@ -47,6 +70,12 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
     return apiCall.call();
   }
 
+  /**
+   * Sends a push authorization request.
+   *
+   * @param {PushedAuthReqRequest} request - The push authorization request
+   * @returns {Promise<PushedAuthReqResponse>} A promise that resolves with the push authorization response
+   */
   async pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse> {
@@ -57,6 +86,12 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
     );
   }
 
+  /**
+   * Sends an authorization request.
+   *
+   * @param {AuthorizationRequest} request - The authorization request
+   * @returns {Promise<AuthorizationResponse>} A promise that resolves with the authorization response
+   */
   async authorization(
     request: AuthorizationRequest
   ): Promise<AuthorizationResponse> {

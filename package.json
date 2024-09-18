@@ -35,6 +35,11 @@
       "types": "./dist/schemas/par/index.d.ts",
       "import": "./dist/schemas/par/index.js",
       "require": "./dist/schemas/par/index.cjs"
+    },
+    "./schemas.authorization": {
+      "types": "./dist/schemas/authorization/index.d.ts",
+      "import": "./dist/schemas/authorization/index.js",
+      "require": "./dist/schemas/authorization/index.cjs"
     }
   },
   "scripts": {
