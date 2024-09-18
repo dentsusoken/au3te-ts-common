@@ -31,6 +31,11 @@
       "import": "./dist/conf/index.js",
       "require": "./dist/conf/index.cjs"
     },
+    "./schemas.common": {
+      "types": "./dist/schemas/common/index.d.ts",
+      "import": "./dist/schemas/common/index.js",
+      "require": "./dist/schemas/common/index.cjs"
+    },
     "./schemas.par": {
       "types": "./dist/schemas/par/index.d.ts",
       "import": "./dist/schemas/par/index.js",

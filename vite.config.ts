@@ -9,6 +9,7 @@ export default defineConfig({
         api: './lib/api/index.ts',
         conf: './lib/conf/index.ts',
         endpoint: './lib/endpoint/index.ts',
+        'schemas/common': './lib/schemas/common/index.ts',
         'schemas/par': './lib/schemas/par/index.ts',
         'schemas/authorization': './lib/schemas/authorization/index.ts',
         utils: './lib/utils/index.ts',
