@@ -35,6 +35,7 @@
 
 import { z } from 'zod';
 import { nullableButOptionalStringSchema } from './stringSchema';
+import { nullableButOptionalSubjectTypeSchema } from './SubjectType';
 
 /**
  * Schema for client application information.
@@ -51,6 +52,7 @@ import { nullableButOptionalStringSchema } from './stringSchema';
 export const clientSchema = z
   .object({
     clientName: nullableButOptionalStringSchema,
+    subjectType: nullableButOptionalSubjectTypeSchema,
   })
   .passthrough();
 
