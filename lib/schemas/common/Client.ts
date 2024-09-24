@@ -53,6 +53,7 @@ export const clientSchema = z
   .object({
     clientName: nullableButOptionalStringSchema,
     subjectType: nullableButOptionalSubjectTypeSchema,
+    derivedSectorIdentifier: nullableButOptionalStringSchema,
   })
   .passthrough();
 

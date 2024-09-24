@@ -19,6 +19,10 @@ import { PushedAuthReqRequest } from '../schemas/par/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../schemas/par/PushedAuthReqResponse';
 import { AuthorizationRequest } from '../schemas/authorization/AuthorizationRequest';
 import { AuthorizationResponse } from '../schemas/authorization/AuthorizationResponse';
+import {
+  AuthorizationFailRequest,
+  AuthorizationFailResponse,
+} from '../schemas/authorization-fail';
 
 /**
  * Represents the Authlete API interface.
@@ -56,6 +60,42 @@ export interface AuthleteApi {
    * @returns {Promise<AuthorizationResponse>} A promise that resolves to the authorization response.
    */
   authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
+
+  /**
+   * Sends an authorization failure request to Authlete's /auth/authorization/fail API.
+   *
+   * This function is used to notify Authlete about a failed authorization attempt.
+   * It's typically called when the authorization server encounters an error or
+   * when the end-user denies the authorization request.
+   *
+   * @async
+   * @function authorizationFail
+   * @param {AuthorizationFailRequest} request - The details of the authorization failure.
+   * @param {string} request.reason - The reason for the authorization failure. Must be one of the predefined enum values.
+   * @param {string|null} [request.ticket] - The ticket value received from the authorization server. Can be null or omitted.
+   * @param {string|null} [request.description] - Additional description of the failure. Can be null or omitted.
+   * @returns {Promise<AuthorizationFailResponse>} A promise that resolves to the response from Authlete's API.
+   * @throws {Error} If the API call fails or returns an unexpected response.
+   *
+   * @typedef {Object} AuthorizationFailResponse
+   * @property {('INTERNAL_SERVER_ERROR'|'BAD_REQUEST'|'LOCATION'|'FORM')} action - Indicates the action that should be taken in response to the authorization failure.
+   * @property {string|null} [responseContent] - Contains the content of the response that should be sent to the client. The exact content depends on the action.
+   *
+   * @remarks
+   * The `reason` parameter in the request determines the specific error response that will be sent to the client.
+   * Different reasons may result in different error codes (e.g., `login_required`, `consent_required`, `interaction_required`).
+   *
+   * The response's `action` property determines how the authorization server should respond to the client:
+   * - INTERNAL_SERVER_ERROR: Indicates a server error. The server should respond with a 500 Internal Server Error.
+   * - BAD_REQUEST: Indicates an invalid request. The server should respond with a 400 Bad Request.
+   * - LOCATION: Indicates that the client should be redirected. The `responseContent` will contain the redirect URL.
+   * - FORM: Indicates that an HTML form should be sent to the client. The `responseContent` will contain the HTML.
+   *
+   * @see {@link https://docs.authlete.com/#auth-authorization-fail|Authlete API Reference: /auth/authorization/fail}
+   */
+  authorizationFail(
+    request: AuthorizationFailRequest
+  ): Promise<AuthorizationFailResponse>;
 
   // /**
   //  * Performs an introspection request.

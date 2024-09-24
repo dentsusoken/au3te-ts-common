@@ -29,6 +29,11 @@ import {
   AuthorizationResponse,
   authorizationResponseSchema,
 } from '../schemas/authorization/AuthorizationResponse';
+import { AuthorizationFailRequest } from '../schemas/authorization-fail/AuthorizationFailRequest';
+import {
+  AuthorizationFailResponse,
+  authorizationFailResponseSchema,
+} from '../schemas/authorization-fail/AuthorizationFailResponse';
 
 /**
  * Abstract base class for Authlete API implementations.
@@ -46,8 +51,11 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
   /** @protected @abstract The path for push authorization requests */
   protected abstract pushAuthorizationRequestPath: string;
 
-  /** @protected @abstract The path for authorization requests */
+  /** @protected @abstract The path for authorization */
   protected abstract authorizationPath: string;
+
+  /** @protected @abstract The path for authorization fail */
+  protected abstract authorizationFailPath: string;
 
   /**
    * Makes a POST API call to the specified path.
@@ -99,6 +107,22 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
       this.authorizationPath,
       request,
       authorizationResponseSchema
+    );
+  }
+
+  /**
+   * Sends an authorization fail request.
+   *
+   * @param {AuthorizationFailRequest} request - The authorization fail request
+   * @returns {Promise<AuthorizationFailResponse>} A promise that resolves with the authorization fail response
+   */
+  authorizationFail(
+    request: AuthorizationFailRequest
+  ): Promise<AuthorizationFailResponse> {
+    return this.callPostApi(
+      this.authorizationFailPath,
+      request,
+      authorizationFailResponseSchema
     );
   }
 }

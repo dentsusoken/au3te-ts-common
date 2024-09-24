@@ -15,4 +15,5 @@
  * License.
  */
 
-export * as par from './par';
+export * from './AuthorizationFailRequest';
+export * from './AuthorizationFailResponse';

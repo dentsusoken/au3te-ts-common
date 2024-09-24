@@ -15,7 +15,6 @@
  * License.
  */
 
-export * from './schemas';
 export * from './endpoint';
 export * from './api';
 export * from './utils';
