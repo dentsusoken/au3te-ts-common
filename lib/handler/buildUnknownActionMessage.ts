@@ -15,19 +15,17 @@
  * License.
  */
 
-import { BuildEndpointErrorMessage } from './buildEndpointErrorMessage';
+import { BuildApiErrorMessage } from './buildApiErrorMessage';
 
 export type BuildUnknownActionMessage = (action: string) => string;
 
 export type CreateBuildUnknownErrorMessageParams = {
-  path: string;
-  buildEndpointErrorMessage: BuildEndpointErrorMessage;
+  buildApiErrorMessage: BuildApiErrorMessage;
 };
 
 export const createBuildUnknownActionMessage =
   ({
-    path,
-    buildEndpointErrorMessage,
+    buildApiErrorMessage,
   }: CreateBuildUnknownErrorMessageParams): BuildUnknownActionMessage =>
   (action) =>
-    buildEndpointErrorMessage(path, `unknown action: ${action}`);
+    buildApiErrorMessage(`Unknown action: ${action}`);

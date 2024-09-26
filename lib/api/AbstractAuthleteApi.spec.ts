@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { AbstractAuthleteApi } from './AbstractAuthleteApi';
 import { PushedAuthReqRequest } from 'au3te-ts-common/schemas.par';
-import { AuthorizationFailRequest } from '../schemas/authorization-fail';
+import { AuthorizationFailRequest } from '../schemas/authorization-fail/AuthorizationFailRequest';
+import { AuthorizationRequest } from '../schemas/authorization/AuthorizationRequest';
 
 class AuthleteApiImpl extends AbstractAuthleteApi {
   protected readonly baseUrl: string;
@@ -120,7 +121,7 @@ describe('AbstractAuthleteApi', () => {
       expect(parResponse.requestUri).toBeDefined();
       expect(parResponse.dpopNonce).toBeUndefined();
 
-      const authorizationRequest: PushedAuthReqRequest = {
+      const authorizationRequest: AuthorizationRequest = {
         parameters: `client_id=tw24.wallet.dentsusoken.com&request_uri=${encodeURIComponent(
           parResponse.requestUri!
         )}`,

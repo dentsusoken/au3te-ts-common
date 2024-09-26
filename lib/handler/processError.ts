@@ -16,22 +16,20 @@
  */
 
 import { BuildErrorMessage } from './buildErrorMessage';
-import { BuildEndpointErrorMessage } from './buildEndpointErrorMessage';
+import { BuildApiErrorMessage } from './buildApiErrorMessage';
 import { OutputErrorMessage } from './outputErrorMessage';
 import { runAsyncCatching } from '../utils/result';
 
 /**
  * Parameters for creating a ProcessError function.
  * @typedef {Object} CreateProcessErrorParams
- * @property {string} path - The path associated with the error processing.
  * @property {BuildErrorMessage} buildErrorMessage - Function to build the initial error message.
- * @property {BuildEndpointErrorMessage} buildEndpointErrorMessage - Function to build the endpoint-specific error message.
+ * @property {BuildApiErrorMessage} buildApiErrorMessage - Function to build the error message for API.
  * @property {OutputErrorMessage} outputErrorMessage - Function to output the final error message.
  */
 export type CreateProcessErrorParams = {
-  path: string;
   buildErrorMessage: BuildErrorMessage;
-  buildEndpointErrorMessage: BuildEndpointErrorMessage;
+  buildApiErrorMessage: BuildApiErrorMessage;
   outputErrorMessage: OutputErrorMessage;
 };
 
@@ -53,43 +51,26 @@ export type ProcessError = (error: Error) => Promise<string>;
  * @description
  * This function creates a ProcessError function that handles error processing in the following steps:
  * 1. Builds an initial error message using the provided buildErrorMessage function.
- * 2. Constructs an endpoint-specific error message using the buildEndpointErrorMessage function.
+ * 2. Constructs an error message for API using the buildEndpointErrorMessage function.
  * 3. Attempts to output the error message using the outputErrorMessage function.
  * 4. If any step fails, it falls back to using the original error message.
  * 5. Any failure in outputting the error message is logged to the console.
- *
- * @example
- * const processError = createProcessError({
- *   path: '/api/endpoint',
- *   buildErrorMessage: async (e) => e.message,
- *   buildEndpointErrorMessage: (path, msg) => `Error at ${path}: ${msg}`,
- *   outputErrorMessage: async (msg) => console.log(msg)
- * });
- *
- * // Usage
- * try {
- *   // ... some code that might throw an error
- * } catch (error) {
- *   const errorMessage = await processError(error);
- *   // Handle the processed error message
- * }
  */
 export const createProcessError =
   ({
-    path,
     buildErrorMessage,
-    buildEndpointErrorMessage,
+    buildApiErrorMessage,
     outputErrorMessage,
   }: CreateProcessErrorParams): ProcessError =>
   async (e) => {
     const errorMessageResult = await runAsyncCatching(async () => {
       const originalMessage = await buildErrorMessage(e);
-      return buildEndpointErrorMessage(path, originalMessage);
+      return buildApiErrorMessage(originalMessage);
     });
     const errorMessage = errorMessageResult.getOrDefault(e.message);
 
-    const outputResult = await runAsyncCatching(async () =>
-      outputErrorMessage(errorMessage)
+    const outputResult = await runAsyncCatching(
+      async () => await outputErrorMessage(errorMessage)
     );
     outputResult.onFailure(console.error);
 

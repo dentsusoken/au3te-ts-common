@@ -15,8 +15,8 @@
  * License.
  */
 
-export * from './CommonEndpoint';
-export * from './buildEndpointErrorMessage';
+export * from './CommonHandler';
+export * from './buildApiErrorMessage';
 export * from './buildErrorMessage';
 export * from './outputErrorMessage';
 export * from './buildUnknownActionMessage';

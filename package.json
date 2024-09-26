@@ -11,10 +11,10 @@
     "dist"
   ],
   "exports": {
-    "./endpoint": {
-      "types": "./dist/endpoint/index.d.ts",
-      "import": "./dist/endpoint/index.js",
-      "require": "./dist/endpoint/index.cjs"
+    "./handler": {
+      "types": "./dist/handler/index.d.ts",
+      "import": "./dist/handler/index.js",
+      "require": "./dist/handler/index.cjs"
     },
     "./api": {
       "types": "./dist/api/index.d.ts",

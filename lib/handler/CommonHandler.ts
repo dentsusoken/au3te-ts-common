@@ -16,9 +16,9 @@
  */
 
 import {
-  BuildEndpointErrorMessage,
-  defaultBuildEndpointErrorMessage,
-} from './buildEndpointErrorMessage';
+  BuildApiErrorMessage,
+  createBuildApiErrorMessage,
+} from './buildApiErrorMessage';
 import {
   BuildErrorMessage,
   defaultBuildErrorMessage,
@@ -33,50 +33,41 @@ import {
 } from './outputErrorMessage';
 import { ProcessError, createProcessError } from './processError';
 
-export type CommonEndpointConstructorOptions = {
+export type CommonHandlerConstructorOptions = {
   buildErrorMessage?: BuildErrorMessage;
-  buildEndpointErrorMessage?: BuildEndpointErrorMessage;
+  buildApiErrorMessage?: BuildApiErrorMessage;
   outputErrorMessage?: OutputErrorMessage;
   processError?: ProcessError;
   buildUnknownActionMessage?: BuildUnknownActionMessage;
 };
 
-export class CommonEndpoint {
+export class CommonHandler {
   readonly path: string;
   readonly buildErrorMessage: BuildErrorMessage;
-  readonly buildEndpointErrorMessage: BuildEndpointErrorMessage;
+  readonly buildApiErrorMessage: BuildApiErrorMessage;
   readonly outputErrorMessage: OutputErrorMessage;
   readonly processError: ProcessError;
   readonly buildUnknownActionMessage: BuildUnknownActionMessage;
 
-  constructor(
-    path: string,
-    {
-      buildErrorMessage,
-      buildEndpointErrorMessage,
-      outputErrorMessage,
-      processError,
-      buildUnknownActionMessage,
-    }: CommonEndpointConstructorOptions = {}
-  ) {
+  constructor(path: string, options: CommonHandlerConstructorOptions = {}) {
     this.path = path;
-    this.buildErrorMessage = buildErrorMessage ?? defaultBuildErrorMessage;
-    this.buildEndpointErrorMessage =
-      buildEndpointErrorMessage ?? defaultBuildEndpointErrorMessage;
-    this.outputErrorMessage = outputErrorMessage ?? defaultOutputErrorMessage;
+    this.buildErrorMessage =
+      options.buildErrorMessage ?? defaultBuildErrorMessage;
+    this.buildApiErrorMessage =
+      options.buildApiErrorMessage ?? createBuildApiErrorMessage(this.path);
+    this.outputErrorMessage =
+      options.outputErrorMessage ?? defaultOutputErrorMessage;
     this.processError =
-      processError ??
+      options.processError ??
       createProcessError({
-        path: this.path,
         buildErrorMessage: this.buildErrorMessage,
-        buildEndpointErrorMessage: this.buildEndpointErrorMessage,
+        buildApiErrorMessage: this.buildApiErrorMessage,
         outputErrorMessage: this.outputErrorMessage,
       });
     this.buildUnknownActionMessage =
-      buildUnknownActionMessage ??
+      options.buildUnknownActionMessage ??
       createBuildUnknownActionMessage({
-        path: this.path,
-        buildEndpointErrorMessage: this.buildEndpointErrorMessage,
+        buildApiErrorMessage: this.buildApiErrorMessage,
       });
   }
 }

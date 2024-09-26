@@ -15,7 +15,7 @@
  * License.
  */
 
-export * from './endpoint';
+export * from './handler';
 export * from './api';
 export * from './utils';
 export * from './conf';
