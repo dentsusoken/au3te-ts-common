@@ -84,15 +84,15 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
    * @param {PushedAuthReqRequest} request - The push authorization request
    * @returns {Promise<PushedAuthReqResponse>} A promise that resolves with the push authorization response
    */
-  async pushAuthorizationRequest(
+  pushAuthorizationRequest = (
     request: PushedAuthReqRequest
-  ): Promise<PushedAuthReqResponse> {
+  ): Promise<PushedAuthReqResponse> => {
     return this.callPostApi(
       this.pushAuthorizationRequestPath,
       request,
       pushedAuthReqResponseSchema
     );
-  }
+  };
 
   /**
    * Sends an authorization request.
@@ -100,15 +100,15 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
    * @param {AuthorizationRequest} request - The authorization request
    * @returns {Promise<AuthorizationResponse>} A promise that resolves with the authorization response
    */
-  async authorization(
+  authorization = (
     request: AuthorizationRequest
-  ): Promise<AuthorizationResponse> {
+  ): Promise<AuthorizationResponse> => {
     return this.callPostApi(
       this.authorizationPath,
       request,
       authorizationResponseSchema
     );
-  }
+  };
 
   /**
    * Sends an authorization fail request.
@@ -116,13 +116,13 @@ export abstract class AbstractAuthleteApi implements AuthleteApi {
    * @param {AuthorizationFailRequest} request - The authorization fail request
    * @returns {Promise<AuthorizationFailResponse>} A promise that resolves with the authorization fail response
    */
-  authorizationFail(
+  authorizationFail = (
     request: AuthorizationFailRequest
-  ): Promise<AuthorizationFailResponse> {
+  ): Promise<AuthorizationFailResponse> => {
     return this.callPostApi(
       this.authorizationFailPath,
       request,
       authorizationFailResponseSchema
     );
-  }
+  };
 }

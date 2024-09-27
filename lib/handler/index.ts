@@ -21,3 +21,4 @@ export * from './buildErrorMessage';
 export * from './outputErrorMessage';
 export * from './buildUnknownActionMessage';
 export * from './processError';
+export * from './processApiRequest';
