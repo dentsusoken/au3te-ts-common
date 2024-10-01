@@ -50,6 +50,11 @@
       "types": "./dist/schemas/authorization-fail/index.d.ts",
       "import": "./dist/schemas/authorization-fail/index.js",
       "require": "./dist/schemas/authorization-fail/index.cjs"
+    },
+    "./schemas.authorization.issue": {
+      "types": "./dist/schemas/authorization-issue/index.d.ts",
+      "import": "./dist/schemas/authorization-issue/index.js",
+      "require": "./dist/schemas/authorization-issue/index.cjs"
     }
   },
   "scripts": {

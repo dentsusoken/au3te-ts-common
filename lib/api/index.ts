@@ -15,9 +15,7 @@
  * License.
  */
 
-export * from './AbstractAuthleteApi';
-export * from './AuthleteApi';
-export * from './AuthleteApiFactory';
+export * from './ApiClientRegistry';
 export * from './ApiCall';
 export * from './ApiClient';
 export * from './AbstractApiClient';

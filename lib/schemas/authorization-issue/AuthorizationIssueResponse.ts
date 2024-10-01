@@ -240,3 +240,22 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    */
   ticketInfo: nullableButOptionalAuthorizationTicketInfoSchema,
 });
+
+/**
+ * Represents the response structure for an authorization issue request.
+ * This type is inferred from the `authorizationIssueResponseSchema` Zod schema.
+ *
+ * @typedef {Object} AuthorizationIssueResponse
+ * @property {('INTERNAL_SERVER_ERROR'|'BAD_REQUEST'|'LOCATION'|'FORM')} action - The next action that the service implementation should take.
+ * @property {string|null} [responseContent] - The response content which can be used as the entity body of the response returned to the client application.
+ * @property {string|null} [accessToken] - The access token issued when the `response_type` request parameter includes `token`.
+ * @property {number|null} [accessTokenExpiresAt] - The expiration date of the access token in seconds since the Unix epoch.
+ * @property {number|null} [accessTokenDuration] - The duration of the access token in seconds.
+ * @property {string|null} [idToken] - The newly issued ID token when the `response_type` includes `id_token`.
+ * @property {string|null} [authorizationCode] - The newly issued authorization code when the `response_type` includes `code`.
+ * @property {string|null} [jwtAccessToken] - The newly issued access token in JWT format, if the server is configured to issue JWT-based tokens.
+ * @property {Object|null} [ticketInfo] - The information attached to the ticket presented to the `/auth/authorization/issue` API.
+ */
+export type AuthorizationIssueResponse = z.infer<
+  typeof authorizationIssueResponseSchema
+>;
