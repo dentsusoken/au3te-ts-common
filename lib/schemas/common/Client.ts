@@ -34,7 +34,10 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
+import {
+  nullableButOptionalStringSchema,
+  nullableButOptionalUrlStringSchema,
+} from './stringSchema';
 import { nullableButOptionalSubjectTypeSchema } from './SubjectType';
 
 /**
@@ -52,6 +55,11 @@ import { nullableButOptionalSubjectTypeSchema } from './SubjectType';
 export const clientSchema = z
   .object({
     clientName: nullableButOptionalStringSchema,
+    description: nullableButOptionalStringSchema,
+    logoUri: nullableButOptionalUrlStringSchema,
+    clientUri: nullableButOptionalUrlStringSchema,
+    policyUri: nullableButOptionalUrlStringSchema,
+    tosUri: nullableButOptionalUrlStringSchema,
     subjectType: nullableButOptionalSubjectTypeSchema,
     derivedSectorIdentifier: nullableButOptionalStringSchema,
   })

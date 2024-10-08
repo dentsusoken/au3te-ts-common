@@ -16,6 +16,7 @@ export default defineConfig({
           './lib/schemas/authorization-fail/index.ts',
         'schemas/authorization-issue':
           './lib/schemas/authorization-issue/index.ts',
+        'page-model/authorization': './lib/page-model/authorization/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',

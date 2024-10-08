@@ -55,6 +55,11 @@
       "types": "./dist/schemas/authorization-issue/index.d.ts",
       "import": "./dist/schemas/authorization-issue/index.js",
       "require": "./dist/schemas/authorization-issue/index.cjs"
+    },
+    "./page-model.authorization": {
+      "types": "./dist/page-model/authorization/index.d.ts",
+      "import": "./dist/page-model/authorization/index.js",
+      "require": "./dist/page-model/authorization/index.cjs"
     }
   },
   "scripts": {
