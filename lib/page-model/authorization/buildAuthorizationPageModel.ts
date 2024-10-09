@@ -21,27 +21,37 @@ import { AuthorizationPageModel } from './AuthorizationPageModel';
 import { computeScopes } from './computeScopes';
 import { extractRequestedClaims } from './extractRequestedClaims';
 
+/**
+ * Builds an AuthorizationPageModel from an AuthorizationResponse and User.
+ *
+ * This function processes the authorization response, extracts relevant information,
+ * and constructs a page model for rendering the authorization page.
+ *
+ * @param {AuthorizationResponse} authorizationResponse - The response from the authorization server.
+ * @param {User} user - The user object associated with the authorization request.
+ * @returns {AuthorizationPageModel} A model containing all necessary information for the authorization page.
+ */
 export const buildAuthorizationPageModel = (
-  authzRes: AuthorizationResponse,
+  authorizationResponse: AuthorizationResponse,
   user: User
 ): AuthorizationPageModel => {
-  const service = authzRes.service;
-  const client = authzRes.client;
+  const service = authorizationResponse.service;
+  const client = authorizationResponse.client;
 
-  const purpose = authzRes.purpose;
+  const purpose = authorizationResponse.purpose;
   const verifiedClaimsForIdToken = extractRequestedClaims(
-    authzRes.idTokenClaims
+    authorizationResponse.idTokenClaims
   );
   const verifiedClaimsForUserInfo = extractRequestedClaims(
-    authzRes.userInfoClaims
+    authorizationResponse.userInfoClaims
   );
   const identityAssuranceRequired =
     purpose !== undefined ||
     verifiedClaimsForIdToken !== undefined ||
     verifiedClaimsForUserInfo !== undefined;
   const authorizationDetailsResult = runCatching(() => {
-    if (authzRes.authorizationDetails) {
-      return JSON.stringify(authzRes.authorizationDetails);
+    if (authorizationResponse.authorizationDetails) {
+      return JSON.stringify(authorizationResponse.authorizationDetails);
     }
 
     return undefined;
@@ -51,22 +61,26 @@ export const buildAuthorizationPageModel = (
     authorizationDetailsResult.getOrDefault(undefined);
 
   const pageModel: AuthorizationPageModel = {
+    authorizationResponse,
     serviceName: service?.serviceName,
     clientName: client?.clientName,
     description: client?.description,
     logoUri: client?.logoUri,
     policyUri: client?.policyUri,
     tosUri: client?.tosUri,
-    scopes: computeScopes(authzRes.scopes, authzRes.dynamicScopes),
-    loginId: authzRes.subject ?? authzRes.loginHint,
-    loginIdReadOnly: authzRes.subject ? 'readonly' : undefined,
+    scopes: computeScopes(
+      authorizationResponse.scopes,
+      authorizationResponse.dynamicScopes
+    ),
+    loginId: authorizationResponse.subject ?? authorizationResponse.loginHint,
+    loginIdReadOnly: authorizationResponse.subject ? 'readonly' : undefined,
     authorizationDetails,
     user,
     purpose,
     verifiedClaimsForIdToken,
     verifiedClaimsForUserInfo,
     identityAssuranceRequired,
-    claimsForUserInfo: authzRes.claimsAtUserInfo,
+    claimsForUserInfo: authorizationResponse.claimsAtUserInfo,
   };
 
   return pageModel;

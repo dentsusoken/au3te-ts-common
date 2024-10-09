@@ -37,6 +37,7 @@ describe('buildAuthorizationPageModel', () => {
     const result = buildAuthorizationPageModel(mockAuthzRes, mockUser);
 
     expect(result).toEqual({
+      authorizationResponse: mockAuthzRes,
       serviceName: 'mockService',
       clientName: 'mockClient',
       description: 'mockDescription',
@@ -76,6 +77,7 @@ describe('buildAuthorizationPageModel', () => {
     );
 
     expect(result).toEqual({
+      authorizationResponse: partialAuthzRes,
       serviceName: undefined,
       clientName: undefined,
       description: undefined,

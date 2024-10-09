@@ -46,15 +46,20 @@
       "import": "./dist/schemas/authorization/index.js",
       "require": "./dist/schemas/authorization/index.cjs"
     },
-    "./schemas.authorization.fail": {
+    "./schemas.authorization-fail": {
       "types": "./dist/schemas/authorization-fail/index.d.ts",
       "import": "./dist/schemas/authorization-fail/index.js",
       "require": "./dist/schemas/authorization-fail/index.cjs"
     },
-    "./schemas.authorization.issue": {
+    "./schemas.authorization-issue": {
       "types": "./dist/schemas/authorization-issue/index.d.ts",
       "import": "./dist/schemas/authorization-issue/index.js",
       "require": "./dist/schemas/authorization-issue/index.cjs"
+    },
+    "./schemas.authorization-decision": {
+      "types": "./dist/schemas/authorization-decision/index.d.ts",
+      "import": "./dist/schemas/authorization-decision/index.js",
+      "require": "./dist/schemas/authorization-decision/index.cjs"
     },
     "./page-model.authorization": {
       "types": "./dist/page-model/authorization/index.d.ts",

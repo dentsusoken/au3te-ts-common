@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { AuthorizationResponse } from '../../schemas/authorization';
 import { Pair } from '../../schemas/common/Pair';
 import { Scope } from '../../schemas/common/Scope';
 import { User } from '../../schemas/common/User';
@@ -22,6 +23,12 @@ import { User } from '../../schemas/common/User';
  * Model to hold data which are referred to in an authorization page.
  */
 export type AuthorizationPageModel = {
+  /**
+   * Represents the response from an authorization server for an authorization request.
+   * This type encapsulates the data returned after a client's authorization request
+   * in the OAuth 2.0 and OpenID Connect protocols.
+   */
+  authorizationResponse: AuthorizationResponse;
   /**
    * The name of the service.
    */
