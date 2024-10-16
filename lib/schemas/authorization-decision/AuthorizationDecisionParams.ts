@@ -16,6 +16,7 @@
 
 import { z } from 'zod';
 import {
+  nullableButOptionalStringArrayArraySchema,
   nullableButOptionalStringArraySchema,
   nullableButOptionalStringSchema,
 } from '../common/stringSchema';
@@ -24,7 +25,7 @@ import {
  * Schema for authorization decision parameters.
  * This schema defines the structure and types of parameters used in the authorization decision process.
  */
-export const authorizationDecisionParams = z.object({
+export const authorizationDecisionParamsSchema = z.object({
   /**
    * The ticket associated with the authorization request.
    * This can be a string, null, or undefined.
@@ -44,10 +45,10 @@ export const authorizationDecisionParams = z.object({
   claimLocales: nullableButOptionalStringArraySchema,
 
   /**
-   * The ID token claim associated with the authorization request.
+   * The ID token claims associated with the authorization request.
    * This can be a string, null, or undefined.
    */
-  idTokenClaim: nullableButOptionalStringSchema,
+  idTokenClaims: nullableButOptionalStringSchema,
 
   /**
    * An array of requested claims for transaction purposes.
@@ -59,7 +60,7 @@ export const authorizationDecisionParams = z.object({
    * An array of requested verified claims for transaction purposes.
    * This can be an array of strings, null, or undefined.
    */
-  requestedVerifiedClaimsForTx: nullableButOptionalStringArraySchema,
+  requestedVerifiedClaimsForTx: nullableButOptionalStringArrayArraySchema,
 });
 
 /**
@@ -67,5 +68,5 @@ export const authorizationDecisionParams = z.object({
  * This type is inferred from the authorizationDecisionParams schema.
  */
 export type AuthorizationDecisionParams = z.infer<
-  typeof authorizationDecisionParams
+  typeof authorizationDecisionParamsSchema
 >;

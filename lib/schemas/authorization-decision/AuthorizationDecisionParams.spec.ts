@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  authorizationDecisionParams,
+  authorizationDecisionParamsSchema,
   AuthorizationDecisionParams,
 } from './AuthorizationDecisionParams';
 
@@ -10,19 +10,21 @@ describe('authorizationDecisionParams', () => {
       ticket: 'valid-ticket',
       claimNames: ['name', 'email'],
       claimLocales: ['en', 'ja'],
-      idTokenClaim: 'id-token-claim',
+      idTokenClaims: 'id-token-claim',
       requestedClaimsForTx: ['claim1', 'claim2'],
-      requestedVerifiedClaimsForTx: ['verified1', 'verified2'],
+      requestedVerifiedClaimsForTx: [{ array: ['verified1', 'verified2'] }],
     };
 
-    expect(() => authorizationDecisionParams.parse(validParams)).not.toThrow();
+    expect(() =>
+      authorizationDecisionParamsSchema.parse(validParams)
+    ).not.toThrow();
   });
 
   it('should allow all fields to be undefined', () => {
     const undefinedParams: AuthorizationDecisionParams = {};
 
     expect(() =>
-      authorizationDecisionParams.parse(undefinedParams)
+      authorizationDecisionParamsSchema.parse(undefinedParams)
     ).not.toThrow();
   });
 
@@ -31,12 +33,14 @@ describe('authorizationDecisionParams', () => {
       ticket: undefined,
       claimNames: undefined,
       claimLocales: undefined,
-      idTokenClaim: undefined,
+      idTokenClaims: undefined,
       requestedClaimsForTx: undefined,
       requestedVerifiedClaimsForTx: undefined,
     };
 
-    expect(() => authorizationDecisionParams.parse(nullParams)).not.toThrow();
+    expect(() =>
+      authorizationDecisionParamsSchema.parse(nullParams)
+    ).not.toThrow();
   });
 
   it('should reject invalid types', () => {
@@ -49,6 +53,8 @@ describe('authorizationDecisionParams', () => {
       requestedVerifiedClaimsForTx: [{}],
     };
 
-    expect(() => authorizationDecisionParams.parse(invalidParams)).toThrow();
+    expect(() =>
+      authorizationDecisionParamsSchema.parse(invalidParams)
+    ).toThrow();
   });
 });
