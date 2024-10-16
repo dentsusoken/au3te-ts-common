@@ -15,5 +15,19 @@
  * License.
  */
 
+export * from './AuthorizationTicketInfo';
+export * from './AuthzDetails';
+export * from './AuthzDetailsElement';
 export * from './Client';
 export * from './User';
+export * from './DynamicScope';
+export * from './Prompt';
+export * from './Pair';
+export * from './Property';
+export * from './Scope';
+export * from './Service';
+export * from './SubjectType';
+export * from './TaggedValue';
+export * from './stringSchema';
+export * from './numberSchema';
+export * from './booleanSchema';
