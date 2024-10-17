@@ -33,7 +33,7 @@ import { extractRequestedClaims } from './extractRequestedClaims';
  */
 export const buildAuthorizationPageModel = (
   authorizationResponse: AuthorizationResponse,
-  user: User
+  user: User | undefined
 ): AuthorizationPageModel => {
   const service = authorizationResponse.service;
   const client = authorizationResponse.client;

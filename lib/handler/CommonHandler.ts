@@ -20,10 +20,6 @@ import {
   createBuildApiErrorMessage,
 } from './buildApiErrorMessage';
 import {
-  BuildErrorMessage,
-  defaultBuildErrorMessage,
-} from './buildErrorMessage';
-import {
   BuildUnknownActionMessage,
   createBuildUnknownActionMessage,
 } from './buildUnknownActionMessage';
@@ -33,26 +29,43 @@ import {
 } from './outputErrorMessage';
 import { ProcessError, createProcessError } from './processError';
 
+/**
+ * Options for constructing a CommonHandler instance.
+ * @typedef {Object} CommonHandlerConstructorOptions
+ * @property {BuildApiErrorMessage} [buildApiErrorMessage] - Function to build API error messages.
+ * @property {OutputErrorMessage} [outputErrorMessage] - Function to output error messages.
+ * @property {ProcessError} [processError] - Function to process errors.
+ * @property {BuildUnknownActionMessage} [buildUnknownActionMessage] - Function to build unknown action messages.
+ */
 export type CommonHandlerConstructorOptions = {
-  buildErrorMessage?: BuildErrorMessage;
   buildApiErrorMessage?: BuildApiErrorMessage;
   outputErrorMessage?: OutputErrorMessage;
   processError?: ProcessError;
   buildUnknownActionMessage?: BuildUnknownActionMessage;
 };
 
+/**
+ * Represents a common handler for API operations.
+ */
 export class CommonHandler {
+  /** @readonly The API path. */
   readonly path: string;
-  readonly buildErrorMessage: BuildErrorMessage;
+  /** @readonly Function to build API error messages. */
   readonly buildApiErrorMessage: BuildApiErrorMessage;
+  /** @readonly Function to output error messages. */
   readonly outputErrorMessage: OutputErrorMessage;
+  /** @readonly Function to process errors. */
   readonly processError: ProcessError;
+  /** @readonly Function to build unknown action messages. */
   readonly buildUnknownActionMessage: BuildUnknownActionMessage;
 
+  /**
+   * Creates an instance of CommonHandler.
+   * @param {string} path - The API path.
+   * @param {CommonHandlerConstructorOptions} [options={}] - Options for constructing the handler.
+   */
   constructor(path: string, options: CommonHandlerConstructorOptions = {}) {
     this.path = path;
-    this.buildErrorMessage =
-      options.buildErrorMessage ?? defaultBuildErrorMessage;
     this.buildApiErrorMessage =
       options.buildApiErrorMessage ?? createBuildApiErrorMessage(this.path);
     this.outputErrorMessage =
@@ -60,7 +73,6 @@ export class CommonHandler {
     this.processError =
       options.processError ??
       createProcessError({
-        buildErrorMessage: this.buildErrorMessage,
         buildApiErrorMessage: this.buildApiErrorMessage,
         outputErrorMessage: this.outputErrorMessage,
       });

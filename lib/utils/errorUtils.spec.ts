@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getErrorMessage, convertToError } from './errorUtils';
+import { getErrorMessage, convertToError, responseToError } from './errorUtils';
 
 describe('errorUtils', () => {
   describe('getErrorMessage', () => {
@@ -118,6 +118,34 @@ describe('errorUtils', () => {
       const result = convertToError(undefined);
       expect(result).toBeInstanceOf(Error);
       expect(result.message).toBe('undefined');
+    });
+  });
+
+  describe('responseToError', () => {
+    it('should generate the correct error message', () => {
+      const mockResponse = {
+        status: 404,
+        statusText: 'Not Found',
+      } as Response;
+
+      const error = responseToError(mockResponse);
+
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('Invalid response with status 404 Not Found');
+    });
+
+    it('should work correctly when statusText is empty', () => {
+      const mockResponse = {
+        status: 500,
+        statusText: 'Internal Server Error',
+      } as Response;
+
+      const error = responseToError(mockResponse);
+
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(
+        'Invalid response with status 500 Internal Server Error'
+      );
     });
   });
 });

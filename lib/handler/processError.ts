@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Authlete, Inc.
+ * Copyright (C) 2014-2024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,57 +15,46 @@
  * License.
  */
 
-import { BuildErrorMessage } from './buildErrorMessage';
 import { BuildApiErrorMessage } from './buildApiErrorMessage';
 import { OutputErrorMessage } from './outputErrorMessage';
-import { runAsyncCatching } from '../utils/result';
+import { runAsyncCatching, runCatching } from '../utils/result';
+
+/**
+ * Represents a function that processes an error.
+ *
+ * @typedef {Function} ProcessError
+ * @param {Error} error - The error to be processed.
+ * @returns {Promise<void>} A promise that resolves when the error processing is complete.
+ */
+export type ProcessError = (error: Error) => Promise<void>;
 
 /**
  * Parameters for creating a ProcessError function.
  * @typedef {Object} CreateProcessErrorParams
- * @property {BuildErrorMessage} buildErrorMessage - Function to build the initial error message.
  * @property {BuildApiErrorMessage} buildApiErrorMessage - Function to build the error message for API.
  * @property {OutputErrorMessage} outputErrorMessage - Function to output the final error message.
  */
 export type CreateProcessErrorParams = {
-  buildErrorMessage: BuildErrorMessage;
   buildApiErrorMessage: BuildApiErrorMessage;
   outputErrorMessage: OutputErrorMessage;
 };
 
 /**
- * A function that processes an error and returns a promise resolving to an error message.
- * @typedef {Function} ProcessError
- * @param {Error} error - The error to process.
- * @returns {Promise<string>} A promise that resolves to the processed error message.
- */
-export type ProcessError = (error: Error) => Promise<string>;
-
-/**
- * Creates a ProcessError function based on the provided parameters.
+ * Creates a function to process errors.
  *
- * @function createProcessError
- * @param {CreateProcessErrorParams} params - Parameters to create the ProcessError function.
- * @returns {ProcessError} The created ProcessError function.
- *
- * @description
- * This function creates a ProcessError function that handles error processing in the following steps:
- * 1. Builds an initial error message using the provided buildErrorMessage function.
- * 2. Constructs an error message for API using the buildEndpointErrorMessage function.
- * 3. Attempts to output the error message using the outputErrorMessage function.
- * 4. If any step fails, it falls back to using the original error message.
- * 5. Any failure in outputting the error message is logged to the console.
+ * @param {CreateProcessErrorParams} params - The parameters for creating the error processing function.
+ * @param {BuildApiErrorMessage} params.buildApiErrorMessage - Function to build the API error message.
+ * @param {OutputErrorMessage} params.outputErrorMessage - Function to output the error message.
+ * @returns {ProcessError} A function that processes errors.
  */
 export const createProcessError =
   ({
-    buildErrorMessage,
     buildApiErrorMessage,
     outputErrorMessage,
   }: CreateProcessErrorParams): ProcessError =>
   async (e) => {
-    const errorMessageResult = await runAsyncCatching(async () => {
-      const originalMessage = await buildErrorMessage(e);
-      return buildApiErrorMessage(originalMessage);
+    const errorMessageResult = await runCatching(() => {
+      return buildApiErrorMessage(e.message);
     });
     const errorMessage = errorMessageResult.getOrDefault(e.message);
 
@@ -73,6 +62,4 @@ export const createProcessError =
       async () => await outputErrorMessage(errorMessage)
     );
     outputResult.onFailure(console.error);
-
-    return errorMessage;
   };

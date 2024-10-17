@@ -17,7 +17,7 @@
 
 import { z } from 'zod';
 import { HttpCall } from './HttpCall';
-import { ResponseError } from './ResponseError';
+import { responseToError } from '../utils/errorUtils';
 
 /**
  * Represents an API call that can be executed.
@@ -44,6 +44,6 @@ export class ApiCall<T> {
       return this.schema.parse(json);
     }
 
-    throw new ResponseError(response, this.httpCall.request);
+    throw responseToError(response);
   }
 }

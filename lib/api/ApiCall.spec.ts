@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { z } from 'zod';
 import { ApiCall } from './ApiCall';
 import { HttpCall } from './HttpCall';
-import { ResponseError } from './ResponseError';
 
 describe('ApiCall', () => {
   const call = vi.fn();
@@ -44,12 +43,8 @@ describe('ApiCall', () => {
       await apiCall.call();
       expect.fail('error');
     } catch (e) {
-      if (e instanceof ResponseError) {
-        expect(e).instanceof(ResponseError);
-        expect(e.message).toBe(
-          'ResponseError: {\n  "status": 404,\n  "statusText": "Not Found"\n}'
-        );
-        expect(e.request).toBe(httpCall.request);
+      if (e instanceof Error) {
+        expect(e.message).toBe('Invalid response with status 404 Not Found');
       } else {
         expect.fail('Expected error to be an instance of Error');
       }

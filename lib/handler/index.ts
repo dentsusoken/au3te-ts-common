@@ -17,7 +17,6 @@
 
 export * from './CommonHandler';
 export * from './buildApiErrorMessage';
-export * from './buildErrorMessage';
 export * from './outputErrorMessage';
 export * from './buildUnknownActionMessage';
 export * from './processError';
