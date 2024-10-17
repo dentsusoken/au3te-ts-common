@@ -61,6 +61,11 @@
       "import": "./dist/schemas/authorization-decision/index.js",
       "require": "./dist/schemas/authorization-decision/index.cjs"
     },
+    "./schemas.service.configuration": {
+      "types": "./dist/schemas/service-configuration/index.d.ts",
+      "import": "./dist/schemas/service-configuration/index.js",
+      "require": "./dist/schemas/service-configuration/index.cjs"
+    },
     "./page-model.authorization": {
       "types": "./dist/page-model/authorization/index.d.ts",
       "import": "./dist/page-model/authorization/index.js",

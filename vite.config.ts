@@ -18,6 +18,8 @@ export default defineConfig({
           './lib/schemas/authorization-issue/index.ts',
         'schemas/authorization-decision':
           './lib/schemas/authorization-decision/index.ts',
+        'schemas/service-configuration':
+          './lib/schemas/service-configuration/index.ts',
         'page-model/authorization': './lib/page-model/authorization/index.ts',
         utils: './lib/utils/index.ts',
       },
