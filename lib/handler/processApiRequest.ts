@@ -46,3 +46,21 @@ export const createProcessApiRequest =
   ): ProcessApiRequest<REQ, RES> =>
   (apiRequest) =>
     apiClient.callPostApi(path, schema, apiRequest);
+
+/**
+ * Creates a function to process an API request.
+ * @template REQ - The type of the request object, must extend object.
+ * @template RES - The type of the response.
+ * @param {string} path - The API endpoint path.
+ * @param {z.ZodType<RES>} schema - The Zod schema for validating the response.
+ * @param {ApiClient} apiClient - The API client instance.
+ * @returns {ProcessApiRequest<REQ, RES>} A function that processes the API request.
+ */
+export const createProcessGetApiRequest =
+  <REQ extends object, RES>(
+    path: string,
+    schema: z.ZodType<RES>,
+    apiClient: ApiClient
+  ): ProcessApiRequest<REQ, RES> =>
+  (apiRequest) =>
+    apiClient.callGetApi(path, schema, apiRequest);

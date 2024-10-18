@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { ApiClient } from './ApiClient';
 import { PostHttpCall } from './PostHttpCall';
 import { ApiCall } from './ApiCall';
+import { GetHttpCall } from './GetHttpCall';
 
 /**
  * Abstract API client class implementing the ApiClient interface.
@@ -72,6 +73,22 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract authorizationIssuePath: string;
 
   /**
+   * The path for service configuration requests
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract serviceConfigurationPath: string;
+
+  /**
+   * The path for credential issuer metadata requests
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract credentialIssuerMetadataPath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - Type of the request object.
    * @template RES - Type of the response object.
@@ -86,6 +103,26 @@ export abstract class AbstractApiClient implements ApiClient {
     request: REQ
   ): Promise<RES> {
     const httpCall = new PostHttpCall(this.baseUrl, path, this.auth, request);
+    const apiCall = new ApiCall(httpCall, schema);
+
+    return apiCall.call();
+  }
+
+  /**
+   * Makes a GET API call to the specified path.
+   * @template REQ - Type of the request object.
+   * @template RES - Type of the response object.
+   * @param {string} path - API endpoint path.
+   * @param {z.ZodType<RES>} schema - Zod schema for validating the response.
+   * @param {REQ} request - Request object.
+   * @returns {Promise<RES>} Promise resolving to the validated response.
+   */
+  callGetApi<REQ extends object, RES>(
+    path: string,
+    schema: z.ZodType<RES>,
+    request: REQ
+  ): Promise<RES> {
+    const httpCall = new GetHttpCall(this.baseUrl, path, this.auth, request);
     const apiCall = new ApiCall(httpCall, schema);
 
     return apiCall.call();

@@ -15,6 +15,8 @@ class ApiClientImpl extends AbstractApiClient {
   readonly authorizationPath: string;
   readonly authorizationFailPath: string;
   readonly authorizationIssuePath: string;
+  readonly serviceConfigurationPath: string;
+  readonly credentialIssuerMetadataPath: string;
 
   constructor() {
     super();
@@ -24,6 +26,8 @@ class ApiClientImpl extends AbstractApiClient {
     this.authorizationPath = `/api/${process.env.API_KEY}/auth/authorization`;
     this.authorizationFailPath = `/api/${process.env.API_KEY}/auth/authorization/fail`;
     this.authorizationIssuePath = `/api/${process.env.API_KEY}/auth/authorization/issue`;
+    this.serviceConfigurationPath = `/api/${process.env.API_KEY}/service/configuration`;
+    this.credentialIssuerMetadataPath = `/api/${process.env.API_KEY}/vci/metadata`;
   }
 }
 

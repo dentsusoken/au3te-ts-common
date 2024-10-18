@@ -52,6 +52,12 @@ export interface ApiClient {
    */
   readonly authorizationFailPath: string;
 
+  /** The path for service configuration requests */
+  readonly serviceConfigurationPath: string;
+
+  /** The path for credential issuer metadata requests */
+  readonly credentialIssuerMetadataPath: string;
+
   /**
    * Makes a POST API call to the specified path.
    * @template REQ - The type of the request object.
@@ -62,6 +68,21 @@ export interface ApiClient {
    * @returns {Promise<RES>} A promise that resolves to the validated response.
    */
   callPostApi<REQ extends object, RES>(
+    path: string,
+    schema: z.ZodType<RES>,
+    request: REQ
+  ): Promise<RES>;
+
+  /**
+   * Makes a GET API call to the specified path.
+   * @template REQ - The type of the request object.
+   * @template RES - The type of the response object.
+   * @param {string} path - The API endpoint path.
+   * @param {z.ZodType<RES>} schema - The Zod schema for validating the response.
+   * @param {REQ} request - The request object.
+   * @returns {Promise<RES>} A promise that resolves to the validated response.
+   */
+  callGetApi<REQ extends object, RES>(
     path: string,
     schema: z.ZodType<RES>,
     request: REQ
