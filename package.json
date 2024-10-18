@@ -61,12 +61,12 @@
       "import": "./dist/schemas/authorization-decision/index.js",
       "require": "./dist/schemas/authorization-decision/index.cjs"
     },
-    "./schemas.service.configuration": {
+    "./schemas.service-configuration": {
       "types": "./dist/schemas/service-configuration/index.d.ts",
       "import": "./dist/schemas/service-configuration/index.js",
       "require": "./dist/schemas/service-configuration/index.cjs"
     },
-    "./schemas.credential.metadata": {
+    "./schemas.credential-metadata": {
       "types": "./dist/schemas/credential-metadata/index.d.ts",
       "import": "./dist/schemas/credential-metadata/index.js",
       "require": "./dist/schemas/credential-metadata/index.cjs"
