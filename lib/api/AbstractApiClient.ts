@@ -81,6 +81,14 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract serviceConfigurationPath: string;
 
   /**
+   * The path for credential issuer metadata requests
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract credentialIssuerMetadataPath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - Type of the request object.
    * @template RES - Type of the response object.

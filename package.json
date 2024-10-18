@@ -66,6 +66,11 @@
       "import": "./dist/schemas/service-configuration/index.js",
       "require": "./dist/schemas/service-configuration/index.cjs"
     },
+    "./schemas.credential.metadata": {
+      "types": "./dist/schemas/credential-metadata/index.d.ts",
+      "import": "./dist/schemas/credential-metadata/index.js",
+      "require": "./dist/schemas/credential-metadata/index.cjs"
+    },
     "./page-model.authorization": {
       "types": "./dist/page-model/authorization/index.d.ts",
       "import": "./dist/page-model/authorization/index.js",

@@ -55,6 +55,9 @@ export interface ApiClient {
   /** The path for service configuration requests */
   readonly serviceConfigurationPath: string;
 
+  /** The path for credential issuer metadata requests */
+  readonly credentialIssuerMetadataPath: string;
+
   /**
    * Makes a POST API call to the specified path.
    * @template REQ - The type of the request object.
