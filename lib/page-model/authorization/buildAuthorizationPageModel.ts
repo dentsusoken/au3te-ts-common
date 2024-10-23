@@ -16,7 +16,7 @@
 
 import { AuthorizationResponse } from '../../schemas/authorization/AuthorizationResponse';
 import { User } from '../../schemas/common/User';
-import { runCatching } from '../../utils';
+import { runCatching } from 'oid4vc-core/utils';
 import { AuthorizationPageModel } from './AuthorizationPageModel';
 import { computeScopes } from './computeScopes';
 import { extractRequestedClaims } from './extractRequestedClaims';

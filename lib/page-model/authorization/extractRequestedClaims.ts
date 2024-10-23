@@ -15,7 +15,7 @@
  */
 
 import { Pair } from '../../schemas/common/Pair';
-import { runCatching } from '../../utils/result';
+import { runCatching } from 'oid4vc-core/utils';
 
 /**
  * Represents an object that may contain a purpose.
