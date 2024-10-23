@@ -17,7 +17,7 @@
 
 import { BuildApiErrorMessage } from './buildApiErrorMessage';
 import { OutputErrorMessage } from './outputErrorMessage';
-import { runAsyncCatching, runCatching } from '../utils/result';
+import { runAsyncCatching, runCatching } from 'oid4vc-core/utils';
 
 /**
  * Represents a function that processes an error.

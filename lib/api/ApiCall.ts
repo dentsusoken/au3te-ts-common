@@ -17,7 +17,7 @@
 
 import { z } from 'zod';
 import { HttpCall } from './HttpCall';
-import { responseToError } from '../utils/errorUtils';
+import { responseToError } from 'oid4vc-core/utils';
 
 /**
  * Represents an API call that can be executed.
