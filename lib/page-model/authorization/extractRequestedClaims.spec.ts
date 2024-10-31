@@ -4,7 +4,7 @@ import {
   extractClaimNamePurposePair,
   extractRequestedClaimsFromObject,
   extractRequestedClaimsFromArray,
-  extractRequestedClaims,
+  defaultExtractRequestedClaims,
   ClaimsContainer,
 } from './extractRequestedClaims';
 
@@ -76,7 +76,7 @@ describe('Claims Extraction Functions', () => {
     });
   });
 
-  describe('extractRequestedClaims', () => {
+  describe('defaultExtractRequestedClaims', () => {
     it('should extract claims from a JSON string', () => {
       const claimsJson = JSON.stringify({
         verified_claims: {
@@ -86,7 +86,7 @@ describe('Claims Extraction Functions', () => {
           },
         },
       });
-      expect(extractRequestedClaims(claimsJson)).toEqual([
+      expect(defaultExtractRequestedClaims(claimsJson)).toEqual([
         { key: 'claim1', value: 'purpose1' },
         { key: 'claim2', value: 'purpose2' },
       ]);
@@ -99,7 +99,7 @@ describe('Claims Extraction Functions', () => {
           { claims: { claim2: { purpose: 'purpose2' } } },
         ],
       });
-      expect(extractRequestedClaims(claimsJson)).toEqual([
+      expect(defaultExtractRequestedClaims(claimsJson)).toEqual([
         { key: 'claim1', value: 'purpose1' },
         { key: 'claim2', value: 'purpose2' },
       ]);
@@ -109,17 +109,17 @@ describe('Claims Extraction Functions', () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
-      expect(extractRequestedClaims('invalid json')).toBeUndefined();
+      expect(defaultExtractRequestedClaims('invalid json')).toBeUndefined();
       expect(consoleErrorSpy).toHaveBeenCalled();
       consoleErrorSpy.mockRestore();
     });
 
     it('should return undefined when there are no verified claims', () => {
-      expect(extractRequestedClaims(JSON.stringify({}))).toBeUndefined();
+      expect(defaultExtractRequestedClaims(JSON.stringify({}))).toBeUndefined();
     });
 
     it('should return undefined when claimsJson is undefined', () => {
-      expect(extractRequestedClaims(undefined)).toBeUndefined();
+      expect(defaultExtractRequestedClaims(undefined)).toBeUndefined();
     });
   });
 });

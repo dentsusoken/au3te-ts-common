@@ -13,10 +13,10 @@ describe('createProcessError', () => {
     });
 
     const error = new Error('Test error');
-    await processError(error);
+    await processError('path', error);
 
     expect(buildApiErrorMessage).toHaveBeenCalledTimes(1);
-    expect(buildApiErrorMessage).toHaveBeenCalledWith('Test error');
+    expect(buildApiErrorMessage).toHaveBeenCalledWith('path', 'Test error');
     expect(outputErrorMessage).toHaveBeenCalledTimes(1);
     expect(outputErrorMessage).toHaveBeenCalledWith('API error message');
   });
@@ -33,7 +33,7 @@ describe('createProcessError', () => {
     });
 
     const error = new Error('Test error');
-    await processError(error);
+    await processError('path', error);
 
     expect(buildApiErrorMessage).toHaveBeenCalled();
     expect(outputErrorMessage).toHaveBeenCalledTimes(1);
@@ -56,10 +56,10 @@ describe('createProcessError', () => {
       });
 
       const error = new Error('Test error');
-      await processError(error);
+      await processError('path', error);
 
       expect(buildApiErrorMessage).toHaveBeenCalledTimes(1);
-      expect(buildApiErrorMessage).toHaveBeenCalledWith('Test error');
+      expect(buildApiErrorMessage).toHaveBeenCalledWith('path', 'Test error');
       expect(outputErrorMessage).toHaveBeenCalledTimes(1);
       expect(outputErrorMessage).toHaveBeenCalledWith('API error message');
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);

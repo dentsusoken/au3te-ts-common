@@ -18,70 +18,98 @@ import { AuthorizationResponse } from '../../schemas/authorization/Authorization
 import { User } from '../../schemas/common/User';
 import { runCatching } from '../../utils';
 import { AuthorizationPageModel } from './AuthorizationPageModel';
-import { computeScopes } from './computeScopes';
-import { extractRequestedClaims } from './extractRequestedClaims';
+import { ComputeScopes, defaultComputeScopes } from './computeScopes';
+import {
+  defaultExtractRequestedClaims,
+  ExtractRequestedClaims,
+} from './extractRequestedClaims';
 
 /**
- * Builds an AuthorizationPageModel from an AuthorizationResponse and User.
- *
- * This function processes the authorization response, extracts relevant information,
- * and constructs a page model for rendering the authorization page.
- *
- * @param {AuthorizationResponse} authorizationResponse - The response from the authorization server.
- * @param {User} user - The user object associated with the authorization request.
- * @returns {AuthorizationPageModel} A model containing all necessary information for the authorization page.
+ * Builds an AuthorizationPageModel based on the given authorization response and user.
+ * @param {AuthorizationResponse} authorizationResponse - The authorization response object.
+ * @param {User | undefined} user - The user object, if available.
+ * @returns {AuthorizationPageModel} The constructed authorization page model.
  */
-export const buildAuthorizationPageModel = (
+export type BuildAuthorizationPageModel = (
   authorizationResponse: AuthorizationResponse,
   user: User | undefined
-): AuthorizationPageModel => {
-  const service = authorizationResponse.service;
-  const client = authorizationResponse.client;
+) => AuthorizationPageModel;
 
-  const purpose = authorizationResponse.purpose;
-  const verifiedClaimsForIdToken = extractRequestedClaims(
-    authorizationResponse.idTokenClaims
-  );
-  const verifiedClaimsForUserInfo = extractRequestedClaims(
-    authorizationResponse.userInfoClaims
-  );
-  const identityAssuranceRequired =
-    purpose !== undefined ||
-    verifiedClaimsForIdToken !== undefined ||
-    verifiedClaimsForUserInfo !== undefined;
-  const authorizationDetailsResult = runCatching(() => {
-    if (authorizationResponse.authorizationDetails) {
-      return JSON.stringify(authorizationResponse.authorizationDetails);
-    }
+/**
+ * Parameters for creating a BuildAuthorizationPageModel function.
+ */
+type CreateBuildAuthorizationPageModelParams = {
+  computeScopes: ComputeScopes;
+  extractRequestedClaims: ExtractRequestedClaims;
+};
 
-    return undefined;
-  });
-  authorizationDetailsResult.onFailure(console.error);
-  const authorizationDetails =
-    authorizationDetailsResult.getOrDefault(undefined);
+/**
+ * Creates a function to build an AuthorizationPageModel.
+ * @param {CreateBuildAuthorizationPageModelParams} params - The parameters for creating the function.
+ * @returns {BuildAuthorizationPageModel} A function that builds an AuthorizationPageModel.
+ */
+export const createBuildAuthorizationPageModel =
+  ({
+    computeScopes,
+    extractRequestedClaims,
+  }: CreateBuildAuthorizationPageModelParams): BuildAuthorizationPageModel =>
+  (authorizationResponse, user) => {
+    const service = authorizationResponse.service;
+    const client = authorizationResponse.client;
 
-  const pageModel: AuthorizationPageModel = {
-    authorizationResponse,
-    serviceName: service?.serviceName,
-    clientName: client?.clientName,
-    description: client?.description,
-    logoUri: client?.logoUri,
-    policyUri: client?.policyUri,
-    tosUri: client?.tosUri,
-    scopes: computeScopes(
-      authorizationResponse.scopes,
-      authorizationResponse.dynamicScopes
-    ),
-    loginId: authorizationResponse.subject ?? authorizationResponse.loginHint,
-    loginIdReadOnly: authorizationResponse.subject ? 'readonly' : undefined,
-    authorizationDetails,
-    user,
-    purpose,
-    verifiedClaimsForIdToken,
-    verifiedClaimsForUserInfo,
-    identityAssuranceRequired,
-    claimsForUserInfo: authorizationResponse.claimsAtUserInfo,
+    const purpose = authorizationResponse.purpose;
+    const verifiedClaimsForIdToken = extractRequestedClaims(
+      authorizationResponse.idTokenClaims
+    );
+    const verifiedClaimsForUserInfo = extractRequestedClaims(
+      authorizationResponse.userInfoClaims
+    );
+    const identityAssuranceRequired =
+      purpose !== undefined ||
+      verifiedClaimsForIdToken !== undefined ||
+      verifiedClaimsForUserInfo !== undefined;
+    const authorizationDetailsResult = runCatching(() => {
+      if (authorizationResponse.authorizationDetails) {
+        return JSON.stringify(authorizationResponse.authorizationDetails);
+      }
+
+      return undefined;
+    });
+    authorizationDetailsResult.onFailure(console.error);
+    const authorizationDetails =
+      authorizationDetailsResult.getOrDefault(undefined);
+
+    const pageModel: AuthorizationPageModel = {
+      authorizationResponse,
+      serviceName: service?.serviceName,
+      clientName: client?.clientName,
+      description: client?.description,
+      logoUri: client?.logoUri,
+      policyUri: client?.policyUri,
+      tosUri: client?.tosUri,
+      scopes: computeScopes(
+        authorizationResponse.scopes,
+        authorizationResponse.dynamicScopes
+      ),
+      loginId: authorizationResponse.subject ?? authorizationResponse.loginHint,
+      loginIdReadOnly: authorizationResponse.subject ? 'readonly' : undefined,
+      authorizationDetails,
+      user,
+      purpose,
+      verifiedClaimsForIdToken,
+      verifiedClaimsForUserInfo,
+      identityAssuranceRequired,
+      claimsForUserInfo: authorizationResponse.claimsAtUserInfo,
+    };
+
+    return pageModel;
   };
 
-  return pageModel;
-};
+/**
+ * Default implementation of BuildAuthorizationPageModel using default compute scopes and extract requested claims functions.
+ */
+export const defaultBuildAuthorizationPageModel: BuildAuthorizationPageModel =
+  createBuildAuthorizationPageModel({
+    computeScopes: defaultComputeScopes,
+    extractRequestedClaims: defaultExtractRequestedClaims,
+  });

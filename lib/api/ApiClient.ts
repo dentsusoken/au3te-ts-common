@@ -52,6 +52,12 @@ export interface ApiClient {
    */
   readonly authorizationFailPath: string;
 
+  /**
+   * The path for authorization issue requests.
+   * @readonly
+   */
+  readonly authorizationIssuePath: string;
+
   /** The path for service configuration requests */
   readonly serviceConfigurationPath: string;
 

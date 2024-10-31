@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Authlete, Inc.
+ * Copyright (C) 2014-2024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  * License.
  */
 
-export * from './CommonHandler';
 export * from './buildApiErrorMessage';
 export * from './outputErrorMessage';
 export * from './buildUnknownActionMessage';
 export * from './processError';
-export * from './processApiRequest';
+export * from './CommonHandlerConfiguration';
+export * from './CommonHandlerConfigurationImpl';

@@ -19,14 +19,7 @@ import { BuildApiErrorMessage } from './buildApiErrorMessage';
 import { OutputErrorMessage } from './outputErrorMessage';
 import { runAsyncCatching, runCatching } from '../utils/result';
 
-/**
- * Represents a function that processes an error.
- *
- * @typedef {Function} ProcessError
- * @param {Error} error - The error to be processed.
- * @returns {Promise<void>} A promise that resolves when the error processing is complete.
- */
-export type ProcessError = (error: Error) => Promise<void>;
+export type ProcessError = (path: string, error: Error) => Promise<void>;
 
 /**
  * Parameters for creating a ProcessError function.
@@ -39,24 +32,16 @@ export type CreateProcessErrorParams = {
   outputErrorMessage: OutputErrorMessage;
 };
 
-/**
- * Creates a function to process errors.
- *
- * @param {CreateProcessErrorParams} params - The parameters for creating the error processing function.
- * @param {BuildApiErrorMessage} params.buildApiErrorMessage - Function to build the API error message.
- * @param {OutputErrorMessage} params.outputErrorMessage - Function to output the error message.
- * @returns {ProcessError} A function that processes errors.
- */
 export const createProcessError =
   ({
     buildApiErrorMessage,
     outputErrorMessage,
   }: CreateProcessErrorParams): ProcessError =>
-  async (e) => {
+  async (path, error) => {
     const errorMessageResult = await runCatching(() => {
-      return buildApiErrorMessage(e.message);
+      return buildApiErrorMessage(path, error.message);
     });
-    const errorMessage = errorMessageResult.getOrDefault(e.message);
+    const errorMessage = errorMessageResult.getOrDefault(error.message);
 
     const outputResult = await runAsyncCatching(
       async () => await outputErrorMessage(errorMessage)

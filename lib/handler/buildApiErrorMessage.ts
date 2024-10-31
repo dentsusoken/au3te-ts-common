@@ -16,40 +16,36 @@
  */
 
 /**
- * Represents a function that builds an error message for API failures.
- *
- * This type defines a function that takes a path and an original error message,
- * and returns a formatted error message string.
- *
- * @typedef {Function} BuildEndpointErrorMessage
- * @param {string} originalMessage - The original error message.
- * @returns {string} A formatted API error message string.
+ * Represents a function that builds an API error message.
+ * @typedef {function} BuildApiErrorMessage
+ * @param {string} path - The API path where the error occurred.
+ * @param {string} errorMessage - The error message to be included.
+ * @returns {string} The formatted API error message.
  */
-export type BuildApiErrorMessage = (originalMessage: string) => string;
+export type BuildApiErrorMessage = (
+  path: string,
+  errorMessage: string
+) => string;
 
 /**
- * Creates a function to build API error messages.
- * @param {string} path - The API path.
- * @returns {BuildApiErrorMessage} A function that builds an error message.
- * @throws {Error} If the path is empty.
+ * Default implementation of the BuildApiErrorMessage function.
+ * @type {BuildApiErrorMessage}
+ * @param {string} path - The API path where the error occurred.
+ * @param {string} errorMessage - The error message to be included.
+ * @returns {string} The formatted API error message.
+ * @throws {Error} If the path or errorMessage is empty.
  */
-export const createBuildApiErrorMessage = (
-  path: string
-): BuildApiErrorMessage => {
+export const defaultBuildApiErrorMessage: BuildApiErrorMessage = (
+  path,
+  errorMessage
+) => {
   if (!path) {
     throw new Error('Path must not be empty');
   }
 
-  /**
-   * Builds an API error message.
-   * @param {string} originalMessage - The original error message.
-   * @returns {string} The formatted error message.
-   * @throws {Error} If the original message is empty.
-   */
-  return (originalMessage) => {
-    if (!originalMessage) {
-      throw new Error('Original message must not be empty');
-    }
-    return `API(${path}) failure: ${originalMessage}`;
-  };
+  if (!errorMessage) {
+    throw new Error('Error message must not be empty');
+  }
+
+  return `API(${path}) failure: ${errorMessage}`;
 };

@@ -15,7 +15,6 @@
  * License.
  */
 
-export * from './ApiClientRegistry';
 export * from './ApiCall';
 export * from './ApiClient';
 export * from './AbstractApiClient';

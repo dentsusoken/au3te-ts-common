@@ -17,15 +17,18 @@
 
 import { BuildApiErrorMessage } from './buildApiErrorMessage';
 
-export type BuildUnknownActionMessage = (action: string) => string;
+export type BuildUnknownActionMessage = (
+  path: string,
+  action: string
+) => string;
 
-export type CreateBuildUnknownErrorMessageParams = {
+type CreateBuildUnknownActionMessageParams = {
   buildApiErrorMessage: BuildApiErrorMessage;
 };
 
 export const createBuildUnknownActionMessage =
   ({
     buildApiErrorMessage,
-  }: CreateBuildUnknownErrorMessageParams): BuildUnknownActionMessage =>
-  (action) =>
-    buildApiErrorMessage(`Unknown action: ${action}`);
+  }: CreateBuildUnknownActionMessageParams): BuildUnknownActionMessage =>
+  (path, action) =>
+    buildApiErrorMessage(path, `Unknown action: ${action}`);

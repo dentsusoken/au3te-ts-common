@@ -15,4 +15,8 @@
  */
 
 export * from './AuthorizationPageModel';
+export * from './AuthorizationPageModelConfiguration';
+export * from './AuthorizationPageModelConfigurationImpl';
 export * from './buildAuthorizationPageModel';
+export * from './computeScopes';
+export * from './extractRequestedClaims';

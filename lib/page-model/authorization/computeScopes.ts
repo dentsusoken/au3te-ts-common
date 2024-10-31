@@ -18,36 +18,23 @@ import { Scope } from '../../schemas/common/Scope';
 import { DynamicScope } from '../../schemas/common/DynamicScope';
 
 /**
- * Computes a combined array of scopes from regular scopes and dynamic scopes.
- *
- * This function merges regular scopes with dynamic scopes, creating a new array
- * that includes all regular scopes (if any) followed by the names of dynamic scopes.
- *
- * @param {Scope[]} [scopes] - An optional array of regular scopes.
- * @param {DynamicScope[]} [dynamicScopes] - An optional array of dynamic scopes.
- *
- * @returns {Scope[]} A new array containing all regular scopes (if provided)
- * and the names of all dynamic scopes (if provided). If both input arrays are
- * undefined or empty, an empty array is returned.
- *
- * @example
- * const regularScopes = [{ name: 'read' }, { name: 'write' }];
- * const dynamicScopes = [{ name: 'dynamic1' }, { name: 'dynamic2' }];
- * const result = computeScopes(regularScopes, dynamicScopes);
- * // result: [{ name: 'read' }, { name: 'write' }, { name: 'dynamic1' }, { name: 'dynamic2' }]
- *
- * @example
- * const result = computeScopes();
- * // result: []
- *
- * @example
- * const result = computeScopes(undefined, [{ name: 'dynamic1' }]);
- * // result: [{ name: 'dynamic1' }]
+ * A function type that computes scopes based on input scopes and dynamic scopes.
+ * @param {Scope[]} [scopes] - An optional array of Scope objects.
+ * @param {DynamicScope[]} [dynamicScopes] - An optional array of DynamicScope objects.
+ * @returns {Scope[]} An array of computed Scope objects.
  */
-export const computeScopes = (
+export type ComputeScopes = (
   scopes?: Scope[],
   dynamicScopes?: DynamicScope[]
-): Scope[] => {
+) => Scope[];
+
+/**
+ * Default implementation of the ComputeScopes function.
+ * @param {Scope[]} [scopes] - An optional array of Scope objects.
+ * @param {DynamicScope[]} [dynamicScopes] - An optional array of DynamicScope objects.
+ * @returns {Scope[]} An array of computed Scope objects.
+ */
+export const defaultComputeScopes: ComputeScopes = (scopes, dynamicScopes) => {
   if (!dynamicScopes) {
     return scopes ?? [];
   }

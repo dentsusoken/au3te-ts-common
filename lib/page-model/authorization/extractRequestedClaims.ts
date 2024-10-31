@@ -97,13 +97,24 @@ export const extractRequestedClaimsFromArray = (
 };
 
 /**
- * Extracts requested claims from a JSON string.
- * @param {string} [claimsJson] - A JSON string containing claims information.
- * @returns {Pair[]|undefined} An array of Pair objects representing the extracted claims, or undefined if no claims could be extracted or an error occurred.
+ * Defines a function type for extracting requested claims from a JSON string.
+ * @typedef {function} ExtractRequestedClaims
+ * @param {string} [claimsJson] - The JSON string containing claims information.
+ * @returns {Pair[]|undefined} An array of Pair objects representing the extracted claims, or undefined if no claims are found.
  */
-export const extractRequestedClaims = (
+export type ExtractRequestedClaims = (
   claimsJson?: string
-): Pair[] | undefined => {
+) => Pair[] | undefined;
+
+/**
+ * Default implementation of the ExtractRequestedClaims function.
+ * @type {ExtractRequestedClaims}
+ * @param {string} [claimsJson] - The JSON string containing claims information.
+ * @returns {Pair[]|undefined} An array of Pair objects representing the extracted claims, or undefined if no claims are found or an error occurs.
+ */
+export const defaultExtractRequestedClaims: ExtractRequestedClaims = (
+  claimsJson
+) => {
   const result = runCatching(() => {
     if (!claimsJson) {
       return undefined;

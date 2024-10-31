@@ -17,7 +17,7 @@
 import { z } from 'zod';
 import { nullableButOptionalStringSchema } from '../common/stringSchema';
 
-const reasonSchema = z.enum([
+export const authorizationFailReasonSchema = z.enum([
   /**
    * Unknown reason.
    *
@@ -333,6 +333,19 @@ const reasonSchema = z.enum([
 ]);
 
 /**
+ * Type definition for AuthorizationFailReason, inferred from the Zod schema.
+ *
+ * This type represents the possible reasons for an authorization failure.
+ * It is derived from the `authorizationFailReasonSchema` and ensures type safety
+ * when working with authorization fail reasons.
+ *
+ * @typedef {z.infer<typeof authorizationFailReasonSchema>} AuthorizationFailReason
+ */
+export type AuthorizationFailReason = z.infer<
+  typeof authorizationFailReasonSchema
+>;
+
+/**
  * Schema for the authorization fail request.
  *
  * This schema defines the structure of a request to indicate that an authorization attempt has failed.
@@ -354,7 +367,7 @@ const reasonSchema = z.enum([
  * @see {@link https://docs.authlete.com/#auth-authorization-fail|Authlete API Reference: /auth/authorization/fail}
  */
 export const authorizationFailRequestSchema = z.object({
-  reason: reasonSchema,
+  reason: authorizationFailReasonSchema,
   ticket: nullableButOptionalStringSchema,
   description: nullableButOptionalStringSchema,
 });
