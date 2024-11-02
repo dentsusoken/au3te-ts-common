@@ -16,32 +16,93 @@
  */
 
 import { z } from 'zod';
+import { nullableButOptionalStringSchema } from './stringSchema';
+import { nullableButOptionalAddressSchema } from './Address';
+import { nullableButOptionalBooleanSchema } from './booleanSchema';
 
 /**
- * Schema for user data.
+ * Schema for a user object containing OpenID Connect standard claims.
  *
- * This schema defines the structure of a user object, which includes
- * a subject identifier. The subject is a unique identifier for the user
- * within the context of the authorization server.
+ * @property subject - Unique identifier for the user
+ * @property loginId - User's login identifier
+ * @property password - User's password
+ * @property name - User's full name
+ * @property email - User's email address
+ * @property address - User's address information
+ * @property phoneNumber - User's phone number
+ * @property code - User's verification code
+ * @property phoneNumberVerified - Whether phone number is verified
+ * @property emailVerified - Whether email is verified
+ * @property givenName - User's given name
+ * @property familyName - User's family name
+ * @property middleName - User's middle name
+ * @property nickname - User's nickname
+ * @property profile - URL of user's profile page
+ * @property picture - URL of user's profile picture
+ * @property website - URL of user's website
+ * @property gender - User's gender
+ * @property zoneinfo - User's timezone
+ * @property locale - User's locale
+ * @property preferredUsername - User's preferred username
+ * @property birthdate - User's birthdate
+ * @property updatedAt - Time the user's information was last updated
  */
 export const userSchema = z.object({
-  /**
-   * The subject identifier for the user.
-   *
-   * This should be a string that uniquely identifies the user. It must
-   * consist of only ASCII characters and its length must be equal to or
-   * less than 100 characters, as per Authlete's requirements.
-   */
   subject: z.string(),
+  loginId: nullableButOptionalStringSchema,
+  password: nullableButOptionalStringSchema,
+  name: nullableButOptionalStringSchema,
+  email: nullableButOptionalStringSchema,
+  address: nullableButOptionalAddressSchema,
+  phoneNumber: nullableButOptionalStringSchema,
+  code: nullableButOptionalStringSchema,
+  phoneNumberVerified: nullableButOptionalBooleanSchema,
+  emailVerified: nullableButOptionalBooleanSchema,
+  givenName: nullableButOptionalStringSchema,
+  familyName: nullableButOptionalStringSchema,
+  middleName: nullableButOptionalStringSchema,
+  nickname: nullableButOptionalStringSchema,
+  profile: nullableButOptionalStringSchema,
+  picture: nullableButOptionalStringSchema,
+  website: nullableButOptionalStringSchema,
+  gender: nullableButOptionalStringSchema,
+  zoneinfo: nullableButOptionalStringSchema,
+  locale: nullableButOptionalStringSchema,
+  preferredUsername: nullableButOptionalStringSchema,
+  birthdate: nullableButOptionalStringSchema,
+  updatedAt: nullableButOptionalStringSchema,
 });
 
 /**
- * Represents a user in the system.
- *
- * This type is inferred from the userSchema and represents the structure
- * of a user object after validation.
- *
- * @typedef {Object} User
- * @property {string} subject - The unique identifier for the user.
+ * Type representing a user with OpenID Connect standard claims.
+ * Most fields are nullable and optional strings, except for 'subject'
+ * which is required, and verification flags which are boolean.
  */
 export type User = z.infer<typeof userSchema>;
+
+/**
+ * Type representing an optional User object.
+ */
+type OptionalUser = User | undefined;
+
+/**
+ * Schema for a nullable but optional user object.
+ *
+ * This schema preprocesses the input to convert null values to undefined,
+ * and then applies an optional userSchema. This allows the schema to
+ * accept null, undefined, or a valid User object.
+ *
+ * @example
+ * // Valid inputs
+ * nullableButOptionalUserSchema.parse(null); // returns undefined
+ * nullableButOptionalUserSchema.parse(undefined); // returns undefined
+ * nullableButOptionalUserSchema.parse({
+ *   subject: '123',
+ *   name: 'John Doe',
+ *   email: 'john@example.com'
+ * }); // returns the User object
+ */
+export const nullableButOptionalUserSchema = z.preprocess(
+  (value) => (value === null ? undefined : value),
+  z.optional(userSchema)
+) as z.ZodType<OptionalUser>;

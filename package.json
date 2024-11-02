@@ -75,6 +75,11 @@
       "types": "./dist/page-model/authorization/index.d.ts",
       "import": "./dist/page-model/authorization/index.js",
       "require": "./dist/page-model/authorization/index.cjs"
+    },
+    "./user": {
+      "types": "./dist/user/index.d.ts",
+      "import": "./dist/user/index.js",
+      "require": "./dist/user/index.cjs"
     }
   },
   "scripts": {

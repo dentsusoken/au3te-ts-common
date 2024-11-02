@@ -24,6 +24,7 @@ export default defineConfig({
           './lib/schemas/credential-metadata/index.ts',
         'page-model/authorization': './lib/page-model/authorization/index.ts',
         utils: './lib/utils/index.ts',
+        user: './lib/user/index.ts',
       },
       name: 'au3te-ts-common',
       fileName: (format, entry) => {
