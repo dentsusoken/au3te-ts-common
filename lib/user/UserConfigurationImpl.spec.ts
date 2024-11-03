@@ -15,15 +15,12 @@
  * License.
  */
 
-import { UserConfig } from './UserConfig';
-import { GetByCredentials, simpleGetByCredentials } from './getByCredentials';
+import { describe, it, expect } from 'vitest';
+import { UserConfigurationImpl } from './UserConfigurationImpl';
 
-/**
- * Implementation class of UserConfig interface.
- */
-export class UserConfigImpl implements UserConfig {
-  /**
-   * Function to retrieve a user by their login credentials.
-   */
-  getByCredentials: GetByCredentials = simpleGetByCredentials;
-}
+describe('UserConfigurationImpl', () => {
+  it('should have getByCredentials property defined', () => {
+    const userConfig = new UserConfigurationImpl();
+    expect(userConfig.getByCredentials).toBeDefined();
+  });
+});

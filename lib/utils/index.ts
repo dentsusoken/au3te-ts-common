@@ -18,3 +18,4 @@
 export * from './mediaType';
 export * from './basicCredentials';
 export * from './httpStatus';
+export * from './parseQueryString';

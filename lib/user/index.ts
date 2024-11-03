@@ -15,6 +15,6 @@
  * License.
  */
 
-export * from './UserConfig';
-export * from './UserConfigImpl';
+export * from './UserConfiguration';
+export * from './UserConfigurationImpl';
 export * from './getByCredentials';

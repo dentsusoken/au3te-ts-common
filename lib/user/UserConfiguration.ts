@@ -20,9 +20,9 @@ import { GetByCredentials } from './getByCredentials';
 /**
  * Configuration interface for user-related operations.
  *
- * @interface UserConfig
+ * @interface UserConfiguration
  * @property {GetByCredentials} getByCredentials - Function to retrieve a user by their login credentials
  */
-export interface UserConfig {
+export interface UserConfiguration {
   getByCredentials: GetByCredentials;
 }
