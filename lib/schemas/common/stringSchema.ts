@@ -145,3 +145,25 @@ export const nullableButOptionalUrlStringSchema = z.preprocess(
   (value) => (value === null ? undefined : value),
   z.string().url().optional()
 ) as z.ZodType<OptionalString>;
+
+/**
+ * Schema for validating an array of URL strings that can be null or undefined.
+ * Each string in the array must be a valid URL.
+ *
+ * @example
+ * // Valid inputs
+ * nullableButOptionalUrlStringArraySchema.parse(null); // returns undefined
+ * nullableButOptionalUrlStringArraySchema.parse(undefined); // returns undefined
+ * nullableButOptionalUrlStringArraySchema.parse(['https://example.com']); // returns ['https://example.com']
+ * nullableButOptionalUrlStringArraySchema.parse(['https://example.com', 'https://test.com']); // returns array of URLs
+ *
+ * @example
+ * // Invalid inputs
+ * nullableButOptionalUrlStringArraySchema.parse(['not-a-url']); // throws ZodError
+ * nullableButOptionalUrlStringArraySchema.parse([123]); // throws ZodError
+ * nullableButOptionalUrlStringArraySchema.parse('https://example.com'); // throws ZodError
+ */
+export const nullableButOptionalUrlStringArraySchema = z.preprocess(
+  (value) => (value === null ? undefined : value),
+  z.array(z.string().url()).optional()
+) as z.ZodType<string[] | undefined>;

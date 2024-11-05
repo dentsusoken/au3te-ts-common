@@ -61,6 +61,11 @@
       "import": "./dist/schemas/authorization-decision/index.js",
       "require": "./dist/schemas/authorization-decision/index.cjs"
     },
+    "./schemas.token": {
+      "types": "./dist/schemas/token/index.d.ts",
+      "import": "./dist/schemas/token/index.js",
+      "require": "./dist/schemas/token/index.cjs"
+    },
     "./schemas.service-configuration": {
       "types": "./dist/schemas/service-configuration/index.d.ts",
       "import": "./dist/schemas/service-configuration/index.js",

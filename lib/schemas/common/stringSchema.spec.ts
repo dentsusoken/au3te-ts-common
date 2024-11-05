@@ -4,6 +4,7 @@ import {
   nullableButOptionalStringSchema,
   nullableButOptionalUrlStringSchema,
   nullableButOptionalStringArraySchema,
+  nullableButOptionalUrlStringArraySchema,
   stringArraySchema,
   StringArray,
   nullableButOptionalStringArrayArraySchema,
@@ -232,6 +233,87 @@ describe('nullableButOptionalStringArrayArraySchema', () => {
     ];
     const result =
       nullableButOptionalStringArrayArraySchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe('nullableButOptionalUrlStringArraySchema', () => {
+  // Test valid URL arrays
+  it('should accept an array of valid URLs', () => {
+    const validUrls = [
+      'https://example.com',
+      'http://test.org',
+      'https://api.service.com/path',
+    ];
+    const result = nullableButOptionalUrlStringArraySchema.safeParse(validUrls);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual(validUrls);
+    }
+  });
+
+  // Test empty array
+  it('should accept an empty array', () => {
+    const result = nullableButOptionalUrlStringArraySchema.safeParse([]);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual([]);
+    }
+  });
+
+  // Test null and undefined
+  it('should handle null and undefined appropriately', () => {
+    // Null should be converted to undefined
+    const nullResult = nullableButOptionalUrlStringArraySchema.safeParse(null);
+    expect(nullResult.success).toBe(true);
+    if (nullResult.success) {
+      expect(nullResult.data).toBeUndefined();
+    }
+
+    // Undefined should remain undefined
+    const undefinedResult =
+      nullableButOptionalUrlStringArraySchema.safeParse(undefined);
+    expect(undefinedResult.success).toBe(true);
+    if (undefinedResult.success) {
+      expect(undefinedResult.data).toBeUndefined();
+    }
+  });
+
+  // Test invalid inputs
+  it('should reject invalid inputs', () => {
+    const invalidInputs = [
+      // Non-array values
+      'https://example.com',
+      123,
+      true,
+      {},
+      // Arrays with invalid URLs
+      ['not-a-url'],
+      ['https://example.com', 'invalid-url'],
+      ['https://example.com', ''],
+      // Arrays with non-string values
+      [123, 456],
+      ['https://example.com', null],
+      ['https://example.com', undefined],
+      // Mixed valid and invalid
+      ['https://example.com', 'not-a-url', 'http://valid.com'],
+    ];
+
+    invalidInputs.forEach((input) => {
+      const result = nullableButOptionalUrlStringArraySchema.safeParse(input);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  // Test URL validation
+  it('should validate each URL in the array', () => {
+    const mixedUrls = [
+      'https://example.com', // valid
+      'not-a-url', // invalid
+      'http://', // invalid
+      'https://test.com/path', // valid
+    ];
+    const result = nullableButOptionalUrlStringArraySchema.safeParse(mixedUrls);
     expect(result.success).toBe(false);
   });
 });
