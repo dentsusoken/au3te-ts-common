@@ -90,6 +90,7 @@ const testAuthorizationFail = async (ticket: string) => {
     authorizationFailResponseSchema,
     request
   );
+  //console.log(response);
 
   expect(response).toBeDefined();
   expect(response.resultCode).toBe('A060301');
@@ -109,7 +110,7 @@ const testAuthorizationIssue = async (ticket: string) => {
     authorizationIssueResponseSchema,
     request
   );
-  console.log(response);
+  //console.log(response);
 
   expect(response).toBeDefined();
   expect(response.resultCode).toBe('A040001');
