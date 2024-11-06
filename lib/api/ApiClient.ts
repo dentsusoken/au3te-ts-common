@@ -58,10 +58,22 @@ export interface ApiClient {
    */
   readonly authorizationIssuePath: string;
 
-  /** The path for service configuration requests */
+  /**
+   * The path for token requests.
+   * @readonly
+   */
+  readonly tokenPath: string;
+
+  /**
+   * The path for service configuration requests.
+   * @readonly
+   */
   readonly serviceConfigurationPath: string;
 
-  /** The path for credential issuer metadata requests */
+  /**
+   * The path for credential issuer metadata requests.
+   * @readonly
+   */
   readonly credentialIssuerMetadataPath: string;
 
   /**

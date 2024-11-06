@@ -63,14 +63,18 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract authorizationFailPath: string;
 
   /**
-   * The path for the authorization issue endpoint.
-   * This abstract property should be implemented by subclasses to provide
-   * the specific path for issuing authorizations.
-   *
+   * Path for authorization issue requests.
    * @abstract
    * @type {string}
    */
   abstract authorizationIssuePath: string;
+
+  /**
+   * Path for token requests.
+   * @abstract
+   * @type {string}
+   */
+  abstract tokenPath: string;
 
   /**
    * The path for service configuration requests

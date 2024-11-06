@@ -7,6 +7,8 @@ import { AuthorizationFailRequest } from '../schemas/authorization-fail/Authoriz
 import { authorizationFailResponseSchema } from '../schemas/authorization-fail/AuthorizationFailResponse';
 import { AuthorizationIssueRequest } from '../schemas/authorization-issue/AuthorizationIssueRequest';
 import { authorizationIssueResponseSchema } from '../schemas/authorization-issue/AuthorizationIssueResponse';
+import { tokenResponseSchema } from '../schemas/token/TokenResponse';
+import { TokenRequest } from '../schemas/token/TokenRequest';
 
 class ApiClientImpl extends AbstractApiClient {
   readonly baseUrl: string;
@@ -15,6 +17,7 @@ class ApiClientImpl extends AbstractApiClient {
   readonly authorizationPath: string;
   readonly authorizationFailPath: string;
   readonly authorizationIssuePath: string;
+  readonly tokenPath: string;
   readonly serviceConfigurationPath: string;
   readonly credentialIssuerMetadataPath: string;
 
@@ -26,6 +29,7 @@ class ApiClientImpl extends AbstractApiClient {
     this.authorizationPath = `/api/${process.env.API_KEY}/auth/authorization`;
     this.authorizationFailPath = `/api/${process.env.API_KEY}/auth/authorization/fail`;
     this.authorizationIssuePath = `/api/${process.env.API_KEY}/auth/authorization/issue`;
+    this.tokenPath = `/api/${process.env.API_KEY}/auth/token`;
     this.serviceConfigurationPath = `/api/${process.env.API_KEY}/service/configuration`;
     this.credentialIssuerMetadataPath = `/api/${process.env.API_KEY}/vci/metadata`;
   }
@@ -120,7 +124,38 @@ const testAuthorizationIssue = async (ticket: string) => {
   ).toBe(true);
   expect(response.authorizationCode).toBeDefined();
 
-  return response;
+  return response.authorizationCode!;
+};
+
+const testToken = async (code: string) => {
+  const request: TokenRequest = {
+    parameters: new URLSearchParams({
+      code,
+      redirect_uri: 'eudi-openid4ci://authorize/',
+      grant_type: 'authorization_code',
+      client_id: 'tw24.wallet.dentsusoken.com',
+    }).toString(),
+  };
+
+  const response = await apiClient.callPostApi(
+    apiClient.tokenPath,
+    tokenResponseSchema,
+    request
+  );
+  console.log(response);
+
+  expect(response).toBeDefined();
+  expect(response.resultCode).toBe('A050001');
+  expect(response.action).toBe('OK');
+  expect(response.accessToken).toBeDefined();
+
+  return response.accessToken!;
+  // expect(
+  //   response.responseContent?.startsWith('eudi-openid4ci://authorize/?code=')
+  // ).toBe(true);
+  // expect(response.authorizationCode).toBeDefined();
+
+  // return response;
 };
 
 describe('AbstractApiClient', () => {
@@ -150,6 +185,15 @@ describe('AbstractApiClient', () => {
       const requestUri = await testPushAuthorizationRequest();
       const ticket = await testAuthorization(requestUri);
       await testAuthorizationIssue(ticket);
+    }, 10000);
+  });
+
+  describe('token', () => {
+    it('should successfully work for token', async () => {
+      const requestUri = await testPushAuthorizationRequest();
+      const ticket = await testAuthorization(requestUri);
+      const code = await testAuthorizationIssue(ticket);
+      await testToken(code);
     }, 10000);
   });
 });
