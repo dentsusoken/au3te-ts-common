@@ -66,6 +66,11 @@
       "import": "./dist/schemas/token/index.js",
       "require": "./dist/schemas/token/index.cjs"
     },
+    "./schemas.token-issue": {
+      "types": "./dist/schemas/token-issue/index.d.ts",
+      "import": "./dist/schemas/token-issue/index.js",
+      "require": "./dist/schemas/token-issue/index.cjs"
+    },
     "./schemas.service-configuration": {
       "types": "./dist/schemas/service-configuration/index.d.ts",
       "import": "./dist/schemas/service-configuration/index.js",

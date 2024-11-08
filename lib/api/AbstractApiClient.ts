@@ -77,6 +77,13 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract tokenPath: string;
 
   /**
+   * Path for token issue requests.
+   * @abstract
+   * @type {string}
+   */
+  abstract tokenIssuePath: string;
+
+  /**
    * The path for service configuration requests
    *
    * @abstract
