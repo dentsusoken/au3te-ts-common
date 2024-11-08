@@ -20,6 +20,7 @@ export default defineConfig({
           './lib/schemas/authorization-decision/index.ts',
         'schemas/token': './lib/schemas/token/index.ts',
         'schemas/token-issue': './lib/schemas/token-issue/index.ts',
+        'schemas/token-fail': './lib/schemas/token-fail/index.ts',
         'schemas/service-configuration':
           './lib/schemas/service-configuration/index.ts',
         'schemas/credential-metadata':
