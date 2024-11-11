@@ -17,13 +17,13 @@
 import { z } from 'zod';
 
 /**
- * Failure reasons of token requests.
- *
- * @enum {string}
+ * Schema for failure reasons of token requests.
  */
-export const TokenFailReason = z.enum([
+export const tokenFailReasonSchema = z.enum([
   /**
    * Unknown reason.
+   *
+   * @remarks
    * Using this reason will result in "error":"server_error".
    */
   'UNKNOWN',
@@ -31,6 +31,8 @@ export const TokenFailReason = z.enum([
   /**
    * The resource owner's credentials (username and password) contained in the token
    * request whose flow is "Resource Owner Password Credentials" are invalid.
+   *
+   * @remarks
    * Using this reason will result in "error":"invalid_request".
    */
   'INVALID_RESOURCE_OWNER_CREDENTIALS',
@@ -38,11 +40,19 @@ export const TokenFailReason = z.enum([
   /**
    * The requested resource is invalid, missing, unknown, or malformed.
    * See "Resource Indicators for OAuth 2.0" for details.
+   *
+   * @remarks
    * Using this reason will result in "error":"invalid_target".
+   *
    * @since 2.62
    */
   'INVALID_TARGET',
 ]);
+
+/**
+ * Type definition for TokenFailReason, inferred from the Zod schema.
+ */
+export type TokenFailReason = z.infer<typeof tokenFailReasonSchema>;
 
 /**
  * Request for Authlete's /auth/token/fail API.
@@ -65,7 +75,7 @@ export const tokenFailRequestSchema = z.object({
    *
    * @required
    */
-  reason: TokenFailReason,
+  reason: tokenFailReasonSchema,
 });
 
 /**
