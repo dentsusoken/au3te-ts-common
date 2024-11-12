@@ -77,6 +77,12 @@ export interface ApiClient {
   readonly tokenFailPath: string;
 
   /**
+   * The path for token create requests.
+   * @readonly
+   */
+  readonly tokenCreatePath: string;
+
+  /**
    * The path for service configuration requests.
    * @readonly
    */
