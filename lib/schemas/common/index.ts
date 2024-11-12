@@ -31,3 +31,5 @@ export * from './TaggedValue';
 export * from './stringSchema';
 export * from './numberSchema';
 export * from './booleanSchema';
+export * from './TokenInfo';
+export * from './TokenType';
