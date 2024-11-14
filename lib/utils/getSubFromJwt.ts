@@ -31,7 +31,7 @@ import { base64UrlDecode } from './base64';
  */
 export const getSubFromJwt = async (
   jwt: string | undefined
-): Promise<string | undefined> => {
+): Promise<string> => {
   try {
     if (!jwt) {
       throw new Error('JWT is missing.');
