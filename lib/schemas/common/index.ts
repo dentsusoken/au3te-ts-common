@@ -21,6 +21,7 @@ export * from './AuthzDetailsElement';
 export * from './Client';
 export * from './User';
 export * from './DynamicScope';
+export * from './GrantType';
 export * from './Prompt';
 export * from './Pair';
 export * from './Property';
