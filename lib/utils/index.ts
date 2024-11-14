@@ -15,7 +15,9 @@
  * License.
  */
 
-export * from './mediaType';
+export * from './base64';
 export * from './basicCredentials';
+export * from './getSubFromJwt';
 export * from './httpStatus';
+export * from './mediaType';
 export * from './parseQueryString';
