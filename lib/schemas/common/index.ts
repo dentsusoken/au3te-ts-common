@@ -20,6 +20,7 @@ export * from './ApiResponse';
 export * from './AuthorizationTicketInfo';
 export * from './AuthzDetails';
 export * from './AuthzDetailsElement';
+export * from './BaseClientAuthRequest';
 export * from './booleanSchema';
 export * from './Client';
 export * from './ClientAuthMethod';

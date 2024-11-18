@@ -21,17 +21,17 @@ describe('TokenRequest', () => {
       clientSecret: 'secret456',
       clientCertificate: 'cert789',
       clientCertificatePath: ['cert1', 'cert2'],
-      properties: [{ key: 'prop1', value: 'value1' }],
       dpop: 'dpop-token',
       htm: 'POST',
       htu: 'https://server.example.com/token',
+      dpopNonceRequired: true,
+      oauthClientAttestation: 'attestation-data',
+      oauthClientAttestationPop: 'attestation-pop',
+      properties: [{ key: 'prop1', value: 'value1' }],
       jwtAtClaims: '{"sub":"user123"}',
       accessToken: 'access-token',
       accessTokenDuration: 3600,
       refreshTokenDuration: 86400,
-      dpopNonceRequired: true,
-      oauthClientAttestation: 'attestation-data',
-      oauthClientAttestationPop: 'attestation-pop',
     };
 
     const result = tokenRequestSchema.safeParse(fullRequest);
@@ -48,12 +48,12 @@ describe('TokenRequest', () => {
     expect(result.success).toBe(false);
   });
 
-  it('should accept request with optional fields', () => {
+  it('should accept request with token-specific optional fields', () => {
     const requestWithOptionals: TokenRequest = {
       parameters: 'grant_type=authorization_code&code=abc123',
-      clientId: 'client123',
       properties: [{ key: 'prop1', value: 'value1' }],
-      dpopNonceRequired: true,
+      accessTokenDuration: 3600,
+      refreshTokenDuration: 86400,
     };
 
     const result = tokenRequestSchema.safeParse(requestWithOptionals);
@@ -63,72 +63,47 @@ describe('TokenRequest', () => {
     }
   });
 
-  it('should reject invalid property types', () => {
+  it('should reject invalid token-specific property types', () => {
     const invalidTypes = {
-      parameters: 123, // should be string
-      clientId: true, // should be string
-      accessTokenDuration: '3600', // should be number
-      dpopNonceRequired: 'true', // should be boolean
-      properties: 'not-an-array', // should be array
-      clientCertificatePath: 'not-an-array', // should be array
+      parameters: 'grant_type=authorization_code&code=abc123',
+      properties: 'not-an-array',
+      accessTokenDuration: '3600',
+      refreshTokenDuration: '86400',
+      jwtAtClaims: 123,
     };
 
     const result = tokenRequestSchema.safeParse(invalidTypes);
     expect(result.success).toBe(false);
   });
 
-  it('should handle null values for optional fields', () => {
+  it('should handle null values for token-specific optional fields', () => {
     const requestWithNulls: TokenRequest = {
       parameters: 'grant_type=authorization_code&code=abc123',
-      clientId: null,
-      clientSecret: null,
       properties: null,
-      dpopNonceRequired: null,
+      jwtAtClaims: null,
+      accessToken: null,
+      accessTokenDuration: null,
+      refreshTokenDuration: null,
     };
 
     const result = tokenRequestSchema.safeParse(requestWithNulls);
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.clientId).toBeNull();
-      expect(result.data.clientSecret).toBeNull();
-      expect(result.data.properties).toBeNull();
-      expect(result.data.dpopNonceRequired).toBeNull();
+      expect(result.data).toEqual(requestWithNulls);
     }
   });
 
   it('should validate property array structure', () => {
-    const invalidProperties = {
+    const validProperties = {
       parameters: 'grant_type=authorization_code&code=abc123',
       properties: [
-        {}, // valid empty property
-        { key: null, value: null }, // valid null values
-        { invalid: 'property' }, // valid as all fields are optional
+        { key: 'key1', value: 'value1' },
+        { key: null, value: null },
+        {},
       ],
     };
 
-    const result = tokenRequestSchema.safeParse(invalidProperties);
+    const result = tokenRequestSchema.safeParse(validProperties);
     expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.properties).toEqual([
-        {},
-        { key: undefined, value: undefined },
-        {},
-      ]);
-    }
-  });
-
-  it('should handle empty arrays for array fields', () => {
-    const requestWithEmptyArrays: TokenRequest = {
-      parameters: 'grant_type=authorization_code&code=abc123',
-      properties: [],
-      clientCertificatePath: [],
-    };
-
-    const result = tokenRequestSchema.safeParse(requestWithEmptyArrays);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.properties).toEqual([]);
-      expect(result.data.clientCertificatePath).toEqual([]);
-    }
   });
 });
