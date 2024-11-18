@@ -17,6 +17,8 @@
 
 export * from './base64';
 export * from './basicCredentials';
+export * from './bearerToken';
+export * from './dpopToken';
 export * from './getSubFromJwt';
 export * from './httpStatus';
 export * from './mediaType';
