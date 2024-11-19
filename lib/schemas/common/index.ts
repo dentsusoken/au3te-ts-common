@@ -25,6 +25,8 @@ export * from './booleanSchema';
 export * from './Client';
 export * from './ClientAuthMethod';
 export * from './DynamicScope';
+export * from './Grant';
+export * from './GrantScope';
 export * from './GrantType';
 export * from './numberSchema';
 export * from './Pair';
