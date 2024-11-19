@@ -9,6 +9,8 @@ import { AuthorizationIssueRequest } from '../schemas/authorization-issue/Author
 import { authorizationIssueResponseSchema } from '../schemas/authorization-issue/AuthorizationIssueResponse';
 import { tokenResponseSchema } from '../schemas/token/TokenResponse';
 import { TokenRequest } from '../schemas/token/TokenRequest';
+import { IntrospectionRequest } from '../schemas/introspection/IntrospectionRequest';
+import { introspectionResponseSchema } from '../schemas/introspection/IntrospectionResponse';
 
 class ApiClientImpl extends AbstractApiClient {
   readonly baseUrl: string;
@@ -21,6 +23,7 @@ class ApiClientImpl extends AbstractApiClient {
   readonly tokenIssuePath: string;
   readonly tokenFailPath: string;
   readonly tokenCreatePath: string;
+  readonly introspectionPath: string;
   readonly serviceConfigurationPath: string;
   readonly credentialIssuerMetadataPath: string;
 
@@ -36,6 +39,7 @@ class ApiClientImpl extends AbstractApiClient {
     this.tokenIssuePath = `/api/${process.env.API_KEY}/auth/token/issue`;
     this.tokenFailPath = `/api/${process.env.API_KEY}/auth/token/fail`;
     this.tokenCreatePath = `/api/${process.env.API_KEY}/auth/token/create`;
+    this.introspectionPath = `/api/${process.env.API_KEY}/auth/introspection`;
     this.serviceConfigurationPath = `/api/${process.env.API_KEY}/service/configuration`;
     this.credentialIssuerMetadataPath = `/api/${process.env.API_KEY}/vci/metadata`;
   }
@@ -43,10 +47,14 @@ class ApiClientImpl extends AbstractApiClient {
 
 const apiClient = new ApiClientImpl();
 
-const testPushAuthorizationRequest = async () => {
+const testPar = async () => {
   const request: PushedAuthReqRequest = {
-    parameters:
-      'scope=org.iso.18013.5.1.mDL+openid&redirect_uri=eudi-openid4ci%3A%2F%2Fauthorize%2F&response_type=code&client_id=tw24.wallet.dentsusoken.com',
+    parameters: new URLSearchParams({
+      scope: 'org.iso.18013.5.1.mDL openid',
+      redirect_uri: 'eudi-openid4ci://authorize/',
+      response_type: 'code',
+      client_id: 'tw24.wallet.dentsusoken.com',
+    }).toString(),
   };
 
   const response = await apiClient.callPostApi(
@@ -69,9 +77,10 @@ const testPushAuthorizationRequest = async () => {
 
 const testAuthorization = async (requestUri: string) => {
   const request: PushedAuthReqRequest = {
-    parameters: `client_id=tw24.wallet.dentsusoken.com&request_uri=${encodeURIComponent(
-      requestUri!
-    )}`,
+    parameters: new URLSearchParams({
+      client_id: 'tw24.wallet.dentsusoken.com',
+      request_uri: requestUri,
+    }).toString(),
   };
 
   const response = await apiClient.callPostApi(
@@ -148,7 +157,7 @@ const testToken = async (code: string) => {
     tokenResponseSchema,
     request
   );
-  console.log(response);
+  //console.log(response);
 
   expect(response).toBeDefined();
   expect(response.resultCode).toBe('A050001');
@@ -156,31 +165,45 @@ const testToken = async (code: string) => {
   expect(response.accessToken).toBeDefined();
 
   return response.accessToken!;
-  // expect(
-  //   response.responseContent?.startsWith('eudi-openid4ci://authorize/?code=')
-  // ).toBe(true);
-  // expect(response.authorizationCode).toBeDefined();
+};
 
-  // return response;
+const testIntrospection = async (accessToken: string) => {
+  const request: IntrospectionRequest = {
+    token: accessToken,
+  };
+
+  const response = await apiClient.callPostApi(
+    apiClient.introspectionPath,
+    introspectionResponseSchema,
+    request
+  );
+  //console.log(response);
+
+  expect(response).toBeDefined();
+  // expect(response.resultCode).toBe('A050001');
+  expect(response.action).toBe('OK');
+  // expect(response.accessToken).toBeDefined();
+
+  // return response.accessToken!;
 };
 
 describe('AbstractApiClient', () => {
-  describe('pushAuthorizationRequest', () => {
+  describe('par', () => {
     it('should successfully push an authorization request', async () => {
-      await testPushAuthorizationRequest();
+      await testPar();
     }, 10000);
   });
 
   describe('authorization', () => {
     it('should successfully post an authorization', async () => {
-      const requestUri = await testPushAuthorizationRequest();
+      const requestUri = await testPar();
       await testAuthorization(requestUri);
     }, 10000);
   });
 
   describe('authorizationFail', () => {
     it('should successfully post an authorization fail', async () => {
-      const requestUri = await testPushAuthorizationRequest();
+      const requestUri = await testPar();
       const ticket = await testAuthorization(requestUri);
       await testAuthorizationFail(ticket);
     }, 10000);
@@ -188,7 +211,7 @@ describe('AbstractApiClient', () => {
 
   describe('authorizationIssue', () => {
     it('should successfully post an authorization issue', async () => {
-      const requestUri = await testPushAuthorizationRequest();
+      const requestUri = await testPar();
       const ticket = await testAuthorization(requestUri);
       await testAuthorizationIssue(ticket);
     }, 10000);
@@ -196,10 +219,20 @@ describe('AbstractApiClient', () => {
 
   describe('token', () => {
     it('should successfully work for token', async () => {
-      const requestUri = await testPushAuthorizationRequest();
+      const requestUri = await testPar();
       const ticket = await testAuthorization(requestUri);
       const code = await testAuthorizationIssue(ticket);
       await testToken(code);
+    }, 10000);
+  });
+
+  describe('introspection', () => {
+    it('should successfully work for introspection', async () => {
+      const requestUri = await testPar();
+      const ticket = await testAuthorization(requestUri);
+      const code = await testAuthorizationIssue(ticket);
+      const accessToken = await testToken(code);
+      await testIntrospection(accessToken);
     }, 10000);
   });
 });

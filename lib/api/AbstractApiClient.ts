@@ -98,6 +98,13 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract tokenCreatePath: string;
 
   /**
+   * The path for introspection requests.
+   * @abstract
+   * @type {string}
+   */
+  abstract introspectionPath: string;
+
+  /**
    * The path for service configuration requests
    *
    * @abstract

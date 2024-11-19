@@ -83,6 +83,12 @@ export interface ApiClient {
   readonly tokenCreatePath: string;
 
   /**
+   * The path for introspection requests.
+   * @readonly
+   */
+  readonly introspectionPath: string;
+
+  /**
    * The path for service configuration requests.
    * @readonly
    */
