@@ -51,17 +51,17 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/vci/metadata \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
+-H 'Authorization: Bearer {アクセストークン}' \
 -d '{ "pretty": "false" }'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-  "resultCode": "string",
-  "resultMessage": "string",
   "action": "OK",
-  "responseContent": "string"
+  "responseContent": "{\"credential_issuer\":\"https://issuer.g-trustedweb.workers.dev\",\"credential_endpoint\":\"https://issuer.g-trustedweb.workers.dev/api/credential\",\"batch_credential_endpoint\":\"https://issuer.g-trustedweb.workers.dev/api/batch_credential\",\"deferred_credential_endpoint\":\"https://issuer.g-trustedweb.workers.dev/api/deferred_credential\",\"credential_response_encryption\":{\"alg_values_supported\":[\"RSA-OAEP-256\"],\"enc_values_supported\":[\"A128CBC-HS256\"],\"encryption_required\":false},\"credential_configurations_supported\":{\"org.iso.18013.5.1.mDL\":{\"format\":\"mso_mdoc\",\"doctype\":\"org.iso.18013.5.1.mDL\",\"claims\":{\"org.iso.18013.5.1\":{\"family_name\":{},\"given_name\":{},\"birth_date\":{},\"issue_date\":{},\"expiry_date\":{},\"issuing_country\":{},\"issuing_authority\":{},\"document_number\":{},\"portrait\":{},\"driving_privileges\":{},\"un_distinguishing_sign\":{},\"administrative_number\":{},\"sex\":{},\"height\":{},\"weight\":{},\"eye_colour\":{},\"hair_colour\":{},\"birth_place\":{},\"resident_address\":{},\"portrait_capture_date\":{},\"age_in_years\":{},\"age_birth_year\":{},\"issuing_jurisdiction\":{},\"nationality\":{},\"resident_city\":{},\"resident_state\":{},\"resident_postal_code\":{},\"resident_country\":{},\"family_name_national_character\":{},\"given_name_national_character\":{},\"signature_usual_mark\":{}}},\"scope\":\"org.iso.18013.5.1.mDL\",\"cryptographic_binding_methods_supported\":[\"jwk\"],\"credential_signing_alg_values_supported\":[\"ES256\"]},\"IdentityCredential\":{\"format\":\"vc+sd-jwt\",\"vct\":\"https://credentials.example.com/identity_credential\",\"claims\":{\"family_name\":{},\"given_name\":{},\"birthdate\":{}},\"scope\":\"identity_credential\",\"cryptographic_binding_methods_supported\":[\"jwk\"],\"credential_signing_alg_values_supported\":[\"ES256\"],\"display\":[{\"name\":\"Identity Credential\"}]}}}",
+  "resultCode": "A364001",
+  "resultMessage": "[A364001] Metadata of the credential issuer was prepared."
 }
 ```

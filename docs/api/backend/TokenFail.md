@@ -52,17 +52,17 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/token/fail
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/token/fail \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
+-H 'Authorization: Bearer {アクセストークン}' \
 -d '{ "ticket": "83BNqKIhGMyrkvop_7jQjv2Z1612LNdGSQKkvkrf47c", "reason": "INVALID_RESOURCE_OWNER_CREDENTIALS" }'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A067301",
-"resultMessage": "[A067301] The credentials (username & password) passed to the token endpoint are invalid.",
-"action": "BAD_REQUEST",
-"responseContent": "{\"error_description\":\"[A067301] The credentials (username & password) passed to the token endpoint are invalid.\",\"error\":\"invalid_request\",\"error_uri\":\"https://docs.authlete.com/#A067301\"}"
+  "resultCode": "A067301",
+  "resultMessage": "[A067301] The credentials (username & password) passed to the token endpoint are invalid.",
+  "action": "BAD_REQUEST",
+  "responseContent": "{\"error_description\":\"[A067301] The credentials (username & password) passed to the token endpoint are invalid.\",\"error\":\"invalid_request\",\"error_uri\":\"https://docs.authlete.com/#A067301\"}"
 }
 ```

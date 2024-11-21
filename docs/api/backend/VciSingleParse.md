@@ -56,23 +56,27 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/vci/single/parse \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "accessToken": "string", "requestContent": "string" }'
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{
+  "accessToken": "-LCEsM_ZQS62Wbe9d8tWMqhNZE9qB8uAimQWYydnVGw",
+  "requestContent": "{\"format\":\"mso_mdoc\",\"doctype\":\"org.iso.18013.5.1.mDL\",\"claims\":{\"org.iso.18013.5.1\":{\"family_name\":{},\"given_name\":{},\"birth_date\":{},\"issue_date\":{},\"expiry_date\":{},\"issuing_country\":{},\"document_number\":{},\"driving_privileges\":{}}}}"
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-  "resultCode": "string",
-  "resultMessage": "string",
   "action": "OK",
-  "responseContent": "string",
+  "responseContent": null,
   "info": {
-    "identifier": "string",
-    "format": "string",
-    "bindingKey": "string",
-    "details": "string"
-  }
+    "identifier": "JpP50g88mGcuOAE0ETSJW096m9_qc_2qGVNm6GUE7xE",
+    "format": "mso_mdoc",
+    "bindingKey": null,
+    "bindingKeys": null,
+    "details": "{\"doctype\":\"org.iso.18013.5.1.mDL\",\"claims\":{\"org.iso.18013.5.1\":{\"family_name\":{},\"given_name\":{},\"birth_date\":{},\"issue_date\":{},\"expiry_date\":{},\"issuing_country\":{},\"document_number\":{},\"driving_privileges\":{}}}}"
+  },
+  "resultCode": "A374001",
+  "resultMessage": "[A374001] The credential request was parsed successfully."
 }
 ```

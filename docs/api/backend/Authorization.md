@@ -104,47 +104,49 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "parameters": "response_type=code&client_id=26478243745571&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&scope=timeline.read+history.read&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256" }'
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{
+  "parameters": "response_type=code&client_id={クライアントID}&redirect_uri=eudi-openid4ci://authorize/&scope=org.iso.18013.5.1.mDL+openid&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256"
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A004001",
-"resultMessage": "[A004001] Authlete has successfully issued a ticket to the service (API Key = 21653835348762) for the authorization request from the client (ID = 26478243745571). [response_type=code, openid=false]",
-"acrEssential": false,
-"action": "INTERACTION",
-"client": {
-"clientId": 26478243745571,
-"clientIdAlias": "my-client",
-"clientIdAliasEnabled": true,
-"clientName": "My updated client",
-"logo_uri": "https://my-client.example.com/logo.png",
-"number": 6164
-},
-"clientIdAliasUsed": false,
-"display": "PAGE",
-"maxAge": 0,
-"scopes": [
-{
-"defaultEntry": false,
-"description": "A permission to read your history.",
-"name": "history.read"
-},
-{
-"defaultEntry": false,
-"description": "A permission to read your timeline.",
-"name": "timeline.read"
-}
-],
-"service": {
-"apiKey": 21653835348762,
-"clientIdAliasEnabled": true,
-"number": 5041,
-"serviceName": "My updated service"
-},
-"ticket": "hXoY87t_t23enrVHWxpXNP5FfVDhDypD3T6H6lt4IPA"
+  "resultCode": "A004001",
+  "resultMessage": "[A004001] Authlete has successfully issued a ticket to the service (API Key = 21653835348762) for the authorization request from the client (ID = 26478243745571). [response_type=code, openid=false]",
+  "acrEssential": false,
+  "action": "INTERACTION",
+  "client": {
+    "clientId": 26478243745571,
+    "clientIdAlias": "my-client",
+    "clientIdAliasEnabled": true,
+    "clientName": "My updated client",
+    "logo_uri": "https://my-client.example.com/logo.png",
+    "number": 6164
+  },
+  "clientIdAliasUsed": false,
+  "display": "PAGE",
+  "maxAge": 0,
+  "scopes": [
+    {
+      "defaultEntry": false,
+      "description": "A permission to read your history.",
+      "name": "history.read"
+    },
+    {
+      "defaultEntry": false,
+      "description": "A permission to read your timeline.",
+      "name": "timeline.read"
+    }
+  ],
+  "service": {
+    "apiKey": 21653835348762,
+    "clientIdAliasEnabled": true,
+    "number": 5041,
+    "serviceName": "My updated service"
+  },
+  "ticket": "hXoY87t_t23enrVHWxpXNP5FfVDhDypD3T6H6lt4IPA"
 }
 ```

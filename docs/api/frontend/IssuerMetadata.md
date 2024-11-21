@@ -16,10 +16,9 @@ https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
 
 ### ヘッダー
 
-| ヘッダー      | 必須 | 説明                             |
-| ------------- | ---- | -------------------------------- |
-| Content-Type  | Yes  | `application/json;charset=utf-8` |
-| Authorization | Yes  | `Bearer {アクセストークン}`      |
+| ヘッダー     | 必須 | 説明                             |
+| ------------ | ---- | -------------------------------- |
+| Content-Type | No   | `application/json;charset=utf-8` |
 
 ### パラメータ
 
@@ -35,12 +34,15 @@ https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
 
 ### パラメータ
 
-| パラメータ名    | データ型 | 説明                                                                                                                                                                        |
-| --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| resultCode      | string   | API 呼び出しの結果コード                                                                                                                                                    |
-| resultMessage   | string   | API 呼び出しの結果を説明する短いメッセージ                                                                                                                                  |
-| action          | string   | クレデンシャル発行者メタデータエンドポイント（`/.well-known/openid-credential-issuer`）の実装が次に取るべきアクション<br>許可値: `OK`、`NOT_FOUND`、`INTERNAL_SERVER_ERROR` |
-| responseContent | string   | クレデンシャル発行者メタデータエンドポイントの実装がレスポンスを構築する際に使用すべきコンテンツ                                                                            |
+> [!NOTE]
+> 以下は主要なレスポンスの一部です。完全なパラメータリストについては[Credential Issuer Metadata](https://openid.github.io/OpenID4VCI/openid-4-verifiable-credential-issuance-wg-draft.html#name-credential-issuer-metadata-p)を参照してください。
+
+| パラメータ名          | データ型 | 説明                                     |
+| --------------------- | -------- | ---------------------------------------- |
+| credential_issuer     | string   | クレデンシャル発行者の URL               |
+| credential_endpoint   | string   | クレデンシャル発行エンドポイントの URL   |
+| credentials_supported | string[] | サポートされているクレデンシャルのタイプ |
+
 
 ## サンプルリクエスト
 
@@ -50,11 +52,27 @@ curl -v https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-is
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-  "resultCode": "string",
-  "resultMessage": "string",
-  "action": "OK",
-  "responseContent": "string"
+  "credential_issuer": "https://issuer.g-trustedweb.workers.dev",
+  "credential_endpoint": "https://issuer.g-trustedweb.workers.dev/api/credential",
+  "credentials_supported": [
+    {
+      "format": "mso_mdoc",
+      "doctype": "org.iso.18013.5.1.mDL",
+      "claims": {
+        "org.iso.18013.5.1": {
+          "family_name": {},
+          "given_name": {},
+          "birth_date": {},
+          "issue_date": {},
+          "expiry_date": {},
+          "issuing_country": {},
+          "document_number": {},
+          "driving_privileges": {}
+        }
+      }
+    }
+  ]
 }
 ```

@@ -96,50 +96,54 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection \
 -H 'Content-Type:application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "token": "VFGsNK-5sXiqterdaR7b5QbRX9VTwVCQB87jbr2_xAI", "scopes": [ "history.read", "timeline.read" ] }'
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{
+  "token": "-LCEsM_ZQS62Wbe9d8tWMqhNZE9qB8uAimQWYydnVGw",
+  "scopes": [
+    "org.iso.18013.5.1.mDL",
+    "openid"
+  ]
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A056001",
-"resultMessage": "[A056001] The access token is valid.",
-"action": "OK",
-"clientAttributes": [
-{
-"key": "attribute1-key",
-"value": "attribute1-value"
-},
-{
-"key": "attribute2-key",
-"value": "attribute2-value"
+  "resultCode": "A056001",
+  "resultMessage": "[A056001] The access token is valid.",
+  "action": "OK",
+  "clientAttributes": [
+    {
+      "key": "attribute1-key",
+      "value": "attribute1-value"
+    },
+    {
+      "key": "attribute2-key",
+      "value": "attribute2-value"
+    }
+  ],
+  "clientId": 26478243745571,
+  "clientIdAlias": "my-client",
+  "clientIdAliasUsed": false,
+  "existent": true,
+  "expiresAt": 1640416873000,
+  "refreshable": true,
+  "responseContent": "Bearer error='invalid_request'",
+  "scopes": ["history.read", "timeline.read"],
+  "serviceAttributes": [
+    {
+      "key": "attribute1-key",
+      "value": "attribute1-value"
+    },
+    {
+      "key": "attribute2-key",
+      "value": "attribute2-value"
+    }
+  ],
+  "subject": "john",
+  "sufficient": true,
+  "usable": true
 }
-],
-"clientId": 26478243745571,
-"clientIdAlias": "my-client",
-"clientIdAliasUsed": false,
-"existent": true,
-"expiresAt": 1640416873000,
-"refreshable": true,
-"responseContent": "Bearer error="invalid_request"",
-"scopes": [
-"history.read",
-"timeline.read"
-],
-"serviceAttributes": [
-{
-"key": "attribute1-key",
-"value": "attribute1-value"
-},
-{
-"key": "attribute2-key",
-"value": "attribute2-value"
-}
-],
-"subject": "john",
-"sufficient": true,
-"usable": true
-}
+
 ```

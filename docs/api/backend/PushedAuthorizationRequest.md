@@ -63,18 +63,21 @@ https://nextdev-api.authlete.net/api/{サービスID}/pushed_auth_req
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/pushed_auth_req \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "parameters": "response_type=code%20id_token&client_id=5921531358155430&redirect_uri=https%3A%2F%2Fserver.example.com%2Fcb&state=SOME_VALUE_ABLE_TO_PREVENT_CSRF&scope=openid&nonce=SOME_VALUE_ABLE_TO_PREVENT_REPLAY_ATTACK&code_challenge=5ZWDQJiryK3eaLtSeFV8y1XySMCWtyITxICLaTwvK8g&code_challenge_method=S256", "clientId": "5921531358155430", "clientSecret" : "P_FouxWlI7zcOep_9vBwR9qMAVJQiCiUiK1HrAP4GziOyezHQpqY0f5dHXK4JT4tnvI51OkbWVoEM9GnOyJViA"}'
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{ 
+    "parameters": "response_type=code%20id_token&client_id=5921531358155430&redirect_uri=https%3A%2F%2Fserver.example.com%2Fcb&state=SOME_VALUE_ABLE_TO_PREVENT_CSRF&scope=openid&nonce=SOME_VALUE_ABLE_TO_PREVENT_REPLAY_ATTACK&code_challenge=5ZWDQJiryK3eaLtSeFV8y1XySMCWtyITxICLaTwvK8g&code_challenge_method=S256",
+ "clientId": "5921531358155430"
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A245001",
-"resultMessage": "[A245001] Successfully registered a request object for client (5921531358155430), URI is urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg.",
-"action": "CREATED",
-"requestUri": "urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg",
-"responseContent": "{"expires_in":600,"request_uri":"urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg"}"
+  "resultCode": "A245001",
+  "resultMessage": "[A245001] Successfully registered a request object for client (5921531358155430), URI is urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg.",
+  "action": "CREATED",
+  "requestUri": "urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg",
+  "responseContent": "{'expires_in':600,'request_uri':'urn:ietf:params:oauth:request_uri:CAK9YEtNorwXE3UwSyihsBOL0jFrqUup7yAACw5y5Zg'}"
 }
 ```
