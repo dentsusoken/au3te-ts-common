@@ -53,17 +53,17 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization/fail
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization/fail \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
+-H 'Authorization: Bearer {アクセストークン}' \
 -d '{ "ticket": "c4iy3TWGn74UMO7ihRl0ZS8OEUzV9axBlBbJbqxH-9Q", "reason": "NOT_AUTHENTICATED" }'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A004201",
-"resultMessage": "[A004201] The authorization request from the service does not contain 'parameters' parameter.",
-"action": "BAD_REQUEST",
-"responseContent": "{\"error_description\":\"[A004201] The authorization request from the service does not contain 'parameters' parameter.\",\"error\":\"invalid_request\",\"error_uri\":\"https://docs.authlete.com/#A004201\"}"
+  "resultCode": "A004201",
+  "resultMessage": "[A004201] The authorization request from the service does not contain 'parameters' parameter.",
+  "action": "BAD_REQUEST",
+  "responseContent": "{\"error_description\":\"[A004201] The authorization request from the service does not contain 'parameters' parameter.\",\"error\":\"invalid_request\",\"error_uri\":\"https://docs.authlete.com/#A004201\"}"
 }
 ```

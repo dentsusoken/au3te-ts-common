@@ -2,7 +2,7 @@
 
 ## 概要
 
-認可リクエストのパラメータを解析し、認可リクエストの処理を進めるためのエンドポイント。
+ユーザーからの同意を受け取り認可コードを発行するためのエンドポイント。
 
 ## URL
 
@@ -13,6 +13,12 @@ https://issuer.g-trustedweb.workers.dev/api/authorization/decision
 ### メソッド
 
 - POST
+
+### ヘッダー
+
+| ヘッダー | 必須 | 説明                                                                                                |
+| -------- | ---- | --------------------------------------------------------------------------------------------------- |
+| Cookie   | Yes  | 認可エンドポイントへのリクエスト時に払い出されるセッション ID<br>形式： `_sessionId={セッションID}` |
 
 ### パラメータ
 
@@ -34,7 +40,8 @@ https://issuer.g-trustedweb.workers.dev/api/authorization/decision
 ## サンプルリクエスト
 
 ```sh
-curl -s https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
+curl -v https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
+     -H "Cookie: _sessionId=c52ca74b-24a8-40cb-55de-e61a717ee3c9" \
      -d loginId=inga \
      -d password=inga \
      -d authorized=Authorize
@@ -42,6 +49,6 @@ curl -s https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
 
 ## サンプルレスポンス
 
-```sh
+```text
 eudi-openid4ci://authorize/?state=7342EFBD-3D9F-4895-8445-18F365B8C66C&code=Akyl_7V8J-Q35VlSX4b0prouiPr47S7eVkdc-VzbiqE&iss=https%3A%2F%2Fissuer.g-trustedweb.workers.dev
 ```

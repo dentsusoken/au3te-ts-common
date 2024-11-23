@@ -2,7 +2,7 @@
 
 ## 概要
 
-認可リクエストのパラメータを解析し、認可リクエストの処理を進めるためのエンドポイント。
+認可リクエストのパラメータを事前に送信し、それに対応する`request_uri`を取得するためのエンドポイント。
 
 ## URL
 
@@ -48,11 +48,11 @@ https://issuer.g-trustedweb.workers.dev/api/par
 ## サンプルリクエスト
 
 ```sh
-curl -s https://issuer.g-trustedweb.workers.dev/api/par \
+curl -v https://issuer.g-trustedweb.workers.dev/api/par \
      -H "DPoP: {DPOP_PROOF_JWT} \
-     -d client_id={CLIENT_ID} \
+     -d client_id={クライアントID} \
      -d response_type=code \
-     -d scope=org.iso.18013.5.1.mDL openid \
+     -d scope=org.iso.18013.5.1.mDL+openid \
      -d redirect_uri=eudi-openid4ci://authorize/ \
      -d state=7342EFBD-3D9F-4895-8445-18F365B8C66C \
      -d code_challenge=-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs \
@@ -61,7 +61,7 @@ curl -s https://issuer.g-trustedweb.workers.dev/api/par \
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
   "expires_in": 600,
   "request_uri": "urn:ietf:params:oauth:request_uri:du-ptCtuukbVDi2MgOjYwwb99cl-ho0bzzLb0X0u1n0"

@@ -82,14 +82,16 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/token
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/token \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "parameters": "grant_type=authorization_code&code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk", "clientId": "57297408867", "clientSecret": "J_3C7P0nDTP7CwCg_HyPQh7bTQ1696CC8GWot-EjesZmdBiU5Gsidq5Ve3tMaN2x2_VcKV1UE1U3ZdGKRuTs7A" }'
-
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{
+  "parameters": "grant_type=authorization_code&code=mbujVd6EebXrFdJHz_pCSo1ayW7FAtVoHR8WEU0NXus&redirect_uri=eudi-openid4ci://authorize/&code_verifier=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM",
+  "clientId": "{クライアントID}"
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
   "resultCode": "A050001",
   "resultMessage": "[A050001] The token request (grant_type=authorization_code) was processed successfully.",
@@ -115,10 +117,7 @@ curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/token
   "refreshTokenDuration": 3600,
   "refreshTokenExpiresAt": 1640252942736,
   "responseContent": "{\\\"access_token\\\":\\\"C4SrUTijIj2IxqE1xBASr3dxQWgso3BpY49g8CyjGjQ\\\",\\\"refresh_token\\\":\\\"60k0cZ38sJcpTgdxvG9Sqa-3RG5AmGExGpFB-1imSxo\\\",\\\"scope\\\":\\\"history.read timeline.read\\\",\\\"token_type\\\":\\\"Bearer\\\",\\\"expires_in\\\":3600}",
-  "scopes": [
-    "history.read",
-    "timeline.read"
-  ],
+  "scopes": ["history.read", "timeline.read"],
   "serviceAttributes": [
     {
       "key": "attribute1-key",

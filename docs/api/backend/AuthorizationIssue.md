@@ -71,20 +71,23 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization/issue
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/authorization/issue \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
--d '{ "ticket": "FFgB9gwb_WXh6g1u-UQ8ZI-d_k4B-o-cm7RkVzI8Vnc", "subject": "john" }'
+-H 'Authorization: Bearer {アクセストークン}' \
+-d '{
+  "ticket": "zhL7BleAB6K2AnKcH3rsMKglr4UovSV2687vmtCBNF0",
+  "subject": "inga"
+}'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A040001",
-"resultMessage": "[A040001] The authorization request was processed successfully.",
-"accessTokenDuration": 0,
-"accessTokenExpiresAt": 0,
-"action": "LOCATION",
-"authorizationCode": "Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo",
-"responseContent": "https://my-client.example.com/cb1?code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&iss=https%3A%2F%2Fmy-service.example.com"
+  "resultCode": "A040001",
+  "resultMessage": "[A040001] The authorization request was processed successfully.",
+  "accessTokenDuration": 0,
+  "accessTokenExpiresAt": 0,
+  "action": "LOCATION",
+  "authorizationCode": "Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo",
+  "responseContent": "https://my-client.example.com/cb1?code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&iss=https%3A%2F%2Fmy-service.example.com"
 }
 ```

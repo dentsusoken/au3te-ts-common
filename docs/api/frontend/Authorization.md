@@ -12,6 +12,7 @@ https://issuer.g-trustedweb.workers.dev/api/authorization
 
 ### メソッド
 
+- GET
 - POST
 
 ### パラメータ
@@ -29,36 +30,46 @@ https://issuer.g-trustedweb.workers.dev/api/authorization
 
 ## レスポンス
 
+### ヘッダー
+
+| ヘッダー   | 必須 | 説明                                                                                                |
+| ---------- | ---- | --------------------------------------------------------------------------------------------------- |
+| Set-Cookie | Yes  | 認可エンドポイントへのリクエスト時に払い出されるセッション ID<br>形式： `_sessionId={セッションID}` |
+
 ### フォーマット
 
 - HTML
+
+### レスポンスボディ
+
+- 同意画面を表示するためのHTML
 
 ## サンプルリクエスト
 
 ### パターン 1
 
 ```sh
-curl -v  https://issuer.g-trustedweb.workers.dev/api/par \
-     -d client_id={CLIENT_ID} \
-     -d response_type=code \
-     -d scope=org.iso.18013.5.1.mDL openid \
-     -d redirect_uri=eudi-openid4ci://authorize/ \
-     -d state=7342EFBD-3D9F-4895-8445-18F365B8C66C \
-     -d code_challenge=-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs \
-     -d code_challenge_method=S256
+curl -v "https://issuer.g-trustedweb.workers.dev/api/authorization?\
+client_id={クライアントID}&\
+response_type=code&\
+scope=org.iso.18013.5.1.mDL+openid&\
+redirect_uri=eudi-openid4ci://authorize/&\
+state=7342EFBD-3D9F-4895-8445-18F365B8C66C&\
+code_challenge=-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs&\
+code_challenge_method=S256"
 ```
 
 ### パターン 2
 
 ```sh
-curl -v  https://issuer.g-trustedweb.workers.dev/api/par \
-     -d client_id={CLIENT_ID} \
-     -d request_uri=urn:ietf:params:oauth:request_uri:du-ptCtuukbVDi2MgOjYwwb99cl-ho0bzzLb0X0u1n0 \
+curl -v "https://issuer.g-trustedweb.workers.dev/api/authorization?\
+client_id={クライアントID}&\
+request_uri=urn:ietf:params:oauth:request_uri:Sv6EwBP0zBYwImCGJS3ewOt-jM43xk2C3SFLINSEctQ"
 ```
 
 ## サンプルレスポンス
 
-```sh
+```html
 <!doctype html>
 <html>
 ...

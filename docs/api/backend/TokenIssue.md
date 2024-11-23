@@ -78,47 +78,47 @@ https://nextdev-api.authlete.net/api/{サービスID}/auth/token/issue
 ```sh
 curl -v -X POST https://nextdev-api.authlete.net/api/{サービスID}/auth/token/issue \
 -H 'Content-Type: application/json' \
--u 'Authorization: Bearer {アクセストークン}' \
+-H 'Authorization: Bearer {アクセストークン}' \
 -d '{ "ticket": "p7SXQ9JFjng7KFOZdCMBKcoR3ift7B54l1LGIgQXqEM", "subject": "john" }'
 ```
 
 ## サンプルレスポンス
 
-```sh
+```json
 {
-"resultCode": "A054001",
-"resultMessage": "[A054001] The token request (grant_type=password) was processed successfully.",
-"accessToken": "OthV6TlZ2pPUtlBBvBSGFYzSdgVy87SSIPz2Zjwi-m0",
-"accessTokenDuration": 3600,
-"accessTokenExpiresAt": 1640331371876,
-"action": "OK",
-"clientAttributes": [
-{
-"key": "attribute1-key",
-"value": "attribute1-value"
-},
-{
-"key": "attribute2-key",
-"value": "attribute2-value"
-}
-],
-"clientId": 26478243745571,
-"clientIdAlias": "my-client",
-"clientIdAliasUsed": false,
-"refreshToken": "ICPN0-sG3BH4szqiNqaFHZrWUGt7e0zaPuhys3ejQow",
-"refreshTokenDuration": 3600,
-"refreshTokenExpiresAt": 1640331371876,
-"responseContent": "{\"access_token\":\"OthV6TlZ2pPUtlBBvBSGFYzSdgVy87SSIPz2Zjwi-m0\",\"refresh_token\":\"ICPN0-sG3BH4szqiNqaFHZrWUGt7e0zaPuhys3ejQow\",\"scope\":null,\"token_type\":\"Bearer\",\"expires_in\":3600}",
-"serviceAttributes": [
-{
-"key": "attribute1-key",
-"value": "attribute1-value"
-},
-{
-"key": "attribute2-key",
-"value": "attribute2-value"
-}
-],
-"subject": "john"
+  "resultCode": "A054001",
+  "resultMessage": "[A054001] The token request (grant_type=password) was processed successfully.",
+  "accessToken": "OthV6TlZ2pPUtlBBvBSGFYzSdgVy87SSIPz2Zjwi-m0",
+  "accessTokenDuration": 3600,
+  "accessTokenExpiresAt": 1640331371876,
+  "action": "OK",
+  "clientAttributes": [
+    {
+      "key": "attribute1-key",
+      "value": "attribute1-value"
+    },
+    {
+      "key": "attribute2-key",
+      "value": "attribute2-value"
+    }
+  ],
+  "clientId": 26478243745571,
+  "clientIdAlias": "my-client",
+  "clientIdAliasUsed": false,
+  "refreshToken": "ICPN0-sG3BH4szqiNqaFHZrWUGt7e0zaPuhys3ejQow",
+  "refreshTokenDuration": 3600,
+  "refreshTokenExpiresAt": 1640331371876,
+  "responseContent": "{\"access_token\":\"OthV6TlZ2pPUtlBBvBSGFYzSdgVy87SSIPz2Zjwi-m0\",\"refresh_token\":\"ICPN0-sG3BH4szqiNqaFHZrWUGt7e0zaPuhys3ejQow\",\"scope\":null,\"token_type\":\"Bearer\",\"expires_in\":3600}",
+  "serviceAttributes": [
+    {
+      "key": "attribute1-key",
+      "value": "attribute1-value"
+    },
+    {
+      "key": "attribute2-key",
+      "value": "attribute2-value"
+    }
+  ],
+  "subject": "john"
 }
 ```
