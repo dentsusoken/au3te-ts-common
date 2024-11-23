@@ -81,6 +81,11 @@
       "import": "./dist/schemas/token-create/index.js",
       "require": "./dist/schemas/token-create/index.cjs"
     },
+    "./schemas.credential": {
+      "types": "./dist/schemas/credential/index.d.ts",
+      "import": "./dist/schemas/credential/index.js",
+      "require": "./dist/schemas/credential/index.cjs"
+    },
     "./schemas.introspection": {
       "types": "./dist/schemas/introspection/index.d.ts",
       "import": "./dist/schemas/introspection/index.js",
