@@ -86,6 +86,11 @@
       "import": "./dist/schemas/credential/index.js",
       "require": "./dist/schemas/credential/index.cjs"
     },
+    "./schemas.credential-single-parse": {
+      "types": "./dist/schemas/credential-single-parse/index.d.ts",
+      "import": "./dist/schemas/credential-single-parse/index.js",
+      "require": "./dist/schemas/credential-single-parse/index.cjs"
+    },
     "./schemas.introspection": {
       "types": "./dist/schemas/introspection/index.d.ts",
       "import": "./dist/schemas/introspection/index.js",
