@@ -23,42 +23,22 @@
 const CHALLENGE_PATTERN = /^Bearer *([^ ]+) *$/i;
 
 /**
- * Extract the access token from form parameters.
+ * Extracts a Bearer token from an Authorization header according to RFC 6750 specifications.
  *
- * @param input - The input string formatted in application/x-www-form-urlencoded
- * @returns The extracted access token, or undefined if not found
- */
-const extractFromFormParameters = (input: string): string | undefined => {
-  try {
-    const params = new URLSearchParams(input);
-    const token = params.get('access_token');
-    return token ?? undefined;
-  } catch {
-    return undefined;
-  }
-};
-
-/**
- * Extract the access token embedded in the input string.
+ * This function parses the input string to extract an OAuth 2.0 Bearer token from
+ * the Authorization Request Header Field as defined in RFC 6750 Section 2.1.
  *
- * This method assumes that the input string comes from one of
- * the following three places that are mentioned in "RFC 6750
- * (OAuth 2.0 Bearer Token Usage), 2. Authenticated Requests".
+ * The expected format is: "Bearer {token}"
  *
- * 1. Authorization Request Header Field
- * 2. Form-Encoded Body Parameter
- * 3. URI Query Parameter
+ * @param input - The string to parse, typically the Authorization header value
+ * @returns The extracted Bearer token if found, undefined otherwise
+ * @example
+ * // Authorization header
+ * parseBearerToken('Bearer abc123') // returns 'abc123'
+ * parseBearerToken('bearer ABC123') // returns 'ABC123' (case-insensitive)
+ * parseBearerToken('Basic abc123') // returns undefined (wrong scheme)
  *
- * To be concrete, this method assumes that the format of the
- * input string is either of the following two.
- *
- * 1. "Bearer {access-token}"
- * 2. Parameters formatted in application/x-www-form-urlencoded
- *    containing access_token={access-token}.
- *
- * @param input - The input string to be parsed
- * @returns The extracted access token, or undefined if not found
- * @see {@link http://tools.ietf.org/html/rfc6750 RFC 6750 (OAuth 2.0 Bearer Token Usage)}
+ * @see {@link https://tools.ietf.org/html/rfc6750#section-2.1 RFC 6750 Section 2.1 - Authorization Request Header Field}
  * @since 2.70
  */
 export const parseBearerToken = (
@@ -77,5 +57,5 @@ export const parseBearerToken = (
   }
 
   // Assume that the input is formatted in application/x-www-form-urlencoded
-  return extractFromFormParameters(input);
+  return undefined;
 };
