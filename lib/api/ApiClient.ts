@@ -101,6 +101,12 @@ export interface ApiClient {
   readonly credentialIssuerMetadataPath: string;
 
   /**
+   * The path for credential single parse requests.
+   * @readonly
+   */
+  readonly credentialSingleParsePath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - The type of the request object.
    * @template RES - The type of the response object.
