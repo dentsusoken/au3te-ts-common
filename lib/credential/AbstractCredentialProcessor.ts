@@ -14,5 +14,20 @@
  * limitations under the License.
  */
 
-export * from './CredentialIssuanceOrder';
-export * from './CredentialRequestInfo';
+import {
+  CredentialIssuanceOrder,
+  CredentialRequestInfo,
+} from '../schemas/credential';
+import { IntrospectionResponse } from '../schemas/introspection/IntrospectionResponse';
+import { CredentialType } from './types';
+import { CredentialProcessor } from './CredentialProcessor';
+
+export abstract class AbstractCredentialProcessor
+  implements CredentialProcessor
+{
+  abstract toOrder(
+    credentialType: CredentialType,
+    credentialRequestInfo: CredentialRequestInfo,
+    introspectionResponse: IntrospectionResponse
+  ): CredentialIssuanceOrder;
+}

@@ -15,13 +15,21 @@
  * License.
  */
 
-export * from './base64';
-export * from './basicCredentials';
-export * from './bearerToken';
-export * from './dpopToken';
-export * from './errorJson';
-export * from './getSubFromJwt';
-export * from './httpStatus';
-export * from './mediaType';
-export * from './parseQueryString';
-export * from './toErrorJson';
+import { errorJson } from './errorJson';
+
+export const toErrorJson = (errorCode: string, errorMessage: string) => {
+  try {
+    const parsed = JSON.parse(errorMessage);
+    if (
+      parsed != null &&
+      typeof parsed === 'object' &&
+      !Array.isArray(parsed)
+    ) {
+      return errorMessage;
+    }
+  } catch {
+    // If parsing fails, treat as a regular string
+  }
+
+  return errorJson(errorCode, errorMessage);
+};

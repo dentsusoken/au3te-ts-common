@@ -14,5 +14,17 @@
  * limitations under the License.
  */
 
-export * from './CredentialIssuanceOrder';
-export * from './CredentialRequestInfo';
+import {
+  CredentialIssuanceOrder,
+  CredentialRequestInfo,
+} from '../schemas/credential';
+import { IntrospectionResponse } from '../schemas/introspection/IntrospectionResponse';
+import { CredentialType } from './types';
+
+export interface CredentialProcessor {
+  toOrder(
+    credentialType: CredentialType,
+    credentialRequestInfo: CredentialRequestInfo,
+    introspectionResponse: IntrospectionResponse
+  ): CredentialIssuanceOrder;
+}

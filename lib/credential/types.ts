@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2024 Authlete, Inc.
+ * Copyright (C) 2019-2024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,17 @@
  * License.
  */
 
-export * from './base64';
-export * from './basicCredentials';
-export * from './bearerToken';
-export * from './dpopToken';
-export * from './errorJson';
-export * from './getSubFromJwt';
-export * from './httpStatus';
-export * from './mediaType';
-export * from './parseQueryString';
-export * from './toErrorJson';
+/**
+ * Type of credential issuance.
+ * - 'single': Single credential issuance
+ * - 'batch': Batch credential issuance
+ * - 'deferred': Deferred credential issuance
+ */
+export type CredentialType = 'single' | 'batch' | 'deferred';
+
+/**
+ * Format of verifiable credential.
+ * - 'vc+sd-jwt': W3C Verifiable Credentials with SD-JWT
+ * - 'mso_mdoc': ISO/IEC 18013-5 mdoc
+ */
+export type CredentialFormat = 'vc+sd-jwt' | 'mso_mdoc';
