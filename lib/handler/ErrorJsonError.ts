@@ -15,11 +15,21 @@
  * License.
  */
 
-export * from './BadRequestError';
-export * from './buildApiErrorMessage';
-export * from './buildUnknownActionMessage';
-export * from './CommonHandlerConfiguration';
-export * from './CommonHandlerConfigurationImpl';
-export * from './ErrorJsonError';
-export * from './outputErrorMessage';
-export * from './processError';
+import { errorJson } from '../utils/errorJson';
+
+/**
+ * Base error class that formats error messages as JSON strings.
+ * Used for OAuth 2.0 and OpenID Connect error responses.
+ */
+export class ErrorJsonError extends Error {
+  /**
+   * Creates a new ErrorJsonError instance.
+   *
+   * @param errorCode - The OAuth 2.0/OIDC error code (e.g., 'invalid_request')
+   * @param errorMessage - The human-readable error description
+   */
+  constructor(errorCode: string, errorMessage: string) {
+    super(errorJson(errorCode, errorMessage));
+    this.name = 'ErrorJsonError';
+  }
+}
