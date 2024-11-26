@@ -16,6 +16,11 @@
       "import": "./dist/handler/index.js",
       "require": "./dist/handler/index.cjs"
     },
+    "./handler/user": {
+      "types": "./dist/handler/user/index.d.ts",
+      "import": "./dist/handler/user/index.js",
+      "require": "./dist/handler/user/index.cjs"
+    },
     "./api": {
       "types": "./dist/api/index.d.ts",
       "import": "./dist/api/index.js",
@@ -110,11 +115,6 @@
       "types": "./dist/page-model/authorization/index.d.ts",
       "import": "./dist/page-model/authorization/index.js",
       "require": "./dist/page-model/authorization/index.cjs"
-    },
-    "./user": {
-      "types": "./dist/user/index.d.ts",
-      "import": "./dist/user/index.js",
-      "require": "./dist/user/index.cjs"
     }
   },
   "scripts": {

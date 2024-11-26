@@ -15,7 +15,7 @@
  * License.
  */
 
-import { User } from '../schemas/common/User';
+import { User } from '../../schemas/common/User';
 
 /**
  * Type definition for a function that retrieves a user by their login credentials.
