@@ -16,7 +16,7 @@
       "import": "./dist/handler/index.js",
       "require": "./dist/handler/index.cjs"
     },
-    "./handler/authorization-page": {
+    "./handler.authorization-page": {
       "types": "./dist/handler/authorization-page/index.d.ts",
       "import": "./dist/handler/authorization-page/index.js",
       "require": "./dist/handler/authorization-page/index.cjs"
