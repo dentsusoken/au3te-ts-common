@@ -16,6 +16,11 @@
       "import": "./dist/handler/index.js",
       "require": "./dist/handler/index.cjs"
     },
+    "./handler/authorization-page": {
+      "types": "./dist/handler/authorization-page/index.d.ts",
+      "import": "./dist/handler/authorization-page/index.js",
+      "require": "./dist/handler/authorization-page/index.cjs"
+    },
     "./handler.user": {
       "types": "./dist/handler/user/index.d.ts",
       "import": "./dist/handler/user/index.js",
@@ -110,11 +115,6 @@
       "types": "./dist/schemas/credential-metadata/index.d.ts",
       "import": "./dist/schemas/credential-metadata/index.js",
       "require": "./dist/schemas/credential-metadata/index.cjs"
-    },
-    "./page-model.authorization": {
-      "types": "./dist/page-model/authorization/index.d.ts",
-      "import": "./dist/page-model/authorization/index.js",
-      "require": "./dist/page-model/authorization/index.cjs"
     }
   },
   "scripts": {

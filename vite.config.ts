@@ -9,6 +9,8 @@ export default defineConfig({
         api: './lib/api/index.ts',
         conf: './lib/conf/index.ts',
         handler: './lib/handler/index.ts',
+        'handler/authorization-page':
+          './lib/handler/authorization-page/index.ts',
         'handler/user': './lib/handler/user/index.ts',
         'schemas/common': './lib/schemas/common/index.ts',
         'schemas/par': './lib/schemas/par/index.ts',
@@ -31,7 +33,6 @@ export default defineConfig({
           './lib/schemas/service-configuration/index.ts',
         'schemas/credential-metadata':
           './lib/schemas/credential-metadata/index.ts',
-        'page-model/authorization': './lib/page-model/authorization/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',
