@@ -16,7 +16,7 @@
       "import": "./dist/handler/index.js",
       "require": "./dist/handler/index.cjs"
     },
-    "./handler/user": {
+    "./handler.user": {
       "types": "./dist/handler/user/index.d.ts",
       "import": "./dist/handler/user/index.js",
       "require": "./dist/handler/user/index.cjs"
