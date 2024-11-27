@@ -14,7 +14,9 @@
  * language governing permissions and limitations under the
  * License.
  */
-
-export * from './UserConfiguration';
-export * from './UserConfigurationImpl';
 export * from './getByCredentials';
+export * from './getBySubject';
+export * from './mockGetByCredentials';
+export * from './mockGetBySubject';
+export * from './UserHandlerConfiguration';
+export * from './UserHandlerConfigurationImpl';

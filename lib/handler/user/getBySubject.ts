@@ -15,12 +15,13 @@
  * License.
  */
 
-import { describe, it, expect } from 'vitest';
-import { UserConfigurationImpl } from './UserConfigurationImpl';
+import { User } from '../../schemas/common/User';
 
-describe('UserConfigurationImpl', () => {
-  it('should have getByCredentials property defined', () => {
-    const userConfig = new UserConfigurationImpl();
-    expect(userConfig.getByCredentials).toBeDefined();
-  });
-});
+/**
+ * Type definition for a function that retrieves a user by their subject identifier.
+ * The subject identifier is a unique identifier for the user in the context of OpenID Connect.
+ *
+ * @param subject - The unique subject identifier of the user
+ * @returns A promise that resolves to either a User object if found, or undefined if no match is found
+ */
+export type GetBySubject = (subject: string) => Promise<User | undefined>;

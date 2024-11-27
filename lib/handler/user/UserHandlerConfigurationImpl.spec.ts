@@ -15,14 +15,13 @@
  * License.
  */
 
-import { GetByCredentials } from './getByCredentials';
+import { describe, expect, it } from 'vitest';
+import { UserHandlerConfigurationImpl } from './UserHandlerConfigurationImpl';
 
-/**
- * Configuration interface for user-related operations.
- *
- * @interface UserConfiguration
- * @property {GetByCredentials} getByCredentials - Function to retrieve a user by their login credentials
- */
-export interface UserConfiguration {
-  getByCredentials: GetByCredentials;
-}
+describe('UserHandlerConfigurationImpl', () => {
+  it('should have required properties defined', () => {
+    const userHandler = new UserHandlerConfigurationImpl();
+    expect(userHandler.getByCredentials).toBeDefined();
+    expect(userHandler.getBySubject).toBeDefined();
+  });
+});
