@@ -23,16 +23,32 @@ import {
   defaultExtractRequestedClaims,
   ExtractRequestedClaims,
 } from './extractRequestedClaims';
-import { AuthorizationPageModelConfiguration } from './AuthorizationPageModelConfiguration';
+import { AuthorizationPageHandlerConfiguration } from './AuthorizationPageHandlerConfiguration';
 
-export class AuthorizationPageModelConfigurationImpl
-  implements AuthorizationPageModelConfiguration
+/**
+ * Implementation of the AuthorizationPageHandlerConfiguration interface.
+ * This class provides default implementations for handling authorization page configurations.
+ */
+export class AuthorizationPageHandlerConfigurationImpl
+  implements AuthorizationPageHandlerConfiguration
 {
+  /**
+   * Function to compute scopes for the authorization page.
+   * Uses the default implementation from computeScopes module.
+   */
   computeScopes: ComputeScopes = defaultComputeScopes;
 
+  /**
+   * Function to extract requested claims from the authorization request.
+   * Uses the default implementation from extractRequestedClaims module.
+   */
   extractRequestedClaims: ExtractRequestedClaims =
     defaultExtractRequestedClaims;
 
+  /**
+   * Function to build the authorization page model.
+   * Created using the default factory function with computeScopes and extractRequestedClaims.
+   */
   buildAuthorizationPageModel: BuildAuthorizationPageModel =
     createBuildAuthorizationPageModel({
       computeScopes: this.computeScopes,

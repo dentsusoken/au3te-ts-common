@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { AuthorizationPageModelConfigurationImpl } from './AuthorizationPageModelConfigurationImpl';
+import { AuthorizationPageHandlerConfigurationImpl } from './AuthorizationPageHandlerConfigurationImpl';
 
-describe('AuthorizationPageModelConfigurationImpl', () => {
+describe('AuthorizationPageHandlerConfigurationImpl', () => {
   it('should have all required properties', () => {
     // Arrange
-    const config = new AuthorizationPageModelConfigurationImpl();
+    const config = new AuthorizationPageHandlerConfigurationImpl();
 
     // Assert
     // Check if all required properties exist

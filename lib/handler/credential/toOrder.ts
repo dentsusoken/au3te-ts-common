@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CredentialRequestInfo } from '../schemas/credential/CredentialRequestInfo';
-import { CredentialIssuanceOrder } from '../schemas/credential/CredentialIssuanceOrder';
+import { CredentialRequestInfo } from '../../schemas/credential/CredentialRequestInfo';
+import { CredentialIssuanceOrder } from '../../schemas/credential/CredentialIssuanceOrder';
 import { CredentialType } from './types';
-import { IntrospectionResponse } from '../schemas/introspection/IntrospectionResponse';
+import { IntrospectionResponse } from '../../schemas/introspection/IntrospectionResponse';
 
 /**
  * Function type for converting credential request information into a credential issuance order.

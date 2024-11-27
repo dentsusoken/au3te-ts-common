@@ -21,6 +21,8 @@ export default defineConfig({
           './lib/schemas/authorization-issue/index.ts',
         'schemas/authorization-decision':
           './lib/schemas/authorization-decision/index.ts',
+        'schemas/authorization-page':
+          './lib/schemas/authorization-page/index.ts',
         'schemas/token': './lib/schemas/token/index.ts',
         'schemas/token-issue': './lib/schemas/token-issue/index.ts',
         'schemas/token-fail': './lib/schemas/token-fail/index.ts',

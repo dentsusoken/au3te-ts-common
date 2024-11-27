@@ -15,7 +15,7 @@
  * License.
  */
 
-import { User } from '../schemas/common/User';
+import { User } from '../../schemas/common/User';
 import { CredentialFormat, CredentialType } from './types';
 
 /**

@@ -19,9 +19,9 @@ import { ComputeScopes } from './computeScopes';
 import { ExtractRequestedClaims } from './extractRequestedClaims';
 
 /**
- * Configuration interface for the Authorization Page Model.
+ * Configuration interface for the Authorization Page Handler.
  */
-export interface AuthorizationPageModelConfiguration {
+export interface AuthorizationPageHandlerConfiguration {
   /**
    * Function to compute scopes based on input scopes and dynamic scopes.
    */

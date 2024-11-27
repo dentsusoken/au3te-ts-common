@@ -15,11 +15,7 @@
  */
 
 import { z } from 'zod';
-import {
-  nullableButOptionalStringArrayArraySchema,
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalStringSchema,
-} from '../common/stringSchema';
+import { stringArraySchema } from '../common/stringSchema';
 
 /**
  * Schema for authorization decision parameters.
@@ -30,37 +26,37 @@ export const authorizationDecisionParamsSchema = z.object({
    * The ticket associated with the authorization request.
    * This can be a string, null, or undefined.
    */
-  ticket: nullableButOptionalStringSchema,
+  ticket: z.string().nullish(),
 
   /**
    * An array of claim names requested in the authorization.
    * This can be an array of strings, null, or undefined.
    */
-  claimNames: nullableButOptionalStringArraySchema,
+  claimNames: z.array(z.string()).nullish(),
 
   /**
    * An array of claim locales requested in the authorization.
    * This can be an array of strings, null, or undefined.
    */
-  claimLocales: nullableButOptionalStringArraySchema,
+  claimLocales: z.array(z.string()).nullish(),
 
   /**
    * The ID token claims associated with the authorization request.
    * This can be a string, null, or undefined.
    */
-  idTokenClaims: nullableButOptionalStringSchema,
+  idTokenClaims: z.string().nullish(),
 
   /**
    * An array of requested claims for transaction purposes.
    * This can be an array of strings, null, or undefined.
    */
-  requestedClaimsForTx: nullableButOptionalStringArraySchema,
+  requestedClaimsForTx: z.array(z.string()).nullish(),
 
   /**
    * An array of requested verified claims for transaction purposes.
    * This can be an array of strings, null, or undefined.
    */
-  requestedVerifiedClaimsForTx: nullableButOptionalStringArrayArraySchema,
+  requestedVerifiedClaimsForTx: z.array(stringArraySchema).nullish(),
 });
 
 /**

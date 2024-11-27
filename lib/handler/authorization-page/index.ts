@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-export * from './AuthorizationPageModel';
-export * from './AuthorizationPageModelConfiguration';
-export * from './AuthorizationPageModelConfigurationImpl';
+export * from '../../schemas/authorization-page/AuthorizationPageModel';
+export * from './AuthorizationPageHandlerConfiguration';
+export * from './AuthorizationPageHandlerConfigurationImpl';
 export * from './buildAuthorizationPageModel';
 export * from './computeScopes';
 export * from './extractRequestedClaims';

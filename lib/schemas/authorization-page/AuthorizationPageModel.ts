@@ -14,77 +14,80 @@
  * limitations under the License.
  */
 
-import { AuthorizationResponse } from '../../schemas/authorization';
-import { Pair } from '../../schemas/common/Pair';
-import { Scope } from '../../schemas/common/Scope';
-import { User } from '../../schemas/common/User';
+import { z } from 'zod';
+import { authorizationResponseSchema } from '../authorization';
+import { pairSchema } from '../common/Pair';
+import { scopeSchema } from '../common/Scope';
+import { userSchema } from '../common/User';
 
 /**
- * Model to hold data which are referred to in an authorization page.
+ * Schema for authorization page model.
+ * This schema defines the structure and types of data which are referred to in an authorization page.
  */
-export type AuthorizationPageModel = {
+export const authorizationPageModelSchema = z.object({
   /**
    * Represents the response from an authorization server for an authorization request.
    * This type encapsulates the data returned after a client's authorization request
    * in the OAuth 2.0 and OpenID Connect protocols.
    */
-  authorizationResponse: AuthorizationResponse;
+  authorizationResponse: authorizationResponseSchema,
+
   /**
    * The name of the service.
    */
-  serviceName?: string;
+  serviceName: z.string().nullish(),
 
   /**
    * The name of the client application.
    */
-  clientName?: string;
+  clientName: z.string().nullish(),
 
   /**
    * The description of the client application.
    */
-  description?: string;
+  description: z.string().nullish(),
 
   /**
    * The URL of the logo image of the client application.
    */
-  logoUri?: string;
+  logoUri: z.string().nullish(),
 
   /**
    * The URL of the homepage of the client application.
    */
-  clientUri?: string;
+  clientUri: z.string().nullish(),
 
   /**
    * The URL of the policy page of the client application.
    */
-  policyUri?: string;
+  policyUri: z.string().nullish(),
 
   /**
    * The URL of "Terms of Service" page of the client application.
    */
-  tosUri?: string;
+  tosUri: z.string().nullish(),
 
   /**
    * Scopes requested by the authorization request.
    */
-  scopes?: Scope[];
+  scopes: z.array(scopeSchema).nullish(),
 
   /**
    * The login ID that should be used as the initial value for the
    * login ID field in the authorization page.
    */
-  loginId?: string;
+  loginId: z.string().nullish(),
 
   /**
    * This variable holds {@code "readonly"} when the initial value
    * of the login ID should not be changed.
    */
-  loginIdReadOnly?: string;
+  loginIdReadOnly: z.string().nullish(),
 
   /**
    * Currently logged in user, could be null if no user is logged in.
    */
-  user?: User;
+  user: userSchema.nullish(),
 
   /**
    * The content of the {@code authorization_details} request parameter
@@ -92,21 +95,21 @@ export type AuthorizationPageModel = {
    *
    * @since 2.23
    */
-  authorizationDetails?: string;
+  authorizationDetails: z.string().nullish(),
 
   /**
    * The value of the {@code purpose} request parameter.
    *
    * @since 2.25
    */
-  purpose?: string;
+  purpose: z.string().nullish(),
 
   /**
    * Verified claims requested for the ID token.
    *
    * @since 2.26
    */
-  verifiedClaimsForIdToken?: Pair[];
+  verifiedClaimsForIdToken: z.array(pairSchema).nullish(),
 
   /**
    * Flag indicating whether the authorization request requests
@@ -114,14 +117,14 @@ export type AuthorizationPageModel = {
    *
    * @since 2.26
    */
-  allVerifiedClaimsForIdTokenRequested?: boolean;
+  allVerifiedClaimsForIdTokenRequested: z.boolean().nullish(),
 
   /**
    * Verified claims requested for the userinfo.
    *
    * @since 2.26
    */
-  verifiedClaimsForUserInfo?: Pair[];
+  verifiedClaimsForUserInfo: z.array(pairSchema).nullish(),
 
   /**
    * Flag indicating whether the authorization request requests
@@ -129,7 +132,7 @@ export type AuthorizationPageModel = {
    *
    * @since 2.26
    */
-  allVerifiedClaimsForUserInfoRequested?: boolean;
+  allVerifiedClaimsForUserInfoRequested: z.boolean().nullish(),
 
   /**
    * Flag indicating whether behaviors for Identity Assurance are
@@ -137,7 +140,7 @@ export type AuthorizationPageModel = {
    *
    * @since 2.26
    */
-  identityAssuranceRequired?: boolean;
+  identityAssuranceRequired: z.boolean().nullish(),
 
   /**
    * Flag indicating whether this type assumes that the old format of
@@ -146,7 +149,7 @@ export type AuthorizationPageModel = {
    *
    * @since 2.42
    */
-  oldIdaFormatUsed?: boolean;
+  oldIdaFormatUsed: z.boolean().nullish(),
 
   /**
    * Claims that the client application requests to be embedded in
@@ -154,7 +157,7 @@ export type AuthorizationPageModel = {
    *
    * @since 2.56
    */
-  claimsForIdToken?: string[];
+  claimsForIdToken: z.array(z.string()).nullish(),
 
   /**
    * Claims that the client application requests to be embedded in
@@ -162,5 +165,13 @@ export type AuthorizationPageModel = {
    *
    * @since 2.56
    */
-  claimsForUserInfo?: string[];
-};
+  claimsForUserInfo: z.array(z.string()).nullish(),
+});
+
+/**
+ * Type definition for AuthorizationPageModel.
+ * This type is inferred from the authorizationPageModelSchema.
+ */
+export type AuthorizationPageModel = z.infer<
+  typeof authorizationPageModelSchema
+>;

@@ -12,7 +12,10 @@ describe('authorizationDecisionParams', () => {
       claimLocales: ['en', 'ja'],
       idTokenClaims: 'id-token-claim',
       requestedClaimsForTx: ['claim1', 'claim2'],
-      requestedVerifiedClaimsForTx: [{ array: ['verified1', 'verified2'] }],
+      requestedVerifiedClaimsForTx: [
+        { array: ['verified1', 'verified2'] },
+        { array: ['verified3'] },
+      ],
     };
 
     expect(() =>
@@ -48,9 +51,35 @@ describe('authorizationDecisionParams', () => {
       ticket: 123,
       claimNames: 'not an array',
       claimLocales: [123],
-      idTokenClaim: {},
-      requestedClaimsForTx: ['valid', ['invalid']],
-      requestedVerifiedClaimsForTx: [{}],
+      idTokenClaims: {},
+      requestedClaimsForTx: ['valid', {}],
+      requestedVerifiedClaimsForTx: ['not-array', {}],
+    };
+
+    expect(() =>
+      authorizationDecisionParamsSchema.parse(invalidParams)
+    ).toThrow();
+  });
+
+  it('should validate requestedVerifiedClaimsForTx as array of stringArray objects', () => {
+    const params: AuthorizationDecisionParams = {
+      requestedVerifiedClaimsForTx: [
+        { array: ['claim1', 'claim2'] },
+        { array: ['claim3'] },
+        { array: [] },
+      ],
+    };
+
+    expect(() => authorizationDecisionParamsSchema.parse(params)).not.toThrow();
+  });
+
+  it('should reject invalid requestedVerifiedClaimsForTx structures', () => {
+    const invalidParams = {
+      requestedVerifiedClaimsForTx: [
+        ['invalid'],
+        'not-an-array',
+        { array: [123] },
+      ],
     };
 
     expect(() =>
