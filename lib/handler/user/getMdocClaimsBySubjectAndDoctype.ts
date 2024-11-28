@@ -14,11 +14,17 @@
  * language governing permissions and limitations under the
  * License.
  */
-export * from './getByCredentials';
-export * from './getBySubject';
-export * from './getMdocClaimsBySubjectAndDoctype';
-export * from './mockGetByCredentials';
-export * from './mockGetBySubject';
-export * from './mockGetMdocClaimsBySubjectAndDoctype';
-export * from './UserHandlerConfiguration';
-export * from './UserHandlerConfigurationImpl';
+
+import { Mdoc } from './types';
+
+/**
+ * Type definition for a function that retrieves mobile document (mdoc) claims for a specific subject and document type.
+ *
+ * @param subject - The unique subject identifier of the user
+ * @param doctype - The document type identifier (e.g. 'org.iso.18013.5.1.mDL')
+ * @returns Promise resolving to the mdoc claims if found, or undefined if no match exists
+ */
+export type GetMdocClaimsBySubjectAndDoctype = (
+  subject: string,
+  doctype: string
+) => Promise<Mdoc | undefined>;

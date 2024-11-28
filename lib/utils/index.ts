@@ -18,6 +18,7 @@
 export * from './base64';
 export * from './basicCredentials';
 export * from './bearerToken';
+export * from './containsAllProperties';
 export * from './dpopToken';
 export * from './errorJson';
 export * from './getSubFromJwt';

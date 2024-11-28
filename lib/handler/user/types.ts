@@ -15,35 +15,18 @@
  * License.
  */
 
-import { CLAIMS, DOCTYPE } from './constants';
-
 /**
- * Type of credential issuance.
- * - 'single': Single credential issuance
- * - 'batch': Batch credential issuance
- * - 'deferred': Deferred credential issuance
+ * Represents a collection of claims within a specific namespace of an mdoc.
+ * Each claim is a key-value pair where the value can be of any type.
  */
-export type CredentialType = 'single' | 'batch' | 'deferred';
-
-/**
- * Format of verifiable credential.
- * - 'vc+sd-jwt': W3C Verifiable Credentials with SD-JWT
- * - 'mso_mdoc': ISO/IEC 18013-5 mdoc
- */
-export type CredentialFormat = 'vc+sd-jwt' | 'mso_mdoc';
-
-/**
- * Represents a collection of claims where each claim is a key-value pair.
- * The value can be of any type.
- */
-export type Claims = Record<string, unknown>;
+export type MdocSubClaims = Record<string, unknown>;
 
 /**
  * Represents a mobile document (mdoc) structure.
  * Contains namespaces as keys (e.g. 'org.iso.18013.5.1') mapping to their respective claims.
  */
 export type Mdoc = {
-  [namespace: string]: Claims;
+  [namespace: string]: MdocSubClaims;
 };
 
 /**
@@ -51,11 +34,3 @@ export type Mdoc = {
  * Document types (e.g. 'org.iso.18013.5.1.mDL') map to their full mdoc structure.
  */
 export type Mdocs = { [doctype: string]: Mdoc };
-/**
- * Represents a mobile document (mdoc) credential structure.
- * Contains a document type identifier and associated claims data.
- */
-export type MdocCredential = {
-  [DOCTYPE]?: string;
-  [CLAIMS]?: Mdoc;
-};

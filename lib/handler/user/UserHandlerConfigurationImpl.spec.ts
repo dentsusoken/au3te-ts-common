@@ -23,5 +23,6 @@ describe('UserHandlerConfigurationImpl', () => {
     const userHandler = new UserHandlerConfigurationImpl();
     expect(userHandler.getByCredentials).toBeDefined();
     expect(userHandler.getBySubject).toBeDefined();
+    expect(userHandler.getMdocClaimsBySubjectAndDoctype).toBeDefined();
   });
 });

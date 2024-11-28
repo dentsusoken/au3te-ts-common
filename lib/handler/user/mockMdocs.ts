@@ -14,11 +14,26 @@
  * language governing permissions and limitations under the
  * License.
  */
-export * from './getByCredentials';
-export * from './getBySubject';
-export * from './getMdocClaimsBySubjectAndDoctype';
-export * from './mockGetByCredentials';
-export * from './mockGetBySubject';
-export * from './mockGetMdocClaimsBySubjectAndDoctype';
-export * from './UserHandlerConfiguration';
-export * from './UserHandlerConfigurationImpl';
+
+import { Mdocs } from './types';
+
+export const mockMdocs: { [subject: string]: Mdocs } = {
+  '1004': {
+    'org.iso.18013.5.1.mDL': {
+      'org.iso.18013.5.1': {
+        family_name: 'Silverstone',
+        given_name: 'Inga',
+        birth_date: 'cbor:1004("1991-11-06")',
+        issuing_country: 'US',
+        document_number: '12345678',
+        driving_privileges: [
+          {
+            vehicle_category_code: 'A',
+            issue_date: 'cbor:1004("2023-01-01")',
+            expiry_date: 'cbor:1004("2043-01-01")',
+          },
+        ],
+      },
+    },
+  },
+};

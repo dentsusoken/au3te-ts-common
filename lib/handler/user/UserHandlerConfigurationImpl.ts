@@ -18,8 +18,10 @@
 import { UserHandlerConfiguration } from './UserHandlerConfiguration';
 import { GetByCredentials } from './getByCredentials';
 import { GetBySubject } from './getBySubject';
+import { GetMdocClaimsBySubjectAndDoctype } from './getMdocClaimsBySubjectAndDoctype';
 import { mockGetByCredentials } from './mockGetByCredentials';
 import { mockGetBySubject } from './mockGetBySubject';
+import { mockGetMdocClaimsBySubjectAndDoctype } from './mockGetMdocClaimsBySubjectAndDoctype';
 
 /**
  * Default implementation of UserHandlerConfiguration interface.
@@ -56,4 +58,14 @@ export class UserHandlerConfigurationImpl implements UserHandlerConfiguration {
    * @see mockGetBySubject
    */
   getBySubject: GetBySubject = mockGetBySubject;
+
+  /**
+   * Implementation of mdoc claims retrieval by subject and document type.
+   * Uses a mock implementation that searches a predefined set of mdocs.
+   *
+   * @type {GetMdocClaimsBySubjectAndDoctype}
+   * @see mockGetMdocClaimsBySubjectAndDoctype
+   */
+  getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype =
+    mockGetMdocClaimsBySubjectAndDoctype;
 }

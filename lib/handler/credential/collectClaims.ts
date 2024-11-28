@@ -16,20 +16,18 @@
  */
 
 import { User } from '../../schemas/common/User';
-import { CredentialFormat, CredentialType } from './types';
+import { CredentialType } from './types';
 
 /**
  * Parameters for collecting claims to be included in a verifiable credential.
  *
  * @property credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
  * @property user - The user for whom the credential is being issued
- * @property format - The format of the verifiable credential ('vc+sd-jwt' or 'mso_mdoc')
  * @property requestedCredential - The credential request containing the claims to collect
  */
 type CollectClaimsParams = {
   credentialType: CredentialType;
   user: User;
-  format: CredentialFormat;
   requestedCredential: Record<string, unknown>;
 };
 
@@ -38,13 +36,11 @@ type CollectClaimsParams = {
  *
  * @param {CredentialType} credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
  * @param {User} user - The user for whom the credential is being issued
- * @param {CredentialFormat} format - The format of the verifiable credential ('vc+sd-jwt' or 'mso_mdoc')
  * @param {Record<string, unknown>} requestedCredential - The credential request containing the claims to collect
  * @returns {Promise<Record<string, unknown>>} A promise that resolves to an object containing the collected claims
  */
 export type CollectClaims = ({
   credentialType,
   user,
-  format,
   requestedCredential,
 }: CollectClaimsParams) => Promise<Record<string, unknown>>;

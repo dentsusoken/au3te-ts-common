@@ -21,9 +21,3 @@
  * @returns {number} The duration in seconds. A value of 0 indicates no expiration.
  */
 export type ComputeCredentialDuration = () => number;
-
-/**
- * Default implementation that returns 0, indicating no expiration.
- */
-export const defaultComputeCredentialDuration: ComputeCredentialDuration = () =>
-  0;

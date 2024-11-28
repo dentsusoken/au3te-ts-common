@@ -11,6 +11,7 @@ export default defineConfig({
         handler: './lib/handler/index.ts',
         'handler/authorization-page':
           './lib/handler/authorization-page/index.ts',
+        'handler/credential': './lib/handler/credential/index.ts',
         'handler/user': './lib/handler/user/index.ts',
         'schemas/common': './lib/schemas/common/index.ts',
         'schemas/par': './lib/schemas/par/index.ts',

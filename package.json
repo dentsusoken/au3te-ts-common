@@ -21,6 +21,11 @@
       "import": "./dist/handler/authorization-page/index.js",
       "require": "./dist/handler/authorization-page/index.cjs"
     },
+    "./handler.credential": {
+      "types": "./dist/handler/credential/index.d.ts",
+      "import": "./dist/handler/credential/index.js",
+      "require": "./dist/handler/credential/index.cjs"
+    },
     "./handler.user": {
       "types": "./dist/handler/user/index.d.ts",
       "import": "./dist/handler/user/index.js",

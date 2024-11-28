@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Authlete, Inc.
+ * Copyright (C) 20142024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,84 +18,107 @@ import { CredentialRequestInfo } from '../../schemas/credential/CredentialReques
 import { CredentialIssuanceOrder } from '../../schemas/credential/CredentialIssuanceOrder';
 import { CredentialType } from './types';
 import { IntrospectionResponse } from '../../schemas/introspection/IntrospectionResponse';
+import { GetBySubject } from '../user/getBySubject';
+import { CheckPermissions } from './checkPermissions';
+import { CollectClaims } from './collectClaims';
+import { BadRequestError } from '../BadRequestError';
+import { CreateOrder } from './createOrder';
+
+/**
+ * Parameters for converting credential request information into a credential issuance order.
+ *
+ * @property credentialType - The type of credential being requested (e.g., 'single')
+ * @property credentialRequestInfo - Contains format, details, and identifier for the request
+ * @property introspectionResponse - Contains subject and issuable credentials information
+ */
+type ToOrderParams = {
+  credentialType: CredentialType;
+  credentialRequestInfo: CredentialRequestInfo;
+  introspectionResponse: IntrospectionResponse;
+};
 
 /**
  * Function type for converting credential request information into a credential issuance order.
  *
- * <p>
- * This function is responsible for processing a credential request and generating
- * an appropriate credential issuance order. The process involves validating the
- * request, checking permissions, and collecting necessary claims.
- * </p>
+ * This function processes a credential request and generates a credential issuance order by:
+ * 1. Validating the request and subject
+ * 2. Retrieving user information
+ * 3. Checking permissions
+ * 4. Collecting claims
+ * 5. Creating the final order
  *
- * <h3>Parameters</h3>
+ * @param params - Parameters for credential issuance order creation
+ * @returns Promise<CredentialIssuanceOrder> - Contains:
+ * - requestIdentifier: The original request identifier
+ * - credentialPayload: JSON string of claims
+ * - issuanceDeferred: True if claims collection is deferred
+ * - credentialDuration: Validity period of the credential
  *
- * <p>
- * The function takes three parameters:
- * </p>
- *
- * <ul>
- * <li>{@code credentialType} - The type of credential being requested.
- *     This determines how the credential will be formatted and what claims
- *     will be included.</li>
- *
- * <li>{@code credentialRequestInfo} - Information about the credential request.
- *     This includes the format, binding keys, and other details specific to
- *     the credential request.</li>
- *
- * <li>{@code introspectionResponse} - Response from token introspection.
- *     Contains information about the access token used in the request,
- *     including the subject (user) and permissions.</li>
- * </ul>
- *
- * <h3>Return Value</h3>
- *
- * <p>
- * The function returns a Promise that resolves to a {@link CredentialIssuanceOrder}.
- * The order contains instructions for issuing the credential, including:
- * </p>
- *
- * <ul>
- * <li>The identifier of the credential request</li>
- * <li>The credential payload (claims to be included)</li>
- * <li>Whether issuance should be deferred</li>
- * <li>The duration of the credential</li>
- * <li>The signing key ID (optional)</li>
- * </ul>
- *
- * <h3>Error Handling</h3>
- *
- * <p>
- * The function may throw exceptions in the following cases:
- * </p>
- *
- * <ul>
- * <li>Invalid credential request format or content</li>
- * <li>Insufficient permissions</li>
- * <li>User not found</li>
- * <li>Required claims not available</li>
- * <li>Other processing errors</li>
- * </ul>
- *
- * @param credentialType - The type of credential being requested
- * @param credentialRequestInfo - Information about the credential request
- * @param introspectionResponse - Response from token introspection
- *
- * @returns A Promise that resolves to a credential issuance order
- *
- * @throws {InvalidCredentialRequestException}
- *         The credential request is invalid
- *
- * @throws {VerifiableCredentialException}
- *         Other errors during processing
- *
- * @since 3.67
- * @since Authlete 3.0
- *
- * @see [OpenID for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)
+ * @throws {BadRequestError} When:
+ * - Subject is missing or invalid
+ * - User not found in the system
+ * - Insufficient permissions for requested credential
+ * - Invalid credential format or type
  */
 export type ToOrder = (
-  credentialType: CredentialType,
-  credentialRequestInfo: CredentialRequestInfo,
-  introspectionResponse: IntrospectionResponse
+  params: ToOrderParams
 ) => Promise<CredentialIssuanceOrder>;
+
+/**
+ * Parameters for creating a ToOrder function.
+ *
+ * @property getBySubject - Function to retrieve user by subject identifier
+ * @property checkPermissions - Function to validate credential issuance permissions
+ * @property collectClaims - Function to gather and format credential claims
+ * @property createOrder - Function to create the final credential issuance order
+ */
+type CreateToOrderParams = {
+  getBySubject: GetBySubject;
+  checkPermissions: CheckPermissions;
+  collectClaims: CollectClaims;
+  createOrder: CreateOrder;
+};
+
+/**
+ * Creates a ToOrder function with the provided dependencies.
+ *
+ * @param params - Configuration parameters containing required dependencies
+ * @returns ToOrder function that processes credential requests
+ */
+export const createToOrder =
+  ({
+    getBySubject,
+    checkPermissions,
+    collectClaims,
+    createOrder,
+  }: CreateToOrderParams): ToOrder =>
+  async ({ credentialType, credentialRequestInfo, introspectionResponse }) => {
+    const { subject, issuableCredentials: issuableCredentialsJson } =
+      introspectionResponse;
+    const { details, identifier: requestIdentifier } = credentialRequestInfo;
+
+    if (!subject) {
+      throw new BadRequestError('invalid_request', 'Subject is required');
+    }
+
+    const user = await getBySubject(subject);
+
+    if (!user) {
+      throw new BadRequestError('invalid_request', 'User not found');
+    }
+
+    const issuableCredentials = JSON.parse(issuableCredentialsJson ?? '[]');
+    const requestedCredential = JSON.parse(details ?? '{}');
+    await checkPermissions({
+      credentialType,
+      issuableCredentials,
+      requestedCredential,
+    });
+    const claims = await collectClaims({
+      credentialType,
+      user,
+      requestedCredential,
+    });
+
+    return createOrder(requestIdentifier, claims);
+  };

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Authlete, Inc.
+ * Copyright (C) 2014-2024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,25 @@
 import type { CredentialType } from './types';
 
 /**
- * Check whether the issuable credentials include the requested credential.
- *
- * @param credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
- * @param issuableCredentials - The issuable credentials associated with the access token
- * @param format - The credential format
- * @param requestedCredential - The requested credential
- *
- * @throws {InvalidCredentialRequestException}
- *         The issuable credentials do not include the requested credential,
- *         the content of the requested credential is invalid, or some other
- *         errors.
+ * Parameters for checking credential issuance permissions.
  */
-export type CheckPermissions = (
-  credentialType: CredentialType,
-  issuableCredentials: Array<Record<string, unknown>>,
-  format: string,
-  requestedCredential: Record<string, unknown>
-) => Promise<void>;
+type CheckPermissionsParams = {
+  /** The type of credential issuance ('single', 'batch', or 'deferred') */
+  credentialType?: CredentialType;
+  /** Array of credential types that the user is allowed to receive */
+  issuableCredentials: Array<Record<string, unknown>>;
+  /** The credential request containing the claims to verify */
+  requestedCredential: Record<string, unknown>;
+};
+
+/**
+ * Checks if the requested credential can be issued based on permissions.
+ *
+ * @param params - Parameters containing credential type, issuable credentials, and requested credential
+ * @returns Promise that resolves if permissions are valid, rejects otherwise
+ */
+export type CheckPermissions = ({
+  credentialType,
+  issuableCredentials,
+  requestedCredential,
+}: CheckPermissionsParams) => Promise<void>;
