@@ -26,7 +26,7 @@ import { CredentialType } from './types';
  * @property requestedCredential - The credential request containing the claims to collect
  */
 type CollectClaimsParams = {
-  credentialType: CredentialType;
+  credentialType?: CredentialType;
   user: User;
   requestedCredential: Record<string, unknown>;
 };

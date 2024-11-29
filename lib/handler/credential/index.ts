@@ -25,5 +25,6 @@ export * from './createOrder';
 export * from './matchDoctype';
 export * from './matchFormat';
 export * from './mdocCheckPermissions';
+export * from './mdocCollectClaims';
 export * from './toOrder';
 export * from './types';
