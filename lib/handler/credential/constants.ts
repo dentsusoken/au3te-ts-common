@@ -36,3 +36,15 @@ export const CLAIMS = 'claims';
  * Used to identify the format of the credential as mdoc.
  */
 export const MSO_MDOC = 'mso_mdoc';
+
+/**
+ * Property key for issue date in credential objects.
+ * Used to access the issue date of the credential.
+ */
+export const ISSUE_DATE = 'issue_date';
+
+/**
+ * Property key for expiry date in credential objects.
+ * Used to access the expiry date of the credential.
+ */
+export const EXPIRY_DATE = 'expiry_date';

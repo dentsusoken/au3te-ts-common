@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-export * from './addMdocDateClaims';
-export * from './buildMdocClaims';
-export * from './checkPermissions';
-export * from './collectClaims';
-export * from './computeCredentialDuration';
-export * from './constants';
-export * from './containsRequestedClaims';
-export * from './createOrder';
-export * from './matchDoctype';
-export * from './matchFormat';
-export * from './mdocCheckPermissions';
-export * from './toOrder';
-export * from './types';
+/**
+ * Returns a Date object representing the next year.
+ * @returns A Date object representing the next year
+ */
+export const nextYear = (date: Date): Date => {
+  const nextYear = new Date(date);
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+
+  return nextYear;
+};
