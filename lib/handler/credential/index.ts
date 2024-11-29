@@ -26,5 +26,6 @@ export * from './matchDoctype';
 export * from './matchFormat';
 export * from './mdocCheckPermissions';
 export * from './mdocCollectClaims';
+export * from './mdocComputeCredentialDuration';
 export * from './toOrder';
 export * from './types';

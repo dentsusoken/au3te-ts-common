@@ -33,10 +33,10 @@ import { MdocCredential } from './types';
  */
 export const containsRequestedClaims = (
   issuableCredential: MdocCredential,
-  requestedCredential: MdocCredential
+  requestedCredential: Record<string, unknown> | undefined
 ): boolean => {
   const issuableClaims = issuableCredential[CLAIMS];
-  const requestedClaims = requestedCredential[CLAIMS];
+  const requestedClaims = requestedCredential?.[CLAIMS];
 
   // If no claims are requested, any issuable credential is valid
   if (!requestedClaims) {
@@ -49,5 +49,10 @@ export const containsRequestedClaims = (
   }
 
   // Check if all requested claims are included in issuable claims
-  return containsAllProperties(issuableClaims, requestedClaims, 3, 1);
+  return containsAllProperties(
+    issuableClaims,
+    requestedClaims as Record<string, unknown>,
+    3,
+    1
+  );
 };

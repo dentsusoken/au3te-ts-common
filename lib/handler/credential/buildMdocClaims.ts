@@ -26,7 +26,7 @@ import { Claims } from './types';
  */
 export const buildMdocClaims = async (
   userClaims: Claims,
-  requestedClaims: Claims
+  requestedClaims: Claims | undefined
 ): Promise<Claims> => {
   if (!requestedClaims || Object.keys(requestedClaims).length === 0) {
     return userClaims;

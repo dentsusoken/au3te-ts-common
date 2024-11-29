@@ -18,14 +18,18 @@ import type { CredentialType } from './types';
 
 /**
  * Parameters for checking credential issuance permissions.
+ *
+ * @property credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
+ * @property issuableCredentials - Array of credential types that the user is allowed to receive
+ * @property requestedCredential - The credential request containing the claims to verify
  */
 type CheckPermissionsParams = {
   /** The type of credential issuance ('single', 'batch', or 'deferred') */
   credentialType?: CredentialType;
   /** Array of credential types that the user is allowed to receive */
-  issuableCredentials: Array<Record<string, unknown>>;
+  issuableCredentials: Array<Record<string, unknown>> | undefined;
   /** The credential request containing the claims to verify */
-  requestedCredential: Record<string, unknown>;
+  requestedCredential: Record<string, unknown> | undefined;
 };
 
 /**

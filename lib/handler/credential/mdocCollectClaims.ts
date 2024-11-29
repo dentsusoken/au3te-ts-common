@@ -45,11 +45,18 @@ export const createMdocCollectClaims =
    *
    * @param {Object} params - Parameters for collecting claims
    * @param {User} params.user - The user for whom to collect claims
-   * @param {Record<string, unknown>} params.requestedCredential - The requested credential details
+   * @param {Record<string, unknown> | undefined} params.requestedCredential - The requested credential details
    * @returns {Promise<{doctype: string, claims: Claims}>} The collected claims and document type
    * @throws {BadRequestError} If the doctype is missing or no claims are found
    */
   async ({ user, requestedCredential }) => {
+    if (!requestedCredential) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'requestedCredential is required'
+      );
+    }
+
     const doctype = requestedCredential[DOCTYPE] as string | undefined;
 
     if (!doctype) {
@@ -71,10 +78,8 @@ export const createMdocCollectClaims =
       );
     }
 
-    const claims = await buildMdocClaims(
-      userClaims,
-      (requestedCredential[CLAIMS] as Claims) || {}
-    );
+    const requestedClaims = requestedCredential[CLAIMS] as Claims | undefined;
+    const claims = await buildMdocClaims(userClaims, requestedClaims);
 
     return { doctype, claims };
   };

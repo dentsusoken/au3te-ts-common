@@ -107,8 +107,10 @@ export const createToOrder =
       throw new BadRequestError('invalid_request', 'User not found');
     }
 
-    const issuableCredentials = JSON.parse(issuableCredentialsJson ?? '[]');
-    const requestedCredential = JSON.parse(details ?? '{}');
+    const issuableCredentials = issuableCredentialsJson
+      ? JSON.parse(issuableCredentialsJson)
+      : undefined;
+    const requestedCredential = details ? JSON.parse(details) : undefined;
     await checkPermissions({
       credentialType,
       issuableCredentials,

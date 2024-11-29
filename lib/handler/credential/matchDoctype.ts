@@ -21,10 +21,10 @@ import { DOCTYPE } from './constants';
  */
 export const matchDoctype = (
   issuableCredential: Record<string, unknown>,
-  requestedCredential: Record<string, unknown>
+  requestedCredential: Record<string, unknown> | undefined
 ): boolean => {
   const issuableDoctype = issuableCredential[DOCTYPE];
-  const requestedDoctype = requestedCredential[DOCTYPE];
+  const requestedDoctype = requestedCredential?.[DOCTYPE];
 
   if (issuableDoctype == null || requestedDoctype == null) {
     return false;

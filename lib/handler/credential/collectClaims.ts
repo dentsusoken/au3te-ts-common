@@ -20,24 +20,24 @@ import { CredentialType } from './types';
 
 /**
  * Parameters for collecting claims to be included in a verifiable credential.
- *
- * @property credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
- * @property user - The user for whom the credential is being issued
- * @property requestedCredential - The credential request containing the claims to collect
  */
 type CollectClaimsParams = {
+  /** The type of credential issuance ('single', 'batch', or 'deferred') */
   credentialType?: CredentialType;
+  /** The user for whom the credential is being issued */
   user: User;
-  requestedCredential: Record<string, unknown>;
+  /** The credential request containing the claims to collect */
+  requestedCredential: Record<string, unknown> | undefined;
 };
 
 /**
  * Collects claims to be included in a verifiable credential.
  *
- * @param {CredentialType} credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
- * @param {User} user - The user for whom the credential is being issued
- * @param {Record<string, unknown>} requestedCredential - The credential request containing the claims to collect
- * @returns {Promise<Record<string, unknown>>} A promise that resolves to an object containing the collected claims
+ * @param params - The parameters for collecting claims
+ * @param params.credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
+ * @param params.user - The user for whom the credential is being issued
+ * @param params.requestedCredential - The credential request containing the claims to collect
+ * @returns A promise that resolves to an object containing the collected claims
  */
 export type CollectClaims = ({
   credentialType,

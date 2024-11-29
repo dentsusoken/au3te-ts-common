@@ -10,7 +10,7 @@ describe('matchDoctype', () => {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
-    const requestedCredential: MdocCredential = {
+    const requestedCredential: Record<string, unknown> = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
@@ -22,7 +22,7 @@ describe('matchDoctype', () => {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
-    const requestedCredential: MdocCredential = {
+    const requestedCredential: Record<string, unknown> = {
       [DOCTYPE]: 'org.iso.18013.5.1.dL',
     };
 
@@ -33,7 +33,7 @@ describe('matchDoctype', () => {
   it('should return false when issuable credential has no doctype', () => {
     const issuableCredential: MdocCredential = {};
 
-    const requestedCredential: MdocCredential = {
+    const requestedCredential: Record<string, unknown> = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
@@ -45,14 +45,14 @@ describe('matchDoctype', () => {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
-    const requestedCredential: MdocCredential = {};
+    const requestedCredential: Record<string, unknown> = {};
 
     expect(matchDoctype(issuableCredential, requestedCredential)).toBe(false);
   });
 
   it('should return false when both credentials have no doctype', () => {
     const issuableCredential: MdocCredential = {};
-    const requestedCredential: MdocCredential = {};
+    const requestedCredential: Record<string, unknown> = {};
 
     expect(matchDoctype(issuableCredential, requestedCredential)).toBe(false);
   });
@@ -63,7 +63,7 @@ describe('matchDoctype', () => {
       [DOCTYPE]: null,
     };
 
-    const requestedCredential: MdocCredential = {
+    const requestedCredential: Record<string, unknown> = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
@@ -75,10 +75,18 @@ describe('matchDoctype', () => {
       [DOCTYPE]: undefined,
     };
 
-    const requestedCredential: MdocCredential = {
+    const requestedCredential: Record<string, unknown> = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
     expect(matchDoctype(issuableCredential, requestedCredential)).toBe(false);
+  });
+
+  it('should return false when requestedCredential is undefined', () => {
+    const issuableCredential: MdocCredential = {
+      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+    };
+
+    expect(matchDoctype(issuableCredential, undefined)).toBe(false);
   });
 });

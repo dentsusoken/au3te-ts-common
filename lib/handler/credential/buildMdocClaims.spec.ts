@@ -27,6 +27,19 @@ describe('Mdoc Claims Builder', () => {
       expect(result).toEqual(userClaims);
     });
 
+    it('should return user claims when requested claims is undefined', async () => {
+      const userClaims: Claims = {
+        'org.iso.18013.5.1': {
+          age: 25,
+          name: 'John Doe',
+        },
+      };
+      const requestedClaims = undefined;
+
+      const result = await buildMdocClaims(userClaims, requestedClaims);
+      expect(result).toEqual(userClaims);
+    });
+
     it('should build claims based on requested claims', async () => {
       const userClaims: Claims = {
         'org.iso.18013.5.1': {
