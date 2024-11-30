@@ -17,44 +17,43 @@
 import { BadRequestError } from '../BadRequestError';
 import { CheckPermissions } from './checkPermissions';
 import { MSO_MDOC } from './constants';
-import { containsRequestedClaims } from './containsRequestedClaims';
+import { ContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
 import { matchDoctype } from './matchDoctype';
 import { matchFormat } from './matchFormat';
-/**
- * Implements permission checking for mobile document (mdoc) credential issuance.
- * Verifies that the requested credential type and claims are allowed based on the user's permissions.
- *
- * @implements {CheckPermissions}
- * @throws {Error} If the credential type is not supported or requested claims are not permitted
- */
-export const mdocCheckPermissions: CheckPermissions = async ({
-  issuableCredentials,
-  requestedCredential,
-}) => {
-  // Check if issuableCredentials is null, undefined, or empty array
-  if (
-    !issuableCredentials ||
-    !Array.isArray(issuableCredentials) ||
-    issuableCredentials.length === 0
-  ) {
-    throw new BadRequestError(
-      'invalid_credential_request',
-      'No credential can be issued with the access token.'
-    );
-  }
 
-  // Check if any credential matches document type and has permitted claims
-  const hasMatchingCredential = issuableCredentials.some(
-    (issuableCredential) =>
-      matchFormat(issuableCredential, MSO_MDOC) &&
-      matchDoctype(issuableCredential, requestedCredential) &&
-      containsRequestedClaims(issuableCredential, requestedCredential)
-  );
-
-  if (!hasMatchingCredential) {
-    throw new BadRequestError(
-      'invalid_credential_request',
-      'The access token does not have permissions to request the credential.'
-    );
-  }
+type CreateMdocCheckPermissionsParams = {
+  containsRequestedMdocClaims: ContainsRequestedMdocClaims;
 };
+
+export const createMdocCheckPermissions =
+  ({
+    containsRequestedMdocClaims,
+  }: CreateMdocCheckPermissionsParams): CheckPermissions =>
+  async ({ issuableCredentials, requestedCredential }) => {
+    // Check if issuableCredentials is null, undefined, or empty array
+    if (
+      !issuableCredentials ||
+      !Array.isArray(issuableCredentials) ||
+      issuableCredentials.length === 0
+    ) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'No credential can be issued with the access token.'
+      );
+    }
+
+    // Check if any credential matches document type and has permitted claims
+    const hasMatchingCredential = issuableCredentials.some(
+      (issuableCredential) =>
+        matchFormat(issuableCredential, MSO_MDOC) &&
+        matchDoctype(issuableCredential, requestedCredential) &&
+        containsRequestedMdocClaims(issuableCredential, requestedCredential)
+    );
+
+    if (!hasMatchingCredential) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'The access token does not have permissions to request the credential.'
+      );
+    }
+  };

@@ -20,23 +20,30 @@ import { nextYear } from '../../utils/nextYear';
 import { EXPIRY_DATE, ISSUE_DATE } from './constants';
 import { Claims } from './types';
 
-/**
- * Adds date claims (issue_date and expiry_date) for mDoc (ISO/IEC 18013-5 mobile documentation)
- * @param subclaims - The map to store the date claims
- * @param requestedSubclaims - The map containing requested claims
- */
-export const addMdocDateClaims = (
-  subclaims: Claims,
-  requestedSubclaims: Claims
-): void => {
+type AddMdocDateClaimsParams = {
+  subClaims: Claims;
+  requestedSubClaims: Claims | undefined;
+  doctype?: string;
+};
+
+export type AddMdocDateClaims = ({
+  subClaims,
+  requestedSubClaims,
+  doctype,
+}: AddMdocDateClaimsParams) => void;
+
+export const defaultAddMdocDateClaims: AddMdocDateClaims = ({
+  subClaims,
+  requestedSubClaims,
+}) => {
   const now = new Date();
 
-  if (ISSUE_DATE in requestedSubclaims) {
-    subclaims[ISSUE_DATE] = formatCborDate(now);
+  if (!requestedSubClaims || ISSUE_DATE in requestedSubClaims) {
+    subClaims[ISSUE_DATE] = formatCborDate(now);
   }
 
-  if (EXPIRY_DATE in requestedSubclaims) {
+  if (!requestedSubClaims || EXPIRY_DATE in requestedSubClaims) {
     const expiry = nextYear(now);
-    subclaims[EXPIRY_DATE] = formatCborDate(expiry);
+    subClaims[EXPIRY_DATE] = formatCborDate(expiry);
   }
 };

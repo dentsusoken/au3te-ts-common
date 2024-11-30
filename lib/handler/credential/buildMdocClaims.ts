@@ -14,61 +14,75 @@
  * limitations under the License.
  */
 
-import { addMdocDateClaims } from './addMdocDateClaims';
-import { Claims } from './types';
+import { BuildMdocSubClaims } from './buildMdocSubClaims';
+import type { Claims } from './types';
 
 /**
- * Builds mDoc claims by combining user claims with requested claims.
- *
- * @param userClaims - The claims provided by the user
- * @param requestedClaims - The claims requested for the mDoc
- * @returns A Promise that resolves to the built mDoc claims
+ * Parameters for building mDoc claims.
  */
-export const buildMdocClaims = async (
-  userClaims: Claims,
-  requestedClaims: Claims | undefined
-): Promise<Claims> => {
-  if (!requestedClaims || Object.keys(requestedClaims).length === 0) {
-    return userClaims;
-  }
-
-  const claims: Claims = {};
-
-  Object.entries(requestedClaims).forEach(([namespace, requestedSubClaims]) => {
-    if (namespace in userClaims) {
-      const userSubClaims = userClaims[namespace];
-      claims[namespace] = buildMdocSubClaims(
-        userSubClaims as Claims,
-        requestedSubClaims as Claims
-      );
-    }
-  });
-
-  return claims;
+type BuildMdocClaimsParams = {
+  /** Claims provided by the user */
+  userClaims: Claims;
+  /** Requested claims for the mDoc */
+  requestedClaims: Claims | undefined;
+  /** Document type of the mDoc */
+  doctype: string;
 };
 
 /**
- * Builds mDoc sub-claims by combining user sub-claims with requested sub-claims.
- *
- * @param userSubClaims - The sub-claims provided by the user
- * @param requestedSubClaims - The sub-claims requested for the mDoc
- * @returns The built mDoc sub-claims
+ * Function type for building mDoc claims.
  */
-export const buildMdocSubClaims = (
-  userSubClaims: Claims,
-  requestedSubClaims: Claims
-): Claims => {
-  const subClaims: Claims = {};
+export type BuildMdocClaims = ({
+  userClaims,
+  requestedClaims,
+  doctype,
+}: BuildMdocClaimsParams) => Promise<Claims>;
 
-  addMdocDateClaims(subClaims, requestedSubClaims);
-
-  Object.keys(requestedSubClaims).forEach((claimName) => {
-    const claimValue = userSubClaims[claimName];
-
-    if (claimValue !== undefined) {
-      subClaims[claimName] = claimValue;
-    }
-  });
-
-  return subClaims;
+/**
+ * Parameters for creating a BuildMdocClaims function.
+ */
+type CreateBuildMdocClaimsParams = {
+  /** Function to build mDoc sub-claims */
+  buildMdocSubClaims: BuildMdocSubClaims;
 };
+
+/**
+ * Creates a function to build mDoc claims.
+ *
+ * @param params - Parameters for creating the function
+ * @returns A function that builds mDoc claims
+ */
+export const createBuildMdocClaims =
+  ({ buildMdocSubClaims }: CreateBuildMdocClaimsParams): BuildMdocClaims =>
+  /**
+   * Builds mDoc claims by combining user claims with requested claims.
+   *
+   * @param params - Parameters for building mDoc claims
+   * @returns A Promise that resolves to the built mDoc claims
+   */
+  async ({
+    userClaims,
+    requestedClaims,
+    doctype,
+  }: BuildMdocClaimsParams): Promise<Claims> => {
+    if (!requestedClaims || Object.keys(requestedClaims).length === 0) {
+      return userClaims;
+    }
+
+    const claims: Claims = {};
+
+    Object.entries(requestedClaims).forEach(
+      ([namespace, requestedSubClaims]) => {
+        if (namespace in userClaims) {
+          const userSubClaims = userClaims[namespace];
+          claims[namespace] = buildMdocSubClaims({
+            userSubClaims: userSubClaims as Claims,
+            requestedSubClaims: requestedSubClaims as Claims,
+            doctype,
+          });
+        }
+      }
+    );
+
+    return claims;
+  };

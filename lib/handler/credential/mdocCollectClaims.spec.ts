@@ -9,32 +9,21 @@ describe('Mdoc Claims Collector', () => {
     subject: 'user123',
   };
 
-  const mockGetMdocClaimsBySubjectAndDoctype = {
-    getMdocClaimsBySubjectAndDoctype: vi.fn(),
-  };
+  // Mock functions
+  const mockGetMdocClaimsBySubjectAndDoctype = vi.fn();
+  const mockBuildMdocClaims = vi.fn();
 
-  const collectClaims = createMdocCollectClaims(
-    mockGetMdocClaimsBySubjectAndDoctype
-  );
+  // Create test instance
+  const collectClaims = createMdocCollectClaims({
+    getMdocClaimsBySubjectAndDoctype: mockGetMdocClaimsBySubjectAndDoctype,
+    buildMdocClaims: mockBuildMdocClaims,
+  });
 
   beforeEach(() => {
     vi.resetAllMocks();
   });
 
   describe('createMdocCollectClaims', () => {
-    it('should throw error when requestedCredential is undefined', async () => {
-      await expect(
-        collectClaims({
-          user: mockUser,
-          requestedCredential: undefined,
-        })
-      ).rejects.toThrow(BadRequestError);
-
-      expect(
-        mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype
-      ).not.toHaveBeenCalled();
-    });
-
     it('should collect claims successfully', async () => {
       const userClaims: Claims = {
         'org.iso.18013.5.1': {
@@ -52,27 +41,35 @@ describe('Mdoc Claims Collector', () => {
         },
       };
 
-      mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype.mockResolvedValue(
-        userClaims
-      );
+      const builtClaims: Claims = {
+        'org.iso.18013.5.1': {
+          age: 25,
+        },
+      };
+
+      mockGetMdocClaimsBySubjectAndDoctype.mockResolvedValue(userClaims);
+      mockBuildMdocClaims.mockResolvedValue(builtClaims);
 
       const result = await collectClaims({
         user: mockUser,
         requestedCredential,
       });
 
-      const claims = await result.claims;
+      expect(mockGetMdocClaimsBySubjectAndDoctype).toHaveBeenCalledWith(
+        'user123',
+        'org.iso.18013.5.1.mDL'
+      );
 
-      expect(result.doctype).toBe('org.iso.18013.5.1.mDL');
-      expect(claims).toEqual({
-        'org.iso.18013.5.1': {
-          age: 25,
-        },
+      expect(mockBuildMdocClaims).toHaveBeenCalledWith({
+        userClaims,
+        requestedClaims: requestedCredential[CLAIMS] as Claims,
+        doctype: 'org.iso.18013.5.1.mDL',
       });
 
-      expect(
-        mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype
-      ).toHaveBeenCalledWith('user123', 'org.iso.18013.5.1.mDL');
+      expect(result).toEqual({
+        doctype: 'org.iso.18013.5.1.mDL',
+        claims: builtClaims,
+      });
     });
 
     it('should throw error when doctype is missing', async () => {
@@ -91,9 +88,8 @@ describe('Mdoc Claims Collector', () => {
         })
       ).rejects.toThrow(BadRequestError);
 
-      expect(
-        mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype
-      ).not.toHaveBeenCalled();
+      expect(mockGetMdocClaimsBySubjectAndDoctype).not.toHaveBeenCalled();
+      expect(mockBuildMdocClaims).not.toHaveBeenCalled();
     });
 
     it('should throw error when no claims are found', async () => {
@@ -106,9 +102,7 @@ describe('Mdoc Claims Collector', () => {
         },
       };
 
-      mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype.mockResolvedValue(
-        null
-      );
+      mockGetMdocClaimsBySubjectAndDoctype.mockResolvedValue(null);
 
       await expect(
         collectClaims({
@@ -117,9 +111,23 @@ describe('Mdoc Claims Collector', () => {
         })
       ).rejects.toThrow(BadRequestError);
 
-      expect(
-        mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype
-      ).toHaveBeenCalledWith('user123', 'org.iso.18013.5.1.mDL');
+      expect(mockGetMdocClaimsBySubjectAndDoctype).toHaveBeenCalledWith(
+        'user123',
+        'org.iso.18013.5.1.mDL'
+      );
+      expect(mockBuildMdocClaims).not.toHaveBeenCalled();
+    });
+
+    it('should throw error when requestedCredential is undefined', async () => {
+      await expect(
+        collectClaims({
+          user: mockUser,
+          requestedCredential: undefined,
+        })
+      ).rejects.toThrow(BadRequestError);
+
+      expect(mockGetMdocClaimsBySubjectAndDoctype).not.toHaveBeenCalled();
+      expect(mockBuildMdocClaims).not.toHaveBeenCalled();
     });
 
     it('should handle empty requested claims', async () => {
@@ -135,64 +143,30 @@ describe('Mdoc Claims Collector', () => {
         [CLAIMS]: {},
       };
 
-      mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype.mockResolvedValue(
-        userClaims
-      );
+      const builtClaims: Claims = userClaims;
+
+      mockGetMdocClaimsBySubjectAndDoctype.mockResolvedValue(userClaims);
+      mockBuildMdocClaims.mockResolvedValue(builtClaims);
 
       const result = await collectClaims({
         user: mockUser,
         requestedCredential,
       });
 
-      const claims = await result.claims;
-
-      expect(result.doctype).toBe('org.iso.18013.5.1.mDL');
-      expect(claims).toEqual(userClaims);
-    });
-
-    it('should handle multiple namespaces in claims', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-        },
-        'org.example.custom': {
-          score: 100,
-          grade: 'A',
-        },
-      };
-
-      const requestedCredential: Record<string, unknown> = {
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: {},
-          },
-          'org.example.custom': {
-            score: {},
-          },
-        },
-      };
-
-      mockGetMdocClaimsBySubjectAndDoctype.getMdocClaimsBySubjectAndDoctype.mockResolvedValue(
-        userClaims
+      expect(mockGetMdocClaimsBySubjectAndDoctype).toHaveBeenCalledWith(
+        'user123',
+        'org.iso.18013.5.1.mDL'
       );
 
-      const result = await collectClaims({
-        user: mockUser,
-        requestedCredential,
+      expect(mockBuildMdocClaims).toHaveBeenCalledWith({
+        userClaims,
+        requestedClaims: requestedCredential[CLAIMS] as Claims,
+        doctype: 'org.iso.18013.5.1.mDL',
       });
 
-      const claims = await result.claims;
-
-      expect(result.doctype).toBe('org.iso.18013.5.1.mDL');
-      expect(claims).toEqual({
-        'org.iso.18013.5.1': {
-          age: 25,
-        },
-        'org.example.custom': {
-          score: 100,
-        },
+      expect(result).toEqual({
+        doctype: 'org.iso.18013.5.1.mDL',
+        claims: builtClaims,
       });
     });
   });

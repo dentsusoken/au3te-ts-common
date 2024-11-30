@@ -17,7 +17,7 @@
 
 import { CollectClaims } from './collectClaims';
 import { CLAIMS, DOCTYPE } from './constants';
-import { buildMdocClaims } from './buildMdocClaims';
+import { BuildMdocClaims } from './buildMdocClaims';
 import { GetMdocClaimsBySubjectAndDoctype } from '../user/getMdocClaimsBySubjectAndDoctype';
 import { BadRequestError } from '../BadRequestError';
 import type { Claims } from './types';
@@ -28,6 +28,8 @@ import type { Claims } from './types';
 type CreateMdocCollectClaimsParams = {
   /** Function to retrieve mDoc claims by subject and document type */
   getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype;
+  /** Function to build mDoc claims */
+  buildMdocClaims: BuildMdocClaims;
 };
 
 /**
@@ -39,6 +41,7 @@ type CreateMdocCollectClaimsParams = {
 export const createMdocCollectClaims =
   ({
     getMdocClaimsBySubjectAndDoctype,
+    buildMdocClaims,
   }: CreateMdocCollectClaimsParams): CollectClaims =>
   /**
    * Collects mDoc claims for a user and requested credential.
@@ -79,7 +82,11 @@ export const createMdocCollectClaims =
     }
 
     const requestedClaims = requestedCredential[CLAIMS] as Claims | undefined;
-    const claims = await buildMdocClaims(userClaims, requestedClaims);
+    const claims = await buildMdocClaims({
+      userClaims,
+      requestedClaims,
+      doctype,
+    });
 
     return { doctype, claims };
   };

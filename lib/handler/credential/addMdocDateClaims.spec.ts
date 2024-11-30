@@ -1,94 +1,101 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { addMdocDateClaims } from './addMdocDateClaims';
+import { defaultAddMdocDateClaims } from './addMdocDateClaims';
 import { EXPIRY_DATE, ISSUE_DATE } from './constants';
 import type { Claims } from './types';
 
-describe('addMdocDateClaims', () => {
+describe('defaultAddMdocDateClaims', () => {
   beforeEach(() => {
-    // 2024-01-01T00:00:00.000Z
     vi.useFakeTimers();
-    vi.setSystemTime(new Date('2024-01-01'));
   });
 
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  // Basic test cases
-  it('should add issue_date when requested', () => {
-    const subclaims: Claims = {};
-    const requestedSubclaims: Claims = {
-      [ISSUE_DATE]: true,
-    };
+  it('should add both issue and expiry dates when no requested claims', () => {
+    const now = new Date('2024-01-01T00:00:00Z');
+    vi.setSystemTime(now);
 
-    addMdocDateClaims(subclaims, requestedSubclaims);
+    const subClaims: Claims = {};
 
-    expect(subclaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
+    defaultAddMdocDateClaims({
+      subClaims,
+      requestedSubClaims: undefined,
+    });
+
+    expect(subClaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
+    expect(subClaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
   });
 
-  it('should add expiry_date when requested', () => {
-    const subclaims: Claims = {};
-    const requestedSubclaims: Claims = {
-      [EXPIRY_DATE]: true,
+  it('should add both dates when they are in requested claims', () => {
+    const now = new Date('2024-01-01T00:00:00Z');
+    vi.setSystemTime(now);
+
+    const subClaims: Claims = {};
+    const requestedSubClaims: Claims = {
+      [ISSUE_DATE]: {},
+      [EXPIRY_DATE]: {},
     };
 
-    addMdocDateClaims(subclaims, requestedSubclaims);
+    defaultAddMdocDateClaims({
+      subClaims,
+      requestedSubClaims,
+    });
 
-    expect(subclaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
+    expect(subClaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
+    expect(subClaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
   });
 
-  it('should add both dates when both are requested', () => {
-    const subclaims: Claims = {};
-    const requestedSubclaims: Claims = {
-      [ISSUE_DATE]: true,
-      [EXPIRY_DATE]: true,
+  it('should add only issue date when only issue date is requested', () => {
+    const now = new Date('2024-01-01T00:00:00Z');
+    vi.setSystemTime(now);
+
+    const subClaims: Claims = {};
+    const requestedSubClaims: Claims = {
+      [ISSUE_DATE]: {},
     };
 
-    addMdocDateClaims(subclaims, requestedSubclaims);
+    defaultAddMdocDateClaims({
+      subClaims,
+      requestedSubClaims,
+    });
 
-    expect(subclaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
-    expect(subclaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
+    expect(subClaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
+    expect(EXPIRY_DATE in subClaims).toBe(false);
   });
 
-  // Edge cases
-  it('should not add any dates when none are requested', () => {
-    const subclaims: Claims = {};
-    const requestedSubclaims: Claims = {};
+  it('should add only expiry date when only expiry date is requested', () => {
+    const now = new Date('2024-01-01T00:00:00Z');
+    vi.setSystemTime(now);
 
-    addMdocDateClaims(subclaims, requestedSubclaims);
+    const subClaims: Claims = {};
+    const requestedSubClaims: Claims = {
+      [EXPIRY_DATE]: {},
+    };
 
-    expect(subclaims[ISSUE_DATE]).toBeUndefined();
-    expect(subclaims[EXPIRY_DATE]).toBeUndefined();
+    defaultAddMdocDateClaims({
+      subClaims,
+      requestedSubClaims,
+    });
+
+    expect(ISSUE_DATE in subClaims).toBe(false);
+    expect(subClaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
   });
 
-  it('should preserve existing claims when adding dates', () => {
-    const subclaims: Claims = {
-      name: 'John Doe',
-      age: 25,
-    };
-    const requestedSubclaims: Claims = {
-      [ISSUE_DATE]: true,
-      [EXPIRY_DATE]: true,
-    };
+  it('should handle doctype parameter', () => {
+    const now = new Date('2024-01-01T00:00:00Z');
+    vi.setSystemTime(now);
 
-    addMdocDateClaims(subclaims, requestedSubclaims);
+    const subClaims: Claims = {};
+    const doctype = 'org.iso.18013.5.1.mDL';
 
-    expect(subclaims.name).toBe('John Doe');
-    expect(subclaims.age).toBe(25);
-    expect(subclaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
-    expect(subclaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
-  });
+    defaultAddMdocDateClaims({
+      subClaims,
+      requestedSubClaims: undefined,
+      doctype,
+    });
 
-  it('should handle falsy values in requestedSubclaims', () => {
-    const subclaims: Claims = {};
-    const requestedSubclaims: Claims = {
-      [ISSUE_DATE]: false,
-      [EXPIRY_DATE]: null,
-    };
-
-    addMdocDateClaims(subclaims, requestedSubclaims);
-
-    expect(subclaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
-    expect(subclaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
+    expect(subClaims[ISSUE_DATE]).toBe('cbor:1004("2024-01-01")');
+    expect(subClaims[EXPIRY_DATE]).toBe('cbor:1004("2025-01-01")');
   });
 });

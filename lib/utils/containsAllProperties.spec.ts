@@ -109,4 +109,62 @@ describe('containsAllProperties', () => {
 
     expect(containsAllProperties(source, target, 2)).toBe(true);
   });
+
+  // Empty object value test cases
+  it('should return true when target has empty object values', () => {
+    const source = {
+      'org.iso.18013.5.1': {
+        age: 25,
+        name: 'John Doe',
+      },
+    };
+    const target = {
+      'org.iso.18013.5.1': {
+        age: {},
+      },
+    };
+
+    expect(containsAllProperties(source, target, 3)).toBe(true);
+  });
+
+  it('should handle deeply nested empty object values', () => {
+    const source = {
+      'org.iso.18013.5.1': {
+        personal: {
+          details: {
+            age: 25,
+            name: 'John Doe',
+          },
+        },
+      },
+    };
+    const target = {
+      'org.iso.18013.5.1': {
+        personal: {
+          details: {
+            age: {},
+          },
+        },
+      },
+    };
+
+    expect(containsAllProperties(source, target, 4)).toBe(true);
+  });
+
+  it('should handle multiple empty object values', () => {
+    const source = {
+      'org.iso.18013.5.1': {
+        age: '25',
+        verified: true,
+      },
+    };
+    const target = {
+      'org.iso.18013.5.1': {
+        age: {},
+        verified: {},
+      },
+    };
+
+    expect(containsAllProperties(source, target, 2)).toBe(true);
+  });
 });

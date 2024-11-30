@@ -1,122 +1,117 @@
-import { describe, it, expect } from 'vitest';
-import { mdocCheckPermissions } from './mdocCheckPermissions';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createMdocCheckPermissions } from './mdocCheckPermissions';
 import { CLAIMS, DOCTYPE, FORMAT, MSO_MDOC } from './constants';
-import type { MdocCredential } from './types';
 import { BadRequestError } from '../BadRequestError';
 
 describe('mdocCheckPermissions', () => {
-  // Valid cases
-  it('should not throw error when credential request is valid', async () => {
-    const issuableCredentials: Record<string, unknown>[] = [
-      {
-        [FORMAT]: MSO_MDOC,
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: 25,
-            name: 'John Doe',
-          },
-        },
-      },
-    ];
-
-    const requestedCredential: MdocCredential = {
-      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-      [CLAIMS]: {
-        'org.iso.18013.5.1': {
-          age: 20,
-        },
-      },
-    };
-
-    await expect(
-      mdocCheckPermissions({ issuableCredentials, requestedCredential })
-    ).resolves.not.toThrow();
+  // Mock containsRequestedMdocClaims
+  const mockContainsRequestedMdocClaims = vi.fn();
+  const mdocCheckPermissions = createMdocCheckPermissions({
+    containsRequestedMdocClaims: mockContainsRequestedMdocClaims,
   });
 
-  it('should not throw error when one of multiple credentials matches', async () => {
-    const issuableCredentials: Record<string, unknown>[] = [
-      {
-        [FORMAT]: 'vc+sd-jwt',
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: 25,
-          },
-        },
-      },
-      {
-        [FORMAT]: MSO_MDOC,
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: 25,
-            name: 'John Doe',
-          },
-        },
-      },
-    ];
-
-    const requestedCredential: MdocCredential = {
-      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-      [CLAIMS]: {
-        'org.iso.18013.5.1': {
-          age: 20,
-        },
-      },
-    };
-
-    await expect(
-      mdocCheckPermissions({ issuableCredentials, requestedCredential })
-    ).resolves.not.toThrow();
+  beforeEach(() => {
+    vi.resetAllMocks();
+    mockContainsRequestedMdocClaims.mockReturnValue(true);
   });
 
-  // Error cases
+  it('should throw error when issuableCredentials is null', async () => {
+    await expect(
+      mdocCheckPermissions({
+        issuableCredentials: undefined,
+        requestedCredential: {},
+      })
+    ).rejects.toThrow(BadRequestError);
+  });
+
+  it('should throw error when issuableCredentials is undefined', async () => {
+    await expect(
+      mdocCheckPermissions({
+        issuableCredentials: undefined,
+        requestedCredential: {},
+      })
+    ).rejects.toThrow(BadRequestError);
+  });
+
   it('should throw error when issuableCredentials is empty array', async () => {
-    const requestedCredential: MdocCredential = {
+    await expect(
+      mdocCheckPermissions({
+        issuableCredentials: [],
+        requestedCredential: {},
+      })
+    ).rejects.toThrow(BadRequestError);
+  });
+
+  it('should pass when credential matches format, doctype and claims', async () => {
+    const issuableCredentials = [
+      {
+        [FORMAT]: MSO_MDOC,
+        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+        [CLAIMS]: {
+          'org.iso.18013.5.1': {
+            age: 25,
+          },
+        },
+      },
+    ];
+
+    const requestedCredential = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+      [CLAIMS]: {
+        'org.iso.18013.5.1': {
+          age: {},
+        },
+      },
     };
 
     await expect(
       mdocCheckPermissions({
-        issuableCredentials: [],
+        issuableCredentials,
+        requestedCredential,
+      })
+    ).resolves.not.toThrow();
+
+    expect(mockContainsRequestedMdocClaims).toHaveBeenCalledWith(
+      issuableCredentials[0],
+      requestedCredential
+    );
+  });
+
+  it('should throw error when format does not match', async () => {
+    const issuableCredentials = [
+      {
+        [FORMAT]: 'wrong_format',
+        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+        [CLAIMS]: {
+          'org.iso.18013.5.1': {
+            age: 25,
+          },
+        },
+      },
+    ];
+
+    const requestedCredential = {
+      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+      [CLAIMS]: {
+        'org.iso.18013.5.1': {
+          age: {},
+        },
+      },
+    };
+
+    await expect(
+      mdocCheckPermissions({
+        issuableCredentials,
         requestedCredential,
       })
     ).rejects.toThrow(BadRequestError);
   });
 
-  it('should throw error when no matching credential format exists', async () => {
-    const issuableCredentials: Record<string, unknown>[] = [
-      {
-        [FORMAT]: 'vc+sd-jwt',
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: 25,
-          },
-        },
-      },
-    ];
-
-    const requestedCredential: MdocCredential = {
-      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-      [CLAIMS]: {
-        'org.iso.18013.5.1': {
-          age: 20,
-        },
-      },
-    };
-
-    await expect(
-      mdocCheckPermissions({ issuableCredentials, requestedCredential })
-    ).rejects.toThrow(BadRequestError);
-  });
-
   it('should throw error when doctype does not match', async () => {
-    const issuableCredentials: Record<string, unknown>[] = [
+    const issuableCredentials = [
       {
         [FORMAT]: MSO_MDOC,
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+        [DOCTYPE]: 'wrong.doctype',
         [CLAIMS]: {
           'org.iso.18013.5.1': {
             age: 25,
@@ -125,44 +120,57 @@ describe('mdocCheckPermissions', () => {
       },
     ];
 
-    const requestedCredential: MdocCredential = {
-      [DOCTYPE]: 'org.iso.18013.5.1.dL',
-      [CLAIMS]: {
-        'org.iso.18013.5.1': {
-          age: 20,
-        },
-      },
-    };
-
-    await expect(
-      mdocCheckPermissions({ issuableCredentials, requestedCredential })
-    ).rejects.toThrow(BadRequestError);
-  });
-
-  it('should throw error when requested claims are not available', async () => {
-    const issuableCredentials: Record<string, unknown>[] = [
-      {
-        [FORMAT]: MSO_MDOC,
-        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
-        [CLAIMS]: {
-          'org.iso.18013.5.1': {
-            age: 25,
-          },
-        },
-      },
-    ];
-
-    const requestedCredential: MdocCredential = {
+    const requestedCredential = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
       [CLAIMS]: {
         'org.iso.18013.5.1': {
-          name: 'John Doe',
+          age: {},
         },
       },
     };
 
     await expect(
-      mdocCheckPermissions({ issuableCredentials, requestedCredential })
+      mdocCheckPermissions({
+        issuableCredentials,
+        requestedCredential,
+      })
     ).rejects.toThrow(BadRequestError);
+  });
+
+  it('should throw error when claims do not match', async () => {
+    mockContainsRequestedMdocClaims.mockReturnValue(false);
+
+    const issuableCredentials = [
+      {
+        [FORMAT]: MSO_MDOC,
+        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+        [CLAIMS]: {
+          'org.iso.18013.5.1': {
+            age: 25,
+          },
+        },
+      },
+    ];
+
+    const requestedCredential = {
+      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+      [CLAIMS]: {
+        'org.iso.18013.5.1': {
+          name: {},
+        },
+      },
+    };
+
+    await expect(
+      mdocCheckPermissions({
+        issuableCredentials,
+        requestedCredential,
+      })
+    ).rejects.toThrow(BadRequestError);
+
+    expect(mockContainsRequestedMdocClaims).toHaveBeenCalledWith(
+      issuableCredentials[0],
+      requestedCredential
+    );
   });
 });

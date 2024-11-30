@@ -18,17 +18,21 @@
 import { ComputeCredentialDuration } from './computeCredentialDuration';
 
 /**
- * Computes the duration for an mDoc credential by calculating the time difference
- * between now and one year in the future.
+ * Default implementation for computing mDoc credential duration.
+ * Calculates the time difference between now and one year in the future.
  *
  * @implements {ComputeCredentialDuration}
  * @returns {number} Duration in seconds until credential expiry (1 year from now)
+ * @example
+ * const duration = defaultMdocComputeCredentialDuration();
+ * // duration = 31536000 (1 year in seconds)
  */
-export const mdocComputeCredentialDuration: ComputeCredentialDuration = () => {
-  const now = new Date();
+export const defaultMdocComputeCredentialDuration: ComputeCredentialDuration =
+  () => {
+    const now = new Date();
 
-  const expiry = new Date(now);
-  expiry.setFullYear(expiry.getFullYear() + 1);
+    const expiry = new Date(now);
+    expiry.setFullYear(expiry.getFullYear() + 1);
 
-  return Math.floor((expiry.getTime() - now.getTime()) / 1000);
-};
+    return Math.floor((expiry.getTime() - now.getTime()) / 1000);
+  };

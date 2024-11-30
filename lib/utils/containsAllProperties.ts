@@ -44,8 +44,9 @@ export const containsAllProperties = (
     }
 
     const sourceValue = source[targetKey];
+
     if (typeof sourceValue !== 'object' || sourceValue == null) {
-      return false;
+      return true;
     }
 
     return containsAllProperties(

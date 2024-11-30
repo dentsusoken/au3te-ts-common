@@ -1,195 +1,183 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { buildMdocClaims, buildMdocSubClaims } from './buildMdocClaims';
-import { EXPIRY_DATE, ISSUE_DATE } from './constants';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createBuildMdocClaims } from './buildMdocClaims';
 import type { Claims } from './types';
 
-describe('Mdoc Claims Builder', () => {
+describe('buildMdocClaims', () => {
+  // Mock buildMdocSubClaims function
+  const mockBuildMdocSubClaims = vi.fn();
+
+  // Create test instance
+  const buildMdocClaims = createBuildMdocClaims({
+    buildMdocSubClaims: mockBuildMdocSubClaims,
+  });
+
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2024-01-01'));
+    vi.resetAllMocks();
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it('should return all user claims when requestedClaims is undefined', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
+        age: 25,
+      },
+    };
+
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    const result = await buildMdocClaims({
+      userClaims,
+      requestedClaims: undefined,
+      doctype,
+    });
+
+    expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
+    expect(result).toEqual(userClaims);
   });
 
-  describe('buildMdocClaims', () => {
-    it('should return user claims when no requested claims', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-        },
-      };
-      const requestedClaims: Claims = {};
+  it('should return only requested claims when requestedClaims is provided', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
+        age: 25,
+        address: '123 Main St',
+      },
+    };
 
-      const result = await buildMdocClaims(userClaims, requestedClaims);
-      expect(result).toEqual(userClaims);
+    const requestedClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: {},
+        age: {},
+      },
+    };
+
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    mockBuildMdocSubClaims.mockReturnValue({
+      name: 'John Doe',
+      age: 25,
     });
 
-    it('should return user claims when requested claims is undefined', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-        },
-      };
-      const requestedClaims = undefined;
-
-      const result = await buildMdocClaims(userClaims, requestedClaims);
-      expect(result).toEqual(userClaims);
+    const result = await buildMdocClaims({
+      userClaims,
+      requestedClaims,
+      doctype,
     });
 
-    it('should build claims based on requested claims', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-          address: 'Tokyo',
-        },
-      };
-      const requestedClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: true,
-          name: true,
-        },
-      };
-
-      const result = await buildMdocClaims(userClaims, requestedClaims);
-      expect(result).toEqual({
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-        },
-      });
+    expect(mockBuildMdocSubClaims).toHaveBeenCalledWith({
+      userSubClaims: userClaims['org.iso.18013.5.1'],
+      requestedSubClaims: requestedClaims['org.iso.18013.5.1'],
+      doctype,
     });
-
-    it('should handle multiple namespaces', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-          name: 'John Doe',
-        },
-        'org.example.custom': {
-          score: 100,
-          rank: 'A',
-        },
-      };
-      const requestedClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: true,
-        },
-        'org.example.custom': {
-          score: true,
-        },
-      };
-
-      const result = await buildMdocClaims(userClaims, requestedClaims);
-      expect(result).toEqual({
-        'org.iso.18013.5.1': {
-          age: 25,
-        },
-        'org.example.custom': {
-          score: 100,
-        },
-      });
-    });
-
-    it('should skip namespaces not present in user claims', async () => {
-      const userClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: 25,
-        },
-      };
-      const requestedClaims: Claims = {
-        'org.iso.18013.5.1': {
-          age: true,
-        },
-        'org.example.missing': {
-          data: true,
-        },
-      };
-
-      const result = await buildMdocClaims(userClaims, requestedClaims);
-      expect(result).toEqual({
-        'org.iso.18013.5.1': {
-          age: 25,
-        },
-      });
+    expect(result).toEqual({
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
+        age: 25,
+      },
     });
   });
 
-  describe('buildMdocSubClaims', () => {
-    it('should build sub claims with date claims', () => {
-      const userSubClaims: Claims = {
-        age: 25,
+  it('should handle missing namespaces', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
         name: 'John Doe',
-      };
-      const requestedSubClaims: Claims = {
-        age: true,
-        [ISSUE_DATE]: true,
-        [EXPIRY_DATE]: true,
-      };
+      },
+    };
 
-      const result = buildMdocSubClaims(userSubClaims, requestedSubClaims);
-      expect(result).toEqual({
-        age: 25,
-        [ISSUE_DATE]: 'cbor:1004("2024-01-01")',
-        [EXPIRY_DATE]: 'cbor:1004("2025-01-01")',
-      });
+    const requestedClaims: Claims = {
+      'org.example.custom': {
+        score: {},
+      },
+    };
+
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    const result = await buildMdocClaims({
+      userClaims,
+      requestedClaims,
+      doctype,
     });
 
-    it('should only include requested claims', () => {
-      const userSubClaims: Claims = {
-        age: 25,
-        name: 'John Doe',
-        address: 'Tokyo',
-      };
-      const requestedSubClaims: Claims = {
-        age: true,
-        name: true,
-      };
+    expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
+    expect(result).toEqual({});
+  });
 
-      const result = buildMdocSubClaims(userSubClaims, requestedSubClaims);
-      expect(result).toEqual({
-        age: 25,
+  it('should handle empty requestedClaims', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
         name: 'John Doe',
-      });
+        age: 25,
+      },
+    };
+
+    const requestedClaims: Claims = {};
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    const result = await buildMdocClaims({
+      userClaims,
+      requestedClaims,
+      doctype,
     });
 
-    it('should handle missing user claims', () => {
-      const userSubClaims: Claims = {
-        age: 25,
-      };
-      const requestedSubClaims: Claims = {
-        age: true,
-        name: true,
-      };
+    expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
+    expect(result).toEqual(userClaims);
+  });
 
-      const result = buildMdocSubClaims(userSubClaims, requestedSubClaims);
-      expect(result).toEqual({
+  it('should handle multiple namespaces', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
         age: 25,
+      },
+      'org.example.custom': {
+        score: 100,
+        grade: 'A',
+      },
+    };
+
+    const requestedClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: {},
+      },
+      'org.example.custom': {
+        score: {},
+      },
+    };
+
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    mockBuildMdocSubClaims
+      .mockReturnValueOnce({
+        name: 'John Doe',
+      })
+      .mockReturnValueOnce({
+        score: 100,
       });
+
+    const result = await buildMdocClaims({
+      userClaims,
+      requestedClaims,
+      doctype,
     });
 
-    it('should handle falsy values in user claims', () => {
-      const userSubClaims: Claims = {
-        age: 0,
-        verified: false,
-        score: null,
-      };
-      const requestedSubClaims: Claims = {
-        age: true,
-        verified: true,
-        score: true,
-      };
-
-      const result = buildMdocSubClaims(userSubClaims, requestedSubClaims);
-      expect(result).toEqual({
-        age: 0,
-        verified: false,
-        score: null,
-      });
+    expect(mockBuildMdocSubClaims).toHaveBeenCalledTimes(2);
+    expect(mockBuildMdocSubClaims).toHaveBeenCalledWith({
+      userSubClaims: userClaims['org.iso.18013.5.1'],
+      requestedSubClaims: requestedClaims['org.iso.18013.5.1'],
+      doctype,
+    });
+    expect(mockBuildMdocSubClaims).toHaveBeenCalledWith({
+      userSubClaims: userClaims['org.example.custom'],
+      requestedSubClaims: requestedClaims['org.example.custom'],
+      doctype,
+    });
+    expect(result).toEqual({
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
+      },
+      'org.example.custom': {
+        score: 100,
+      },
     });
   });
 });
