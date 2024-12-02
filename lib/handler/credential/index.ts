@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-export * from './addMdocDateClaims';
-export * from './buildMdocClaims';
+export * from './mdoc/addMdocDateClaims';
+export * from './mdoc/buildMdocClaims';
+export * from './buildRequestedCredential';
+export * from './buildRequestedClaims';
+export * from './mdoc/buildMdocSubClaims';
 export * from './checkPermissions';
 export * from './collectClaims';
 export * from './CommonCredentialHandlerConfiguration';
 export * from './CommonCredentialHandlerConfigurationImpl';
 export * from './computeCredentialDuration';
 export * from './constants';
-export * from './containsRequestedMdocClaims';
+export * from './mdoc/containsRequestedMdocClaims';
 export * from './createOrder';
 export * from './getToOrder';
 export * from './matchDoctype';
 export * from './matchFormat';
-export * from './mdocCheckPermissions';
-export * from './mdocCollectClaims';
-export * from './mdocComputeCredentialDuration';
+export * from './mdoc/mdocBuildRequestedCredential';
+export * from './mdoc/mdocCheckPermissions';
+export * from './mdoc/mdocCollectClaims';
+export * from './mdoc/mdocComputeCredentialDuration';
 export * from './toOrder';
 export * from './types';

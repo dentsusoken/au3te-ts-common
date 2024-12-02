@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createBuildMdocClaims } from './buildMdocClaims';
-import type { Claims } from './types';
+import type { Claims } from '../types';
+import { BadRequestError } from '../../BadRequestError';
 
 describe('buildMdocClaims', () => {
   // Mock buildMdocSubClaims function
@@ -15,7 +16,7 @@ describe('buildMdocClaims', () => {
     vi.resetAllMocks();
   });
 
-  it('should return all user claims when requestedClaims is undefined', async () => {
+  it('should throw BadRequestError when requestedClaims is undefined', async () => {
     const userClaims: Claims = {
       'org.iso.18013.5.1': {
         name: 'John Doe',
@@ -25,14 +26,47 @@ describe('buildMdocClaims', () => {
 
     const doctype = 'org.iso.18013.5.1.mDL';
 
-    const result = await buildMdocClaims({
-      userClaims,
-      requestedClaims: undefined,
-      doctype,
-    });
+    await expect(
+      buildMdocClaims({
+        userClaims,
+        requestedClaims: undefined,
+        doctype,
+      })
+    ).rejects.toThrow(
+      new BadRequestError(
+        'invalid_credential_request',
+        'No requested claims provided'
+      )
+    );
 
     expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
-    expect(result).toEqual(userClaims);
+  });
+
+  it('should throw BadRequestError when requestedClaims is empty', async () => {
+    const userClaims: Claims = {
+      'org.iso.18013.5.1': {
+        name: 'John Doe',
+        age: 25,
+      },
+    };
+
+    const requestedClaims: Claims = {};
+    const doctype = 'org.iso.18013.5.1.mDL';
+
+    await expect(
+      buildMdocClaims({
+        userClaims,
+        requestedClaims,
+        doctype,
+      })
+    ).rejects.toThrow(
+      new BadRequestError(
+        'invalid_credential_request',
+        'No requested claims provided'
+      )
+    );
+
+    expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
   });
 
   it('should return only requested claims when requestedClaims is provided', async () => {
@@ -100,27 +134,6 @@ describe('buildMdocClaims', () => {
 
     expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
     expect(result).toEqual({});
-  });
-
-  it('should handle empty requestedClaims', async () => {
-    const userClaims: Claims = {
-      'org.iso.18013.5.1': {
-        name: 'John Doe',
-        age: 25,
-      },
-    };
-
-    const requestedClaims: Claims = {};
-    const doctype = 'org.iso.18013.5.1.mDL';
-
-    const result = await buildMdocClaims({
-      userClaims,
-      requestedClaims,
-      doctype,
-    });
-
-    expect(mockBuildMdocSubClaims).not.toHaveBeenCalled();
-    expect(result).toEqual(userClaims);
   });
 
   it('should handle multiple namespaces', async () => {

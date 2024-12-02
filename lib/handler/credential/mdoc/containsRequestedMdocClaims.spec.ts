@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { createContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
-import { CLAIMS } from './constants';
-import type { MdocCredential } from './types';
+import { CLAIMS } from '../constants';
+import type { MdocCredential } from '../types';
 
 describe('containsRequestedMdocClaims', () => {
   // Create test instance with default maxRecursionDepth
@@ -74,14 +74,17 @@ describe('containsRequestedMdocClaims', () => {
     const issuableCredential: MdocCredential = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
-          age: 25,
+          age: {},
         },
       },
     };
 
-    expect(containsRequestedMdocClaims(issuableCredential, undefined)).toBe(
-      true
-    );
+    expect(
+      containsRequestedMdocClaims(
+        issuableCredential,
+        undefined as unknown as Record<string, unknown>
+      )
+    ).toBe(true);
   });
 
   it('should return false when claims are requested but issuable credential has no claims', () => {
@@ -107,8 +110,8 @@ describe('containsRequestedMdocClaims', () => {
         'org.iso.18013.5.1': {
           personal: {
             details: {
-              age: 25,
-              name: 'John Doe',
+              age: {},
+              name: {},
             },
           },
         },
@@ -137,8 +140,8 @@ describe('containsRequestedMdocClaims', () => {
     const issuableCredential: MdocCredential = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
-          age: '25',
-          verified: true,
+          age: {},
+          verified: {},
         },
       },
     };
@@ -169,7 +172,7 @@ describe('containsRequestedMdocClaims', () => {
         'org.iso.18013.5.1': {
           personal: {
             details: {
-              age: 25,
+              age: {},
             },
           },
         },

@@ -15,7 +15,8 @@
  */
 
 import { BuildMdocSubClaims } from './buildMdocSubClaims';
-import type { Claims } from './types';
+import type { Claims } from '../types';
+import { BadRequestError } from '../../..';
 
 /**
  * Parameters for building mDoc claims.
@@ -48,28 +49,31 @@ type CreateBuildMdocClaimsParams = {
 
 /**
  * Creates a function to build mDoc claims.
- *
- * @param params - Parameters for creating the function
- * @returns A function that builds mDoc claims
+ * @param {BuildMdocSubClaims} buildMdocSubClaims - Function to build mDoc sub-claims
+ * @returns {BuildMdocClaims} A function that builds mDoc claims
  */
 export const createBuildMdocClaims =
   ({ buildMdocSubClaims }: CreateBuildMdocClaimsParams): BuildMdocClaims =>
   /**
    * Builds mDoc claims by combining user claims with requested claims.
-   *
-   * @param params - Parameters for building mDoc claims
-   * @returns A Promise that resolves to the built mDoc claims
+   * @param {Claims} userClaims - Claims provided by the user
+   * @param {Claims | undefined} requestedClaims - Requested claims for the mDoc
+   * @param {string} doctype - Document type of the mDoc
+   * @returns {Promise<Claims>} A Promise that resolves to the built mDoc claims
    */
   async ({
     userClaims,
     requestedClaims,
     doctype,
   }: BuildMdocClaimsParams): Promise<Claims> => {
-    if (!requestedClaims || Object.keys(requestedClaims).length === 0) {
-      return userClaims;
-    }
-
     const claims: Claims = {};
+
+    if (!requestedClaims || Object.keys(requestedClaims).length === 0) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'No requested claims provided'
+      );
+    }
 
     Object.entries(requestedClaims).forEach(
       ([namespace, requestedSubClaims]) => {

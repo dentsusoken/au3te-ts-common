@@ -23,6 +23,7 @@ import { CheckPermissions } from './checkPermissions';
 import { CollectClaims } from './collectClaims';
 import { BadRequestError } from '../BadRequestError';
 import { CreateOrder } from './createOrder';
+import { BuildRequestedCredential } from './buildRequestedCredential';
 
 /**
  * Parameters for converting credential request information into a credential issuance order.
@@ -69,12 +70,14 @@ export type ToOrder = (
  *
  * @property getBySubject - Function to retrieve user by subject identifier
  * @property checkPermissions - Function to validate credential issuance permissions
+ * @property buildRequestedCredential - Function to build requested credential from issuable credential
  * @property collectClaims - Function to gather and format credential claims
  * @property createOrder - Function to create the final credential issuance order
  */
 type CreateToOrderParams = {
   getBySubject: GetBySubject;
   checkPermissions: CheckPermissions;
+  buildRequestedCredential: BuildRequestedCredential;
   collectClaims: CollectClaims;
   createOrder: CreateOrder;
 };
@@ -89,6 +92,7 @@ export const createToOrder =
   ({
     getBySubject,
     checkPermissions,
+    buildRequestedCredential,
     collectClaims,
     createOrder,
   }: CreateToOrderParams): ToOrder =>
@@ -104,14 +108,27 @@ export const createToOrder =
     const user = await getBySubject(subject);
 
     if (!user) {
-      throw new BadRequestError('invalid_request', 'User not found');
+      throw new BadRequestError('invalid_credential_request', 'User not found');
     }
 
-    const issuableCredentials = issuableCredentialsJson
-      ? JSON.parse(issuableCredentialsJson)
-      : undefined;
-    const requestedCredential = details ? JSON.parse(details) : undefined;
-    await checkPermissions({
+    if (!issuableCredentialsJson) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'Issuable credentials are required'
+      );
+    }
+
+    if (!details) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'Requested credential is required'
+      );
+    }
+
+    const issuableCredentials = JSON.parse(issuableCredentialsJson);
+    const requestedCredential = JSON.parse(details);
+
+    const issuableCredential = await checkPermissions({
       credentialType,
       issuableCredentials,
       requestedCredential,
@@ -119,7 +136,10 @@ export const createToOrder =
     const claims = await collectClaims({
       credentialType,
       user,
-      requestedCredential,
+      requestedCredential: buildRequestedCredential({
+        issuableCredential,
+        requestedCredential,
+      }),
     });
 
     return createOrder(requestIdentifier, claims);

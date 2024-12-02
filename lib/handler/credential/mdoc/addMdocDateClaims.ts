@@ -15,10 +15,10 @@
  * License.
  */
 
-import { formatCborDate } from '../../utils/formatDate';
-import { nextYear } from '../../utils/nextYear';
-import { EXPIRY_DATE, ISSUE_DATE } from './constants';
-import { Claims } from './types';
+import { formatCborDate } from '../../../utils/formatDate';
+import { nextYear } from '../../../utils/nextYear';
+import { EXPIRY_DATE, ISSUE_DATE } from '../constants';
+import type { Claims } from '../types';
 
 type AddMdocDateClaimsParams = {
   subClaims: Claims;
@@ -36,13 +36,17 @@ export const defaultAddMdocDateClaims: AddMdocDateClaims = ({
   subClaims,
   requestedSubClaims,
 }) => {
+  if (!requestedSubClaims) {
+    return;
+  }
+
   const now = new Date();
 
-  if (!requestedSubClaims || ISSUE_DATE in requestedSubClaims) {
+  if (ISSUE_DATE in requestedSubClaims) {
     subClaims[ISSUE_DATE] = formatCborDate(now);
   }
 
-  if (!requestedSubClaims || EXPIRY_DATE in requestedSubClaims) {
+  if (EXPIRY_DATE in requestedSubClaims) {
     const expiry = nextYear(now);
     subClaims[EXPIRY_DATE] = formatCborDate(expiry);
   }

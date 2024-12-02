@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMdocCollectClaims } from './mdocCollectClaims';
-import { CLAIMS, DOCTYPE } from './constants';
-import { BadRequestError } from '../BadRequestError';
-import type { Claims } from './types';
+import { CLAIMS, DOCTYPE } from '../constants';
+import { BadRequestError } from '../../BadRequestError';
+import type { Claims } from '../types';
 
 describe('Mdoc Claims Collector', () => {
   const mockUser = {
@@ -122,7 +122,7 @@ describe('Mdoc Claims Collector', () => {
       await expect(
         collectClaims({
           user: mockUser,
-          requestedCredential: undefined,
+          requestedCredential: undefined as unknown as Record<string, unknown>,
         })
       ).rejects.toThrow(BadRequestError);
 

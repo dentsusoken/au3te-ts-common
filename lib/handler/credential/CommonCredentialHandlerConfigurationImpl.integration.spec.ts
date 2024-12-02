@@ -12,7 +12,7 @@ describe('CommonCredentialHandlerConfigurationImpl integration tests', () => {
       userHandlerConfiguration,
     });
 
-  it('should successfully integrate with mdocToOrder function', async () => {
+  it('should convert mdoc request to order with specific claims', async () => {
     // Prepare test data
     const issuableCredentials = [
       {
@@ -53,7 +53,6 @@ describe('CommonCredentialHandlerConfigurationImpl integration tests', () => {
       credentialRequestInfo,
       introspectionResponse,
     });
-    console.log(order);
 
     // Verify the result
     expect(order).toBeDefined();
@@ -66,6 +65,60 @@ describe('CommonCredentialHandlerConfigurationImpl integration tests', () => {
       claims: {
         'org.iso.18013.5.1': {
           given_name: 'Inga',
+        },
+      },
+    });
+  });
+
+  it('should convert mdoc request to order with all available claims when no specific claims are requested', async () => {
+    // Prepare test data
+    const issuableCredentials = [
+      {
+        [FORMAT]: MSO_MDOC,
+        [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+        [CLAIMS]: {
+          'org.iso.18013.5.1': {
+            family_name: {},
+            given_name: {},
+          },
+        },
+      },
+    ];
+
+    const requestedCredential = {
+      [DOCTYPE]: 'org.iso.18013.5.1.mDL',
+    };
+
+    const credentialRequestInfo: CredentialRequestInfo = {
+      format: MSO_MDOC,
+      details: JSON.stringify(requestedCredential),
+      identifier: 'test-request-id',
+    };
+
+    const introspectionResponse = {
+      subject: '1004',
+      issuableCredentials: JSON.stringify(issuableCredentials),
+    } as IntrospectionResponse;
+
+    // Execute toOrder
+    const order = await commonCredentialHandlerConfiguration.mdocToOrder({
+      credentialType: 'single',
+      credentialRequestInfo,
+      introspectionResponse,
+    });
+
+    // Verify the result
+    expect(order).toBeDefined();
+    expect(order.requestIdentifier).toBe('test-request-id');
+    expect(order.credentialPayload).toBeDefined();
+    expect(order.issuanceDeferred).toBe(false);
+    expect(order.credentialDuration).toBeDefined();
+    expect(JSON.parse(order.credentialPayload as string)).toEqual({
+      doctype: 'org.iso.18013.5.1.mDL',
+      claims: {
+        'org.iso.18013.5.1': {
+          given_name: 'Inga',
+          family_name: 'Silverstone',
         },
       },
     });

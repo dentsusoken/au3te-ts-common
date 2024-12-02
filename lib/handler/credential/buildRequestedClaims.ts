@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2024 Authlete, Inc.
+ * Copyright (C) 20142024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-import { DOCTYPE } from './constants';
+import { Claims } from './types';
 
-/**
- * Checks if the document type of the issuable credential matches the requested credential
- */
-export const matchDoctype = (
-  issuableCredential: Record<string, unknown>,
-  requestedCredential: Record<string, unknown>
-): boolean => {
-  const issuableDoctype = issuableCredential?.[DOCTYPE];
-  const requestedDoctype = requestedCredential?.[DOCTYPE];
+export const buildRequestedClaims = (issuableClaims: unknown | undefined) => {
+  const claims: Claims = {};
 
-  if (issuableDoctype == null || requestedDoctype == null) {
-    return false;
+  if (
+    issuableClaims &&
+    typeof issuableClaims === 'object' &&
+    !Array.isArray(issuableClaims)
+  ) {
+    Object.entries(issuableClaims).forEach(([claimName, claimValue]) => {
+      claims[claimName] = buildRequestedClaims(claimValue);
+    });
   }
-
-  return issuableDoctype === requestedDoctype;
+  return claims;
 };

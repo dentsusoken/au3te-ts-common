@@ -15,7 +15,8 @@
  */
 
 import { AddMdocDateClaims } from './addMdocDateClaims';
-import { Claims } from './types';
+import { Claims } from '../types';
+import { BadRequestError } from '../../BadRequestError';
 
 /**
  * Parameters for building mDoc sub-claims.
@@ -65,13 +66,16 @@ export const createBuildMdocSubClaims =
     requestedSubClaims,
     doctype,
   }: BuildMdocSubClaimsParams): Claims => {
+    if (!requestedSubClaims || Object.keys(requestedSubClaims).length === 0) {
+      throw new BadRequestError(
+        'invalid_credential_request',
+        'No requested sub-claims provided'
+      );
+    }
+
     const subClaims: Claims = {};
 
     addMdocDateClaims({ subClaims, requestedSubClaims, doctype });
-
-    if (!requestedSubClaims) {
-      return { ...userSubClaims, ...subClaims };
-    }
 
     Object.keys(requestedSubClaims).forEach((claimName) => {
       const claimValue = userSubClaims[claimName];

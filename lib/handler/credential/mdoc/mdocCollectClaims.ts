@@ -15,12 +15,12 @@
  * License.
  */
 
-import { CollectClaims } from './collectClaims';
-import { CLAIMS, DOCTYPE } from './constants';
+import { CollectClaims } from '../collectClaims';
+import { CLAIMS, DOCTYPE } from '../constants';
 import { BuildMdocClaims } from './buildMdocClaims';
-import { GetMdocClaimsBySubjectAndDoctype } from '../user/getMdocClaimsBySubjectAndDoctype';
-import { BadRequestError } from '../BadRequestError';
-import type { Claims } from './types';
+import { GetMdocClaimsBySubjectAndDoctype } from '../../user/getMdocClaimsBySubjectAndDoctype';
+import { BadRequestError } from '../../BadRequestError';
+import type { Claims } from '../types';
 
 /**
  * Parameters for creating an mDoc claim collector function.
@@ -35,8 +35,9 @@ type CreateMdocCollectClaimsParams = {
 /**
  * Creates a function to collect mDoc claims.
  *
- * @param {CreateMdocCollectClaimsParams} params - Parameters for creating the claim collector
- * @returns {CollectClaims} A function that collects mDoc claims
+ * @param getMdocClaimsBySubjectAndDoctype - Function to retrieve mDoc claims by subject and document type
+ * @param buildMdocClaims - Function to build mDoc claims
+ * @returns Function to collect mDoc claims
  */
 export const createMdocCollectClaims =
   ({
@@ -44,13 +45,12 @@ export const createMdocCollectClaims =
     buildMdocClaims,
   }: CreateMdocCollectClaimsParams): CollectClaims =>
   /**
-   * Collects mDoc claims for a user and requested credential.
+   * Collects mDoc claims for the specified user and requested credential.
    *
-   * @param {Object} params - Parameters for collecting claims
-   * @param {User} params.user - The user for whom to collect claims
-   * @param {Record<string, unknown> | undefined} params.requestedCredential - The requested credential details
-   * @returns {Promise<{doctype: string, claims: Claims}>} The collected claims and document type
-   * @throws {BadRequestError} If the doctype is missing or no claims are found
+   * @param user - The user to collect claims for
+   * @param requestedCredential - The requested credential
+   * @returns Promise resolving to an object containing doctype and collected claims
+   * @throws {BadRequestError} If the requested credential is invalid or claims are not found
    */
   async ({ user, requestedCredential }) => {
     if (!requestedCredential) {

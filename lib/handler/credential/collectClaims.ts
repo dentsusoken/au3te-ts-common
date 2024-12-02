@@ -27,16 +27,15 @@ type CollectClaimsParams = {
   /** The user for whom the credential is being issued */
   user: User;
   /** The credential request containing the claims to collect */
-  requestedCredential: Record<string, unknown> | undefined;
+  requestedCredential: Record<string, unknown>;
 };
 
 /**
  * Collects claims to be included in a verifiable credential.
  *
- * @param params - The parameters for collecting claims
- * @param params.credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
- * @param params.user - The user for whom the credential is being issued
- * @param params.requestedCredential - The credential request containing the claims to collect
+ * @param credentialType The type of credential issuance ('single', 'batch', or 'deferred')
+ * @param user The user for whom the credential is being issued
+ * @param requestedCredential The credential request containing the claims to collect
  * @returns A promise that resolves to an object containing the collected claims
  */
 export type CollectClaims = ({

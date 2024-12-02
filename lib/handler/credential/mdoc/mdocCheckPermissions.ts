@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { BadRequestError } from '../BadRequestError';
-import { CheckPermissions } from './checkPermissions';
-import { MSO_MDOC } from './constants';
+import { BadRequestError } from '../../BadRequestError';
+import { CheckPermissions } from '../checkPermissions';
+import { MSO_MDOC } from '../constants';
 import { ContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
-import { matchDoctype } from './matchDoctype';
-import { matchFormat } from './matchFormat';
+import { matchDoctype } from '../matchDoctype';
+import { matchFormat } from '../matchFormat';
 
 type CreateMdocCheckPermissionsParams = {
   containsRequestedMdocClaims: ContainsRequestedMdocClaims;
@@ -43,17 +43,19 @@ export const createMdocCheckPermissions =
     }
 
     // Check if any credential matches document type and has permitted claims
-    const hasMatchingCredential = issuableCredentials.some(
+    const issuableCredential = issuableCredentials.find(
       (issuableCredential) =>
         matchFormat(issuableCredential, MSO_MDOC) &&
         matchDoctype(issuableCredential, requestedCredential) &&
         containsRequestedMdocClaims(issuableCredential, requestedCredential)
     );
 
-    if (!hasMatchingCredential) {
+    if (!issuableCredential) {
       throw new BadRequestError(
         'invalid_credential_request',
         'The access token does not have permissions to request the credential.'
       );
     }
+
+    return issuableCredential;
   };

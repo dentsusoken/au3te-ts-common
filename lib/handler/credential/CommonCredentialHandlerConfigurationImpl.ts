@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-import { createBuildMdocClaims } from './buildMdocClaims';
-import { createBuildMdocSubClaims } from './buildMdocSubClaims';
-import { createContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
-import { createMdocCheckPermissions } from './mdocCheckPermissions';
-import { createMdocCollectClaims } from './mdocCollectClaims';
-import { defaultMdocComputeCredentialDuration } from './mdocComputeCredentialDuration';
+import { createBuildMdocClaims } from './mdoc/buildMdocClaims';
+import { createBuildMdocSubClaims } from './mdoc/buildMdocSubClaims';
+import { createContainsRequestedMdocClaims } from './mdoc/containsRequestedMdocClaims';
+import { createMdocCheckPermissions } from './mdoc/mdocCheckPermissions';
+import { createMdocCollectClaims } from './mdoc/mdocCollectClaims';
+import { defaultMdocComputeCredentialDuration } from './mdoc/mdocComputeCredentialDuration';
 import { createGetToOrder } from './getToOrder';
-import { defaultAddMdocDateClaims } from './addMdocDateClaims';
+import { defaultAddMdocDateClaims } from './mdoc/addMdocDateClaims';
 import type { CommonCredentialHandlerConfiguration } from './CommonCredentialHandlerConfiguration';
 import { UserHandlerConfiguration } from '../user/UserHandlerConfiguration';
 import { createToOrder } from './toOrder';
 import { createCreateOrder } from './createOrder';
+import { defaultMdocBuildRequestedCredential } from './mdoc/mdocBuildRequestedCredential';
 
 /**
  * Parameter type definition for the constructor of CommonCredentialHandlerConfigurationImpl
@@ -53,6 +54,8 @@ export class CommonCredentialHandlerConfigurationImpl
   buildMdocSubClaims;
   /** Function to build claims for mDoc */
   buildMdocClaims;
+  /** Function to build requested credential for mDoc */
+  buildRequestedCredential;
   /** Function to collect claims for mDoc */
   mdocCollectClaims;
   /** Function to compute the duration of mDoc credentials */
@@ -66,13 +69,15 @@ export class CommonCredentialHandlerConfigurationImpl
 
   /**
    * Constructor for CommonCredentialHandlerConfigurationImpl
-   * @param {CommonCredentialHandlerConfigurationImplConstructorParams} params - Constructor parameters
+   * @param userHandlerConfiguration - User handler configuration for managing user-related operations
    */
   constructor({
     userHandlerConfiguration,
-  }: CommonCredentialHandlerConfigurationImplConstructorParams) {
+  }: {
+    userHandlerConfiguration: UserHandlerConfiguration;
+  }) {
     // Initialization of each property (comments omitted)
-    this.containsRequestedMdocClaims = createContainsRequestedMdocClaims(3);
+    this.containsRequestedMdocClaims = createContainsRequestedMdocClaims(10);
 
     this.mdocCheckPermissions = createMdocCheckPermissions({
       containsRequestedMdocClaims: this.containsRequestedMdocClaims,
@@ -87,6 +92,8 @@ export class CommonCredentialHandlerConfigurationImpl
     this.buildMdocClaims = createBuildMdocClaims({
       buildMdocSubClaims: this.buildMdocSubClaims,
     });
+
+    this.buildRequestedCredential = defaultMdocBuildRequestedCredential;
 
     this.mdocCollectClaims = createMdocCollectClaims({
       getMdocClaimsBySubjectAndDoctype:
@@ -103,6 +110,7 @@ export class CommonCredentialHandlerConfigurationImpl
     this.mdocToOrder = createToOrder({
       getBySubject: userHandlerConfiguration.getBySubject,
       checkPermissions: this.mdocCheckPermissions,
+      buildRequestedCredential: this.buildRequestedCredential,
       collectClaims: this.mdocCollectClaims,
       createOrder: this.mdocCreateOrder,
     });

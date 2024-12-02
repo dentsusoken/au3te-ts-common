@@ -18,9 +18,8 @@
  * Checks if the issuable credential contains all the requested claims
  */
 
-import { CLAIMS } from './constants';
-import { containsAllProperties } from '../../utils/containsAllProperties';
-import { MdocCredential } from './types';
+import { CLAIMS } from '../constants';
+import { containsAllProperties } from '../../../utils/containsAllProperties';
 
 /**
  * Function type for checking if an issuable credential contains all requested claims.
@@ -29,8 +28,8 @@ import { MdocCredential } from './types';
  * @returns True if the issuable credential contains all requested claims, false otherwise.
  */
 export type ContainsRequestedMdocClaims = (
-  issuableCredential: MdocCredential,
-  requestedCredential: Record<string, unknown> | undefined
+  issuableCredential: Record<string, unknown>,
+  requestedCredential: Record<string, unknown>
 ) => boolean;
 
 /**
@@ -46,27 +45,28 @@ export const createContainsRequestedMdocClaims =
    * @param requestedCredential The credential requested by the client.
    * @returns True if the issuable credential contains all requested claims, false otherwise.
    */
-  (
-    issuableCredential: MdocCredential,
-    requestedCredential: Record<string, unknown> | undefined
-  ): boolean => {
-    const issuableClaims = issuableCredential[CLAIMS];
-    const requestedClaims = requestedCredential?.[CLAIMS];
+  (issuableCredential, requestedCredential): boolean => {
+    const issuableClaims = issuableCredential?.[CLAIMS] as Record<
+      string,
+      unknown
+    >;
+    const requestedClaims = requestedCredential?.[CLAIMS] as Record<
+      string,
+      unknown
+    >;
 
-    // If no claims are requested, any issuable credential is valid
-    if (!requestedClaims) {
-      return true;
-    }
-
-    // If claims are requested but issuable credential has no claims
     if (!issuableClaims) {
       return false;
+    }
+
+    if (!requestedClaims) {
+      return true;
     }
 
     // Check if all requested claims are included in issuable claims
     return containsAllProperties(
       issuableClaims,
-      requestedClaims as Record<string, unknown>,
+      requestedClaims,
       maxRecursionDepth,
       1
     );

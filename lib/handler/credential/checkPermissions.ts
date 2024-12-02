@@ -27,19 +27,24 @@ type CheckPermissionsParams = {
   /** The type of credential issuance ('single', 'batch', or 'deferred') */
   credentialType?: CredentialType;
   /** Array of credential types that the user is allowed to receive */
-  issuableCredentials: Array<Record<string, unknown>> | undefined;
+  issuableCredentials: Array<Record<string, unknown>>;
   /** The credential request containing the claims to verify */
-  requestedCredential: Record<string, unknown> | undefined;
+  requestedCredential: Record<string, unknown>;
 };
 
 /**
  * Checks if the requested credential can be issued based on permissions.
+ * Verifies that the access token has sufficient permissions to issue the requested credential.
  *
- * @param params - Parameters containing credential type, issuable credentials, and requested credential
- * @returns Promise that resolves if permissions are valid, rejects otherwise
+ * @param params - Parameters for checking permissions
+ * @param params.credentialType - The type of credential issuance ('single', 'batch', or 'deferred')
+ * @param params.issuableCredentials - Array of credential types that can be issued with the access token
+ * @param params.requestedCredential - The credential request to verify permissions for
+ * @returns Promise that resolves to the validated credential request if permissions are valid
+ * @throws {BadRequestError} If the access token does not have sufficient permissions
  */
 export type CheckPermissions = ({
   credentialType,
   issuableCredentials,
   requestedCredential,
-}: CheckPermissionsParams) => Promise<void>;
+}: CheckPermissionsParams) => Promise<Record<string, unknown>>;

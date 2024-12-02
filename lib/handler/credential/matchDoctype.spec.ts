@@ -87,6 +87,11 @@ describe('matchDoctype', () => {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
     };
 
-    expect(matchDoctype(issuableCredential, undefined)).toBe(false);
+    expect(
+      matchDoctype(
+        issuableCredential,
+        undefined as unknown as Record<string, unknown>
+      )
+    ).toBe(false);
   });
 });

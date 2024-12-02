@@ -15,7 +15,8 @@
  * License.
  */
 
-import { ComputeCredentialDuration } from './computeCredentialDuration';
+import { nextYear } from '../../../utils/nextYear';
+import { ComputeCredentialDuration } from '../computeCredentialDuration';
 
 /**
  * Default implementation for computing mDoc credential duration.
@@ -31,8 +32,7 @@ export const defaultMdocComputeCredentialDuration: ComputeCredentialDuration =
   () => {
     const now = new Date();
 
-    const expiry = new Date(now);
-    expiry.setFullYear(expiry.getFullYear() + 1);
+    const expiry = nextYear(now);
 
     return Math.floor((expiry.getTime() - now.getTime()) / 1000);
   };

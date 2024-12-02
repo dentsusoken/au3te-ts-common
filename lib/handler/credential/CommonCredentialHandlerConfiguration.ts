@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { AddMdocDateClaims } from './addMdocDateClaims';
-import { BuildMdocClaims } from './buildMdocClaims';
-import { BuildMdocSubClaims } from './buildMdocSubClaims';
+import { AddMdocDateClaims } from './mdoc/addMdocDateClaims';
+import { BuildMdocClaims } from './mdoc/buildMdocClaims';
+import { BuildMdocSubClaims } from './mdoc/buildMdocSubClaims';
+import { BuildRequestedCredential } from './buildRequestedCredential';
 import { CheckPermissions } from './checkPermissions';
 import { CollectClaims } from './collectClaims';
 import { ComputeCredentialDuration } from './computeCredentialDuration';
-import { ContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
+import { ContainsRequestedMdocClaims } from './mdoc/containsRequestedMdocClaims';
 import { CreateOrder } from './createOrder';
 import { GetToOrder } from './getToOrder';
 import { ToOrder } from './toOrder';
@@ -50,6 +51,11 @@ export interface CommonCredentialHandlerConfiguration {
    * BuildMdocClaims handler for mDoc credential issuance.
    */
   buildMdocClaims: BuildMdocClaims;
+
+  /**
+   * BuildRequestedCredential handler for mDoc credential issuance.
+   */
+  buildRequestedCredential: BuildRequestedCredential;
 
   /**
    * CollectClaims handler for mDoc credential issuance.
