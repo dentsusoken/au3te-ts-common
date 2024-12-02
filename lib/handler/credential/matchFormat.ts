@@ -15,7 +15,8 @@
  */
 
 import { FORMAT } from './constants';
-import { CredentialFormat } from './types';
+import { CredentialFormat } from '../../schemas/credential/CredentialFormat';
+import type { Claims } from './types';
 
 /**
  * Checks if the format of an issuable credential matches the specified format.
@@ -25,7 +26,7 @@ import { CredentialFormat } from './types';
  * @returns True if the credential format matches the specified format, false otherwise
  */
 export const matchFormat = (
-  issuableCredential: Record<string, unknown>,
+  issuableCredential: Claims,
   format: CredentialFormat
 ): boolean => {
   return issuableCredential[FORMAT] === format;

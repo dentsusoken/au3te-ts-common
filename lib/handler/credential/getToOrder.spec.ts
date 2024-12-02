@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { createGetToOrder } from './getToOrder';
 import { MSO_MDOC } from './constants';
 import type { ToOrder } from './toOrder';
-import type { CredentialFormat } from './types';
+import { CredentialFormat } from '../../schemas/credential/CredentialFormat';
 
 describe('getToOrder', () => {
   // Mock ToOrder function

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { createContainsRequestedMdocClaims } from './containsRequestedMdocClaims';
 import { CLAIMS } from '../constants';
-import type { MdocCredential } from '../types';
+import type { Claims } from '../types';
 
 describe('containsRequestedMdocClaims', () => {
   // Create test instance with default maxRecursionDepth
@@ -9,7 +9,7 @@ describe('containsRequestedMdocClaims', () => {
 
   // Basic test cases
   it('should return true when issuable credential contains all requested claims', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: 25,
@@ -18,7 +18,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: {},
@@ -32,7 +32,7 @@ describe('containsRequestedMdocClaims', () => {
   });
 
   it('should return false when issuable credential is missing requested claims', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: 25,
@@ -40,7 +40,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           name: {},
@@ -55,7 +55,7 @@ describe('containsRequestedMdocClaims', () => {
 
   // Edge cases
   it('should return true when no claims are requested', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: 25,
@@ -63,7 +63,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {};
+    const requestedCredential: Claims = {};
 
     expect(
       containsRequestedMdocClaims(issuableCredential, requestedCredential)
@@ -71,7 +71,7 @@ describe('containsRequestedMdocClaims', () => {
   });
 
   it('should return true when requestedCredential is undefined', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: {},
@@ -82,15 +82,15 @@ describe('containsRequestedMdocClaims', () => {
     expect(
       containsRequestedMdocClaims(
         issuableCredential,
-        undefined as unknown as Record<string, unknown>
+        undefined as unknown as Claims
       )
     ).toBe(true);
   });
 
   it('should return false when claims are requested but issuable credential has no claims', () => {
-    const issuableCredential: MdocCredential = {};
+    const issuableCredential: Claims = {};
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: {},
@@ -105,7 +105,7 @@ describe('containsRequestedMdocClaims', () => {
 
   // Nested structure test
   it('should handle deeply nested claim structures', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           personal: {
@@ -118,7 +118,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           personal: {
@@ -137,7 +137,7 @@ describe('containsRequestedMdocClaims', () => {
 
   // Different value types test
   it('should check structure regardless of value types', () => {
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: {},
@@ -146,7 +146,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           age: {},
@@ -167,7 +167,7 @@ describe('containsRequestedMdocClaims', () => {
     const containsRequestedMdocClaimsDepth4 =
       createContainsRequestedMdocClaims(4);
 
-    const issuableCredential: MdocCredential = {
+    const issuableCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           personal: {
@@ -179,7 +179,7 @@ describe('containsRequestedMdocClaims', () => {
       },
     };
 
-    const requestedCredential: Record<string, unknown> = {
+    const requestedCredential: Claims = {
       [CLAIMS]: {
         'org.iso.18013.5.1': {
           personal: {

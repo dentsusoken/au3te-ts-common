@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMdocCheckPermissions } from './mdocCheckPermissions';
 import { CLAIMS, DOCTYPE, FORMAT, MSO_MDOC } from '../constants';
+import { Claims } from '../types';
 
 describe('mdocCheckPermissions', () => {
   const mockContainsRequestedMdocClaims = vi.fn();
@@ -16,7 +17,7 @@ describe('mdocCheckPermissions', () => {
   it('should throw BadRequestError when issuableCredentials is null', async () => {
     await expect(
       mdocCheckPermissions({
-        issuableCredentials: null as unknown as Record<string, unknown>[],
+        issuableCredentials: null as unknown as Claims[],
         requestedCredential: {},
       })
     ).rejects.toThrow('No credential can be issued with the access token.');
@@ -25,7 +26,7 @@ describe('mdocCheckPermissions', () => {
   it('should throw BadRequestError when issuableCredentials is undefined', async () => {
     await expect(
       mdocCheckPermissions({
-        issuableCredentials: undefined as unknown as Record<string, unknown>[],
+        issuableCredentials: undefined as unknown as Claims[],
         requestedCredential: {},
       })
     ).rejects.toThrow('No credential can be issued with the access token.');
@@ -43,7 +44,7 @@ describe('mdocCheckPermissions', () => {
   it('should throw BadRequestError when issuableCredentials is not an array', async () => {
     await expect(
       mdocCheckPermissions({
-        issuableCredentials: {} as unknown as Record<string, unknown>[],
+        issuableCredentials: {} as unknown as Claims[],
         requestedCredential: {},
       })
     ).rejects.toThrow('No credential can be issued with the access token.');
@@ -59,7 +60,7 @@ describe('mdocCheckPermissions', () => {
           age: {},
         },
       },
-    } as Record<string, unknown>;
+    } as Claims;
 
     const requestedCredential = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
@@ -68,7 +69,7 @@ describe('mdocCheckPermissions', () => {
           age: {},
         },
       },
-    };
+    } as Claims;
 
     const result = await mdocCheckPermissions({
       issuableCredentials: [issuableCredential],
@@ -92,7 +93,7 @@ describe('mdocCheckPermissions', () => {
           age: {},
         },
       },
-    } as Record<string, unknown>;
+    } as Claims;
 
     const requestedCredential = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
@@ -101,7 +102,7 @@ describe('mdocCheckPermissions', () => {
           age: {},
         },
       },
-    };
+    } as Claims;
 
     await expect(
       mdocCheckPermissions({
@@ -124,7 +125,7 @@ describe('mdocCheckPermissions', () => {
           age: {},
         },
       },
-    } as Record<string, unknown>;
+    } as Claims;
 
     const requestedCredential = {
       [DOCTYPE]: 'org.iso.18013.5.1.mDL',
@@ -133,7 +134,7 @@ describe('mdocCheckPermissions', () => {
           name: {},
         },
       },
-    };
+    } as Claims;
 
     await expect(
       mdocCheckPermissions({

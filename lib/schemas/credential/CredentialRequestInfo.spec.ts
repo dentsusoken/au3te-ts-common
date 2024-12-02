@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { credentialRequestInfoSchema } from './CredentialRequestInfo';
+import { CREDENTIAL_FORMAT_VC_SD_JWT } from './CredentialFormat';
 
 describe('CredentialRequestInfo Schema', () => {
   // Test valid cases
   it('should validate a complete valid request info', () => {
     const validInfo = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       bindingKey: '{"kty":"RSA","n":"abc...","e":"AQAB"}',
       bindingKeys: ['{"kty":"RSA","n":"abc...","e":"AQAB"}'],
       details: '{"credential_definition":{"type":["VerifiableCredential"]}}',
@@ -18,7 +19,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should validate with only required fields', () => {
     const minimalInfo = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
     };
 
     expect(() => credentialRequestInfoSchema.parse(minimalInfo)).not.toThrow();
@@ -27,7 +28,7 @@ describe('CredentialRequestInfo Schema', () => {
   // Test required fields
   it('should require identifier', () => {
     const invalidInfo = {
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
     };
 
     expect(() => credentialRequestInfoSchema.parse(invalidInfo)).toThrow();
@@ -45,7 +46,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should accept null for optional fields', () => {
     const infoWithNulls = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       bindingKey: null,
       bindingKeys: null,
       details: null,
@@ -59,7 +60,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should accept undefined for optional fields', () => {
     const infoWithUndefined = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       bindingKey: undefined,
       bindingKeys: undefined,
       details: undefined,
@@ -74,7 +75,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should validate bindingKeys as array of strings', () => {
     const validInfo = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       bindingKeys: ['{"key1":"value1"}', '{"key2":"value2"}'],
     };
 
@@ -84,7 +85,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should reject invalid bindingKeys type', () => {
     const invalidInfo = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       bindingKeys: 'not_an_array',
     };
 
@@ -95,7 +96,7 @@ describe('CredentialRequestInfo Schema', () => {
   it('should accept complex details as JSON string', () => {
     const validInfo = {
       identifier: 'base64url_encoded_string',
-      format: 'jwt_vc_json',
+      format: CREDENTIAL_FORMAT_VC_SD_JWT,
       details: JSON.stringify({
         credential_definition: {
           type: ['VerifiableCredential', 'UniversityDegreeCredential'],

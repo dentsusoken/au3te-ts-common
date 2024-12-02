@@ -14,5 +14,7 @@
  * limitations under the License.
  */
 
+export * from './CredentialFormat';
 export * from './CredentialIssuanceOrder';
 export * from './CredentialRequestInfo';
+export * from './CredentialType';

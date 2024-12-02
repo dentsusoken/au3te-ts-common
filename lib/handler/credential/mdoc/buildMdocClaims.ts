@@ -16,7 +16,7 @@
 
 import { BuildMdocSubClaims } from './buildMdocSubClaims';
 import type { Claims } from '../types';
-import { BadRequestError } from '../../..';
+import { BadRequestError } from '../../BadRequestError';
 
 /**
  * Parameters for building mDoc claims.

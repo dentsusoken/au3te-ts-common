@@ -16,7 +16,7 @@
 
 import { MSO_MDOC } from './constants';
 import { ToOrder } from './toOrder';
-import { CredentialFormat } from './types';
+import { CredentialFormat } from '../../schemas/credential/CredentialFormat';
 
 /**
  * Function type that returns a ToOrder function based on the credential format.

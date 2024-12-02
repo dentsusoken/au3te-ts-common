@@ -15,6 +15,7 @@
  */
 
 import { z } from 'zod';
+import { credentialFormatSchema } from './CredentialFormat';
 
 /**
  * Zod schema for information about a credential request.
@@ -60,7 +61,7 @@ import { z } from 'zod';
  */
 export const credentialRequestInfoSchema = z.object({
   identifier: z.string(),
-  format: z.string(),
+  format: credentialFormatSchema,
   bindingKey: z.string().nullish(),
   bindingKeys: z.array(z.string()).nullish(),
   details: z.string().nullish(),

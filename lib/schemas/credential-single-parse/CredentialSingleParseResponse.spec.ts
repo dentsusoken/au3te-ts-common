@@ -1,14 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { credentialSingleParseResponseSchema } from './CredentialSingleParseResponse';
+import {
+  CredentialSingleParseResponse,
+  credentialSingleParseResponseSchema,
+} from './CredentialSingleParseResponse';
 
 describe('CredentialSingleParseResponse Schema', () => {
   // Test successful response
   it('should validate a successful response with complete info', () => {
-    const validResponse = {
+    const validResponse: CredentialSingleParseResponse = {
       action: 'OK',
       info: {
         identifier: 'base64url_encoded_string',
-        format: 'jwt_vc_json',
+        format: 'vc+sd-jwt',
         bindingKey: '{"kty":"RSA","n":"abc...","e":"AQAB"}',
         bindingKeys: ['{"kty":"RSA","n":"abc...","e":"AQAB"}'],
         details: '{"credential_definition":{"type":["VerifiableCredential"]}}',
@@ -21,11 +24,11 @@ describe('CredentialSingleParseResponse Schema', () => {
   });
 
   it('should validate a successful response with minimal info', () => {
-    const validResponse = {
+    const validResponse: CredentialSingleParseResponse = {
       action: 'OK',
       info: {
         identifier: 'base64url_encoded_string',
-        format: 'jwt_vc_json',
+        format: 'vc+sd-jwt',
       },
     };
 
@@ -72,11 +75,11 @@ describe('CredentialSingleParseResponse Schema', () => {
 
   // Test optional fields
   it('should accept response without responseContent for OK action', () => {
-    const validResponse = {
+    const validResponse: CredentialSingleParseResponse = {
       action: 'OK',
       info: {
         identifier: 'base64url_encoded_string',
-        format: 'jwt_vc_json',
+        format: 'vc+sd-jwt',
       },
     };
 
@@ -86,7 +89,7 @@ describe('CredentialSingleParseResponse Schema', () => {
   });
 
   it('should accept null values for optional fields', () => {
-    const response = {
+    const response: CredentialSingleParseResponse = {
       action: 'OK',
       responseContent: null,
       info: null,

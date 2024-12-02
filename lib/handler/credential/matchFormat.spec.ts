@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { matchFormat } from './matchFormat';
 import { FORMAT } from './constants';
-import type { CredentialFormat, MdocCredential } from './types';
+import type { Claims } from './types';
+import { CredentialFormat } from '../../schemas/credential/CredentialFormat';
 
 describe('matchFormat', () => {
   // Basic test cases
@@ -31,7 +32,7 @@ describe('matchFormat', () => {
 
   // Edge cases
   it('should return false when credential has no format', () => {
-    const issuableCredential: MdocCredential = {};
+    const issuableCredential: Claims = {};
     const format: CredentialFormat = 'mso_mdoc';
 
     expect(matchFormat(issuableCredential, format)).toBe(false);

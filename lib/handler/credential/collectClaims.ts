@@ -16,7 +16,8 @@
  */
 
 import { User } from '../../schemas/common/User';
-import { CredentialType } from './types';
+import { CredentialType } from '../../schemas/credential/CredentialType';
+import type { Claims } from './types';
 
 /**
  * Parameters for collecting claims to be included in a verifiable credential.
@@ -27,7 +28,7 @@ type CollectClaimsParams = {
   /** The user for whom the credential is being issued */
   user: User;
   /** The credential request containing the claims to collect */
-  requestedCredential: Record<string, unknown>;
+  requestedCredential: Claims;
 };
 
 /**
@@ -42,4 +43,4 @@ export type CollectClaims = ({
   credentialType,
   user,
   requestedCredential,
-}: CollectClaimsParams) => Promise<Record<string, unknown>>;
+}: CollectClaimsParams) => Promise<Claims>;

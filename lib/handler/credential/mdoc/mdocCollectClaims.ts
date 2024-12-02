@@ -60,7 +60,7 @@ export const createMdocCollectClaims =
       );
     }
 
-    const doctype = requestedCredential[DOCTYPE] as string | undefined;
+    const doctype = requestedCredential[DOCTYPE] as string;
 
     if (!doctype) {
       throw new BadRequestError(
@@ -81,7 +81,7 @@ export const createMdocCollectClaims =
       );
     }
 
-    const requestedClaims = requestedCredential[CLAIMS] as Claims | undefined;
+    const requestedClaims = requestedCredential[CLAIMS] as Claims;
     const claims = await buildMdocClaims({
       userClaims,
       requestedClaims,

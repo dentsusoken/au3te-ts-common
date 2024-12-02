@@ -73,7 +73,7 @@ describe('Mdoc Claims Collector', () => {
     });
 
     it('should throw error when doctype is missing', async () => {
-      const requestedCredential: Record<string, unknown> = {
+      const requestedCredential: Claims = {
         [CLAIMS]: {
           'org.iso.18013.5.1': {
             age: {},
@@ -93,7 +93,7 @@ describe('Mdoc Claims Collector', () => {
     });
 
     it('should throw error when no claims are found', async () => {
-      const requestedCredential: Record<string, unknown> = {
+      const requestedCredential: Claims = {
         [DOCTYPE]: 'org.iso.18013.5.1.mDL',
         [CLAIMS]: {
           'org.iso.18013.5.1': {
@@ -122,7 +122,7 @@ describe('Mdoc Claims Collector', () => {
       await expect(
         collectClaims({
           user: mockUser,
-          requestedCredential: undefined as unknown as Record<string, unknown>,
+          requestedCredential: undefined as unknown as Claims,
         })
       ).rejects.toThrow(BadRequestError);
 
@@ -138,7 +138,7 @@ describe('Mdoc Claims Collector', () => {
         },
       };
 
-      const requestedCredential: Record<string, unknown> = {
+      const requestedCredential: Claims = {
         [DOCTYPE]: 'org.iso.18013.5.1.mDL',
         [CLAIMS]: {},
       };

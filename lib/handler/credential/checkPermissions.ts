@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import type { CredentialType } from './types';
+import { CredentialType } from '../../schemas/credential/CredentialType';
+import type { Claims } from './types';
 
 /**
  * Parameters for checking credential issuance permissions.
@@ -27,9 +28,9 @@ type CheckPermissionsParams = {
   /** The type of credential issuance ('single', 'batch', or 'deferred') */
   credentialType?: CredentialType;
   /** Array of credential types that the user is allowed to receive */
-  issuableCredentials: Array<Record<string, unknown>>;
+  issuableCredentials: Array<Claims>;
   /** The credential request containing the claims to verify */
-  requestedCredential: Record<string, unknown>;
+  requestedCredential: Claims;
 };
 
 /**
@@ -47,4 +48,4 @@ export type CheckPermissions = ({
   credentialType,
   issuableCredentials,
   requestedCredential,
-}: CheckPermissionsParams) => Promise<Record<string, unknown>>;
+}: CheckPermissionsParams) => Promise<Claims>;

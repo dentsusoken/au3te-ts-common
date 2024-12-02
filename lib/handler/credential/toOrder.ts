@@ -16,7 +16,7 @@
 
 import { CredentialRequestInfo } from '../../schemas/credential/CredentialRequestInfo';
 import { CredentialIssuanceOrder } from '../../schemas/credential/CredentialIssuanceOrder';
-import { CredentialType } from './types';
+import { CredentialType } from '../../schemas/credential/CredentialType';
 import { IntrospectionResponse } from '../../schemas/introspection/IntrospectionResponse';
 import { GetBySubject } from '../user/getBySubject';
 import { CheckPermissions } from './checkPermissions';
