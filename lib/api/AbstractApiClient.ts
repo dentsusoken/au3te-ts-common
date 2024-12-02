@@ -129,6 +129,14 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract credentialSingleParsePath: string;
 
   /**
+   * The path for credential single issue requests.
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract credentialSingleIssuePath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - Type of the request object.
    * @template RES - Type of the response object.
