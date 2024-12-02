@@ -29,6 +29,8 @@ export default defineConfig({
         'schemas/token-fail': './lib/schemas/token-fail/index.ts',
         'schemas/token-create': './lib/schemas/token-create/index.ts',
         'schemas/credential': './lib/schemas/credential/index.ts',
+        'schemas/credential-single-issue':
+          './lib/schemas/credential-single-issue/index.ts',
         'schemas/credential-single-parse':
           './lib/schemas/credential-single-parse/index.ts',
         'schemas/introspection': './lib/schemas/introspection/index.ts',
