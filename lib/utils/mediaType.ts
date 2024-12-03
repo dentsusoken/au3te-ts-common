@@ -68,6 +68,9 @@ export const MediaType = {
 
   /** Media type for JavaScript code */
   APPLICATION_JAVASCRIPT: 'application/javascript',
+
+  /** Media type for JSON Web Token */
+  APPLICATION_JWT: 'application/jwt',
 } as const;
 
 /**
