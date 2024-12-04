@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer-hono.g-trustedweb.workers.dev/api/token
+https://issuer.g-trustedweb.workers.dev/api/token
 
 ## リクエスト
 
@@ -52,7 +52,7 @@ https://issuer-hono.g-trustedweb.workers.dev/api/token
 ## サンプルリクエスト
 
 ```sh
-curl -v  https://issuer-hono.g-trustedweb.workers.dev/api/token \
+curl -v  https://issuer.g-trustedweb.workers.dev/api/token \
      -d client_id={クライアントID} \
      -d grant_type=authorization_code \
      -d code=kQiKmNUFyWfOSVfxpqnd2Ny1HJYx6ExytNjCJLTtrDs \

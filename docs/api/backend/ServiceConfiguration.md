@@ -69,9 +69,9 @@ curl -v 'https://nextdev-api.authlete.net/api/{サービスID}/service/configura
 
 ```json
 {
-    "issuer": "https://issuer-hono.g-trustedweb.workers.dev",
-    "authorization_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/authorization",
-    "token_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/token",
+    "issuer": "https://issuer.g-trustedweb.workers.dev",
+    "authorization_endpoint": "https://issuer.g-trustedweb.workers.dev/api/authorization",
+    "token_endpoint": "https://issuer.g-trustedweb.workers.dev/api/token",
     "scopes_supported": [
         "history.read",
     "timeline.read"

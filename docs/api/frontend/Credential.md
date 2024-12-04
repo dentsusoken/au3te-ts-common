@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer-hono.g-trustedweb.workers.dev/api/credential
+https://issuer.g-trustedweb.workers.dev/api/credential
 
 ## リクエスト
 
@@ -46,7 +46,7 @@ https://issuer-hono.g-trustedweb.workers.dev/api/credential
 ## サンプルリクエスト
 
 ```sh
-curl -v https://issuer-hono.g-trustedweb.workers.dev/api/credential \
+curl -v https://issuer.g-trustedweb.workers.dev/api/credential \
      -H "Authorization: Bearer {アクセストークン}" \
      -H "Content-Type: application/json" \
      --data '{

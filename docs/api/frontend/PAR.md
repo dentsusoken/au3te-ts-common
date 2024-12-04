@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer-hono.g-trustedweb.workers.dev/api/par
+https://issuer.g-trustedweb.workers.dev/api/par
 
 ## リクエスト
 
@@ -48,7 +48,7 @@ https://issuer-hono.g-trustedweb.workers.dev/api/par
 ## サンプルリクエスト
 
 ```sh
-curl -v https://issuer-hono.g-trustedweb.workers.dev/api/par \
+curl -v https://issuer.g-trustedweb.workers.dev/api/par \
      -H "DPoP: {DPOP_PROOF_JWT} \
      -d client_id={クライアントID} \
      -d response_type=code \
