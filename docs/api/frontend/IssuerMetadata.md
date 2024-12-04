@@ -6,7 +6,7 @@ Issuer の設定情報を取得するためのエンドポイント。
 
 ## URL
 
-https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
+https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
 
 ## リクエスト
 
@@ -47,15 +47,15 @@ https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
 ## サンプルリクエスト
 
 ```sh
-curl -v https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
+curl -v https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-credential-issuer
 ```
 
 ## サンプルレスポンス
 
 ```json
 {
-  "credential_issuer": "https://issuer.g-trustedweb.workers.dev",
-  "credential_endpoint": "https://issuer.g-trustedweb.workers.dev/api/credential",
+  "credential_issuer": "https://issuer-hono.g-trustedweb.workers.dev",
+  "credential_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/credential",
   "credentials_supported": [
     {
       "format": "mso_mdoc",

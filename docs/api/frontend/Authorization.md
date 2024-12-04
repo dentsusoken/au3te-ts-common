@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer.g-trustedweb.workers.dev/api/authorization
+https://issuer-hono.g-trustedweb.workers.dev/api/authorization
 
 ## リクエスト
 
@@ -49,7 +49,7 @@ https://issuer.g-trustedweb.workers.dev/api/authorization
 ### パターン 1
 
 ```sh
-curl -v "https://issuer.g-trustedweb.workers.dev/api/authorization?\
+curl -v "https://issuer-hono.g-trustedweb.workers.dev/api/authorization?\
 client_id={クライアントID}&\
 response_type=code&\
 scope=org.iso.18013.5.1.mDL+openid&\
@@ -62,7 +62,7 @@ code_challenge_method=S256"
 ### パターン 2
 
 ```sh
-curl -v "https://issuer.g-trustedweb.workers.dev/api/authorization?\
+curl -v "https://issuer-hono.g-trustedweb.workers.dev/api/authorization?\
 client_id={クライアントID}&\
 request_uri=urn:ietf:params:oauth:request_uri:Sv6EwBP0zBYwImCGJS3ewOt-jM43xk2C3SFLINSEctQ"
 ```

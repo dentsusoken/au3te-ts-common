@@ -68,7 +68,6 @@ export class GetHttpCall implements HttpCall {
     Object.entries(parameters).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
-    console.log('this.auth :>> ', this.auth);
     const requestInit = {
       method: 'GET',
       headers: {

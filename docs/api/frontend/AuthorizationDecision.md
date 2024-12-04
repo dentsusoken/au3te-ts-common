@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer.g-trustedweb.workers.dev/api/authorization/decision
+https://issuer-hono.g-trustedweb.workers.dev/api/authorization/decision
 
 ## リクエスト
 
@@ -40,7 +40,7 @@ https://issuer.g-trustedweb.workers.dev/api/authorization/decision
 ## サンプルリクエスト
 
 ```sh
-curl -v https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
+curl -v https://issuer-hono.g-trustedweb.workers.dev/api/authorization/decision \
      -H "Cookie: _sessionId=c52ca74b-24a8-40cb-55de-e61a717ee3c9" \
      -d loginId=inga \
      -d password=inga \
@@ -50,5 +50,5 @@ curl -v https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
 ## サンプルレスポンス
 
 ```text
-eudi-openid4ci://authorize/?state=7342EFBD-3D9F-4895-8445-18F365B8C66C&code=Akyl_7V8J-Q35VlSX4b0prouiPr47S7eVkdc-VzbiqE&iss=https%3A%2F%2Fissuer.g-trustedweb.workers.dev
+eudi-openid4ci://authorize/?state=7342EFBD-3D9F-4895-8445-18F365B8C66C&code=Akyl_7V8J-Q35VlSX4b0prouiPr47S7eVkdc-VzbiqE&iss=https%3A%2F%2Fissuer-hono.g-trustedweb.workers.dev
 ```

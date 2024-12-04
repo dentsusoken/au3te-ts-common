@@ -6,7 +6,7 @@
 
 ## URL
 
-https://issuer.g-trustedweb.workers.dev/.well-known/openid-configuration
+https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-configuration
 
 ## リクエスト
 
@@ -51,22 +51,22 @@ https://issuer.g-trustedweb.workers.dev/.well-known/openid-configuration
 ## サンプルリクエスト
 
 ```sh
-curl -v https://issuer.g-trustedweb.workers.dev/.well-known/openid-configuration
+curl -v https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-configuration
 ```
 
 ## サンプルレスポンス
 
 ```json
 {
-  "issuer": "https://issuer.g-trustedweb.workers.dev",
-  "authorization_endpoint": "https://issuer.g-trustedweb.workers.dev/api/authorization",
-  "token_endpoint": "https://issuer.g-trustedweb.workers.dev/api/token",
-  "jwks_uri": "https://issuer.g-trustedweb.workers.dev/api/jwks",
+  "issuer": "https://issuer-hono.g-trustedweb.workers.dev",
+  "authorization_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/authorization",
+  "token_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/token",
+  "jwks_uri": "https://issuer-hono.g-trustedweb.workers.dev/api/jwks",
   "scopes_supported": ["openid", "org.iso.18013.5.1.mDL"],
   "response_types_supported": ["code"],
   "grant_types_supported": ["authorization_code"],
   "subject_types_supported": ["public"],
   "id_token_signing_alg_values_supported": ["RS256"],
-  "pushed_authorization_request_endpoint": "https://issuer.g-trustedweb.workers.dev/api/par"
+  "pushed_authorization_request_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/par"
 }
 ```

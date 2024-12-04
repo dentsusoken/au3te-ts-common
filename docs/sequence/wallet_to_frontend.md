@@ -38,7 +38,7 @@ sequenceDiagram
 
 Wallet は Authorization Server の Well-known Endpoint にリクエストを送信し、OpenID Configuration を取得します。
 
-URL: `https://issuer.g-trustedweb.workers.dev/.well-known/openid-configuration`  
+URL: `https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-configuration`  
 Method: GET
 
 ### 1.2. OpenID Configuration
@@ -47,16 +47,16 @@ Authorization Server は、OpenID Configuration を返します。詳細なパ�
 
 ```json
 {
-  "issuer": "https://issuer.g-trustedweb.workers.dev",
-  "authorization_endpoint": "https://issuer.g-trustedweb.workers.dev/api/authorization",
-  "token_endpoint": "https://issuer.g-trustedweb.workers.dev/api/token",
-  "jwks_uri": "https://issuer.g-trustedweb.workers.dev/api/jwks",
+  "issuer": "https://issuer-hono.g-trustedweb.workers.dev",
+  "authorization_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/authorization",
+  "token_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/token",
+  "jwks_uri": "https://issuer-hono.g-trustedweb.workers.dev/api/jwks",
   "scopes_supported": ["openid", "org.iso.18013.5.1.mDL"],
   "response_types_supported": ["code"],
   "grant_types_supported": ["authorization_code"],
   "subject_types_supported": ["public"],
   "id_token_signing_alg_values_supported": ["RS256"],
-  "pushed_authorization_request_endpoint": "https://issuer.g-trustedweb.workers.dev/api/par"
+  "pushed_authorization_request_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/par"
 }
 ```
 
@@ -64,7 +64,7 @@ Authorization Server は、OpenID Configuration を返します。詳細なパ�
 
 Wallet は Credential Issuer の Well-known Endpoint にリクエストを送信しメタデータを取得します。
 
-URL: `https://issuer.g-trustedweb.workers.dev/.well-known/openid-credential-issuer`  
+URL: `https://issuer-hono.g-trustedweb.workers.dev/.well-known/openid-credential-issuer`  
 Method: GET
 
 ### 1.4. Credential Issuer Metadata
@@ -73,8 +73,8 @@ Credential Issuer は、メタデータを返します。詳細なパラメー�
 
 ```json
 {
-  "credential_issuer": "https://issuer.g-trustedweb.workers.dev",
-  "credential_endpoint": "https://issuer.g-trustedweb.workers.dev/api/credential",
+  "credential_issuer": "https://issuer-hono.g-trustedweb.workers.dev",
+  "credential_endpoint": "https://issuer-hono.g-trustedweb.workers.dev/api/credential",
   "credentials_supported": [
     {
       "format": "mso_mdoc",
@@ -100,7 +100,7 @@ Credential Issuer は、メタデータを返します。詳細なパラメー�
 
 Wallet は、Authorization Server の認可エンドポイントに認可リクエストを送信します。
 
-URL: `https://issuer.g-trustedweb.workers.dev/api/authorization`  
+URL: `https://issuer-hono.g-trustedweb.workers.dev/api/authorization`  
 Method: GET
 
 Parameters:
@@ -155,7 +155,7 @@ Parameters:
 
 Wallet は、受け取った認可コードを使用してトークンエンドポイントにアクセストークンをリクエストします。
 
-URL: `https://issuer.g-trustedweb.workers.dev/api/token`  
+URL: `https://issuer-hono.g-trustedweb.workers.dev/api/token`  
 Method: POST
 
 Parameters:
@@ -183,7 +183,7 @@ Parameters:
 
 Wallet は、アクセストークンを使用して Credential Issuer にクレデンシャルをリクエストします。
 
-URL: `https://issuer.g-trustedweb.workers.dev/api/credential`  
+URL: `https://issuer-hono.g-trustedweb.workers.dev/api/credential`  
 Method: POST
 
 Headers:
