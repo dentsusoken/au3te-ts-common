@@ -122,10 +122,10 @@ Authorization Server は、ユーザーに同意画面を表示します。同�
 - クライアント（Wallet）の情報
 - 同意または拒否のボタン
 
-レスポンスには認可フローを通じて使用される`_sessionId`が含まれます：
+レスポンスには認可フローを通じて使用される`__session`が含まれます：
 
 Headers:
-- Set-Cookie: _sessionId={セッションID}
+- Set-Cookie: __session={セッションID}
 
 ### 2.3. User Consent
 
@@ -135,7 +135,7 @@ Headers:
 - Deny (拒否): クレデンシャルの発行を拒否
 
 Headers:
-- Cookie: _sessionId={セッションID}
+- Cookie: __session={セッションID}
 
 Parameters:
 - loginId={login_id}

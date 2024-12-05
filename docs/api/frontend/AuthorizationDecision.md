@@ -16,9 +16,9 @@ https://issuer.g-trustedweb.workers.dev/api/authorization/decision
 
 ### ヘッダー
 
-| ヘッダー | 必須 | 説明                                                                                                |
-| -------- | ---- | --------------------------------------------------------------------------------------------------- |
-| Cookie   | Yes  | 認可エンドポイントへのリクエスト時に払い出されるセッション ID<br>形式： `_sessionId={セッションID}` |
+| ヘッダー | 必須 | 説明                                                                                               |
+| -------- | ---- | -------------------------------------------------------------------------------------------------- |
+| Cookie   | Yes  | 認可エンドポイントへのリクエスト時に払い出されるセッション ID<br>形式： `__session={セッションID}` |
 
 ### パラメータ
 
@@ -41,7 +41,7 @@ https://issuer.g-trustedweb.workers.dev/api/authorization/decision
 
 ```sh
 curl -v https://issuer.g-trustedweb.workers.dev/api/authorization/decision \
-     -H "Cookie: _sessionId=c52ca74b-24a8-40cb-55de-e61a717ee3c9" \
+     -H "Cookie: __session=c52ca74b-24a8-40cb-55de-e61a717ee3c9" \
      -d loginId=inga \
      -d password=inga \
      -d authorized=Authorize
