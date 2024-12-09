@@ -7,7 +7,7 @@ import {
 
 describe('serviceConfigurationResponseSchema', () => {
   it('should validate a valid service configuration request response', () => {
-    const validResponse: ServiceConfigurationResponse = {
+    const validResponse: ServiceConfigurationResponse = `{
       issuer: 'https://example.com',
       authorization_endpoint: 'https://example.com/api/authorization',
       prompt_values_supported: [
@@ -392,7 +392,7 @@ describe('serviceConfigurationResponseSchema', () => {
       organization_name: 'Dentsusoken',
       request_authentication_signing_alg_values_supported: ['ES256'],
       'pre-authorized_grant_anonymous_access_supported': false,
-    };
+    }`;
 
     const result = serviceConfigurationResponseSchema.safeParse(validResponse);
     expect(result.success).toBe(true);
@@ -400,7 +400,10 @@ describe('serviceConfigurationResponseSchema', () => {
   });
 
   it('should invalidate a response', () => {
-    const invalidResponse = '';
+    const invalidResponse = {
+      issuer: 'https://example.com',
+      authorization_endpoint: 'https://example.com/api/authorization',
+    };
 
     const result =
       serviceConfigurationResponseSchema.safeParse(invalidResponse);

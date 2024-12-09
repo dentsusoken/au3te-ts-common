@@ -96,4 +96,14 @@ describe('ApiCall', () => {
     const result = await apiCall.call();
     expect(result).toEqual({});
   });
+
+  it('should handle empty response bodies with callGet', async () => {
+    const data = `{ id: 1, name: 'John' }`;
+    const response = new Response(data, { status: 200 });
+    call.mockResolvedValueOnce(response);
+
+    const apiCall = new ApiCall(httpCall, z.string());
+    const result = await apiCall.callGet();
+    expect(result).toEqual(data);
+  });
 });

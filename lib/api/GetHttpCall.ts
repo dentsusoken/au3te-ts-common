@@ -66,7 +66,7 @@ export class GetHttpCall implements HttpCall {
   ) {
     const url = new URL(`${this.baseUrl}${this.path}`);
     Object.entries(parameters).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
+      value && url.searchParams.append(key, value);
     });
     const requestInit = {
       method: 'GET',

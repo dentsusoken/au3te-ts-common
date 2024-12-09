@@ -173,6 +173,6 @@ export abstract class AbstractApiClient implements ApiClient {
     const httpCall = new GetHttpCall(this.baseUrl, path, this.auth, request);
     const apiCall = new ApiCall(httpCall, schema);
 
-    return apiCall.call();
+    return apiCall.callGet();
   }
 }

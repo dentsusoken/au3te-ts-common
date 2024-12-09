@@ -46,4 +46,20 @@ export class ApiCall<T> {
 
     throw responseToError(response);
   }
+
+  async callGet(): Promise<T> {
+    const response = await this.httpCall.call();
+
+    if (response.ok) {
+      if (response.status === 204) {
+        return this.schema.parse('{}');
+      }
+
+      const text = await response.text();
+
+      return this.schema.parse(text);
+    }
+
+    throw responseToError(response);
+  }
 }

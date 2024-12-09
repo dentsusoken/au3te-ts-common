@@ -35,15 +35,15 @@ import { z } from 'zod';
  *
  * @example
  * // Valid schema usage
- * const validRequest = {
+ * const validRequest = `{
  *  pretty: true,
  *  patch: '[{"op":"replace","path":"/subject_types_supported","value":["public"]}]'
- * };
+ * }`;
  * serviceConfigurationResponseSchema.parse(validRequest);
  *
  * @since 3.43
  */
-export const serviceConfigurationResponseSchema = z.record(z.string(), z.any());
+export const serviceConfigurationResponseSchema = z.string();
 
 /**
  * Represents the structure of the response from Authlete's /service/configuration API.
