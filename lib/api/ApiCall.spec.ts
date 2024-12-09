@@ -106,4 +106,56 @@ describe('ApiCall', () => {
     const result = await apiCall.callGet();
     expect(result).toEqual(data);
   });
+
+  it('should throw ResponseError on non-ok status with callGet', async () => {
+    const response = new Response(undefined, {
+      status: 404,
+      statusText: 'Not Found',
+    });
+    call.mockResolvedValueOnce(response);
+
+    try {
+      const apiCall = new ApiCall(httpCall, z.string());
+      await apiCall.callGet();
+      expect.fail('error');
+    } catch (e) {
+      if (e instanceof Error) {
+        expect(e.message).toBe('Invalid response with status 404 Not Found');
+      } else {
+        expect.fail('Expected error to be an instance of Error');
+      }
+    }
+
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+
+  it('should propagate error on httpCall.call failure with callGet', async () => {
+    const networkError = new Error('Network error');
+    call.mockRejectedValueOnce(networkError);
+
+    const apiCall = new ApiCall(httpCall, z.string());
+
+    try {
+      await apiCall.callGet();
+      expect.fail('Expected ApiCall to throw an error, but it did not');
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error).toBe(networkError);
+        expect(error.message).toBe('Network error');
+      } else {
+        expect.fail('Expected error to be an instance of Error');
+      }
+    }
+
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle empty response bodies with callGet', async () => {
+    const response = new Response(undefined, { status: 204 });
+    call.mockResolvedValueOnce(response);
+
+    const apiCall = new ApiCall(httpCall, z.string());
+    const result = await apiCall.callGet();
+    expect(result).toEqual('{}');
+  });
 });
