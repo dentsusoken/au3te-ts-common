@@ -137,6 +137,22 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract credentialSingleIssuePath: string;
 
   /**
+   * The path for service JWKS requests.
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract serviceJwksPath: string;
+
+  /**
+   * The path for credential issuer JWKS requests.
+   *
+   * @abstract
+   * @type {string}
+   */
+  abstract credentialIssuerJwksPath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - Type of the request object.
    * @template RES - Type of the response object.

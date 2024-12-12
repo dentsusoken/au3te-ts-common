@@ -38,6 +38,9 @@ export default defineConfig({
           './lib/schemas/service-configuration/index.ts',
         'schemas/credential-metadata':
           './lib/schemas/credential-metadata/index.ts',
+        'schemas/service-jwks': './lib/schemas/service-jwks/index.ts',
+        'schemas/credential-issuer-jwks':
+          './lib/schemas/credential-issuer-jwks/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',

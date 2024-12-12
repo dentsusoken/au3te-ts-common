@@ -113,6 +113,18 @@ export interface ApiClient {
   readonly credentialSingleIssuePath: string;
 
   /**
+   * The path for service JWKS requests.
+   * @readonly
+   */
+  readonly serviceJwksPath: string;
+
+  /**
+   * The path for credential issuer JWKS requests.
+   * @readonly
+   */
+  readonly credentialIssuerJwksPath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - The type of the request object.
    * @template RES - The type of the response object.

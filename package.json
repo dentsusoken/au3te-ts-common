@@ -130,6 +130,16 @@
       "types": "./dist/schemas/credential-metadata/index.d.ts",
       "import": "./dist/schemas/credential-metadata/index.js",
       "require": "./dist/schemas/credential-metadata/index.cjs"
+    },
+    "./schemas.service-jwks": {
+      "types": "./dist/schemas/service-jwks/index.d.ts",
+      "import": "./dist/schemas/service-jwks/index.js",
+      "require": "./dist/schemas/service-jwks/index.cjs"
+    },
+    "./schemas.credential-issuer-jwks": {
+      "types": "./dist/schemas/credential-issuer-jwks/index.d.ts",
+      "import": "./dist/schemas/credential-issuer-jwks/index.js",
+      "require": "./dist/schemas/credential-issuer-jwks/index.cjs"
     }
   },
   "scripts": {

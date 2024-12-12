@@ -19,12 +19,9 @@
  *
  * @typedef {Object} ServiceConfigurationResponse
  *
- * Note: The `patch` request parameter is supported since Authlete 2.2.36.
  *
  * @since 3.43
- *
  * @see [OpenID Connect Discovery 1.0](https://openid.net/specs/openid-connect-discovery-1_0.html)
- * @see [RFC 6902 JavaScript Object Notation (JSON) Patch](https://www.rfc-editor.org/rfc/rfc6902)
  *
  */
 
@@ -35,11 +32,14 @@ import { z } from 'zod';
  *
  * @example
  * // Valid schema usage
- * const validRequest = `{
- *  pretty: true,
- *  patch: '[{"op":"replace","path":"/subject_types_supported","value":["public"]}]'
+ * const validResponse = `{
+ *  "issuer": "https://example.com",
+ *  "authorization_endpoint": "https://example.com/api/authorization",
+ *  "token_endpoint": "https://example.com/api/token",
+ *  "userinfo_endpoint": "https://example.com/api/userinfo",
+ *  "jwks_uri": "https://example.com/api/jwks"
  * }`;
- * serviceConfigurationResponseSchema.parse(validRequest);
+ * serviceConfigurationResponseSchema.parse(validResponse);
  *
  * @since 3.43
  */
@@ -53,10 +53,13 @@ export const serviceConfigurationResponseSchema = z.string();
  *
  * @example
  * // Usage of ServiceConfigurationResponse type
- * const request: ServiceConfigurationResponse = {
- *  pretty: true,
- *  patch: '[{"op":"replace","path":"/subject_types_supported","value":["public"]}]'
- * };
+ * const response: ServiceConfigurationResponse = `{
+ *  "issuer": "https://example.com",
+ *  "authorization_endpoint": "https://example.com/api/authorization",
+ *  "token_endpoint": "https://example.com/api/token",
+ *  "userinfo_endpoint": "https://example.com/api/userinfo",
+ *  "jwks_uri": "https://example.com/api/jwks"
+ * }`;
  *
  * @since 3.43
  */
