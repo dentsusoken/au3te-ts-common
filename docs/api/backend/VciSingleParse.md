@@ -10,7 +10,7 @@ Verifiable Credential またはトランザクション ID を発行し、クレ
 
 ## URL
 
-https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
+https://nextdev-api.authlete.net/api/{サービスID}/vci/single/parse
 
 ## リクエスト
 

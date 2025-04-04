@@ -10,7 +10,7 @@ Issuer の設定情報を取得するためのエンドポイント。
 
 ## URL
 
-https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
+https://nextdev-api.authlete.net/api/{サービスID}/vci/metadata
 
 ## リクエスト
 

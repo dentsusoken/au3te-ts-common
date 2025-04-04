@@ -10,7 +10,7 @@
 
 ## URL
 
-https://nextdev-api.authlete.net/api/{サービスID}/auth/introspection
+https://nextdev-api.authlete.net/api/{サービスID}/vci/single/issue
 
 ## リクエスト
 
