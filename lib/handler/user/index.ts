@@ -22,3 +22,4 @@ export * from './mockGetBySubject';
 export * from './mockGetMdocClaimsBySubjectAndDoctype';
 export * from './UserHandlerConfiguration';
 export * from './UserHandlerConfigurationImpl';
+export * from './types';
