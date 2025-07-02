@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseDpopToken } from './dpopToken';
+import { parseDpopToken } from '../dpopToken';
 
 describe('parseDpopToken', () => {
   it('should return undefined for undefined input', () => {

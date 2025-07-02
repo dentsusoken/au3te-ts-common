@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { containsAllProperties } from './containsAllProperties';
+import { containsAllProperties } from '../containsAllProperties';
 
 describe('containsAllProperties', () => {
   // Basic test cases

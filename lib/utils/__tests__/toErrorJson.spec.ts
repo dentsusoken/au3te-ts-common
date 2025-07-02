@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toErrorJson } from './toErrorJson';
+import { toErrorJson } from '../toErrorJson';
 
 describe('toErrorJson', () => {
   // Test when errorMessage is a JSON object string

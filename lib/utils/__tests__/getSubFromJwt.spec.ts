@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getSubFromJwt } from './getSubFromJwt';
+import { getSubFromJwt } from '../getSubFromJwt';
 
 describe('getSubFromJwt', () => {
   it('should extract sub claim from a valid JWT', async () => {

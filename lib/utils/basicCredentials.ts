@@ -15,53 +15,80 @@
  * License.
  */
 
-import * as base64 from 'base64-ts';
+import { decodeBase64 } from 'u8a-utils';
 
+/**
+ * Regular expression pattern to match Basic Authentication header format.
+ * Matches "Basic" followed by optional spaces, then the base64-encoded credentials.
+ */
 const CHALLENGE_PATTERN = /^Basic *([^ ]+) *$/i;
 
+/**
+ * TextDecoder instance for converting binary data to UTF-8 string.
+ * Reused across function calls for better performance.
+ */
+const decoder = new TextDecoder();
+
+/**
+ * Represents parsed Basic Authentication credentials.
+ */
 type Credentials = {
+  /** The extracted user ID. Undefined if invalid or empty. */
   userId: string | undefined;
+  /** The extracted password. Undefined if invalid, empty, or not provided. */
   password: string | undefined;
 };
 
+/**
+ * Default empty credentials object.
+ * Used as a fallback when parsing fails or input is invalid.
+ */
 const emptyCredentials: Credentials = {
   userId: undefined,
   password: undefined,
 };
 
 /**
- * Parses the Basic Authentication credentials from the input string.
+ * Parses Basic Authentication credentials from an HTTP Authorization header.
  *
  * This function extracts the userId and password from a Basic Authentication
  * header value. It handles various edge cases, including empty inputs and
  * malformed credentials.
  *
- * @param {string | undefined} input - The input string containing the Basic Authentication credentials.
- *                                     It should be in the format "Basic base64EncodedCredentials".
+ * The function expects the input to be in the format "Basic base64EncodedCredentials"
+ * where the base64-encoded string contains "user:password" in UTF-8 encoding.
  *
- * @returns {Credentials} An object containing the parsed credentials.
- *                        Both userId and password can be either a string or undefined.
+ * @param input - The Authorization header value containing Basic Authentication credentials.
+ *                Should be in the format "Basic base64EncodedCredentials".
+ *                Can be undefined for invalid or missing headers.
  *
- * @property {string | undefined} userId - The extracted user ID.
- *                                         It's undefined if the input is invalid or the user ID is empty.
- * @property {string | undefined} password - The extracted password.
- *                                           It's undefined if the input is invalid, the password is empty,
- *                                           or no password is provided.
+ * @returns An object containing the parsed credentials.
+ *          Both userId and password can be undefined if parsing fails.
  *
  * @throws {Error} If there's an error decoding the Base64 credentials.
  *                 The error is caught, logged, and empty credentials are returned.
  *
  * @example
- * // Returns { userId: "user", password: "pass" }
+ * // Valid Basic Auth header
  * parseBasicCredentials("Basic dXNlcjpwYXNz");
+ * // Returns: { userId: "user", password: "pass" }
  *
  * @example
- * // Returns { userId: "user", password: undefined }
+ * // User without password
  * parseBasicCredentials("Basic dXNlcjo=");
+ * // Returns: { userId: "user", password: undefined }
  *
  * @example
- * // Returns { userId: undefined, password: undefined }
+ * // Invalid header format
  * parseBasicCredentials("Bearer token");
+ * // Returns: { userId: undefined, password: undefined }
+ *
+ * @example
+ * // Empty or undefined input
+ * parseBasicCredentials(undefined);
+ * // Returns: { userId: undefined, password: undefined }
+ *
+ * @see {@link https://tools.ietf.org/html/rfc7617|RFC 7617 - The 'Basic' HTTP Authentication Scheme}
  */
 export const parseBasicCredentials = (
   input: string | undefined
@@ -77,7 +104,7 @@ export const parseBasicCredentials = (
   }
 
   try {
-    const decoded = new TextDecoder('utf-8').decode(base64.decode(matcher[1]));
+    const decoded = decoder.decode(decodeBase64(matcher[1]));
     const [userId, ...passwordParts] = decoded.split(':');
     const password = passwordParts.join(':');
 
@@ -86,7 +113,7 @@ export const parseBasicCredentials = (
       password: password || undefined,
     };
   } catch (error) {
-    console.error('Error decoding Basic Auth credentials:', error);
+    console.log('Error decoding Basic Auth credentials:', error);
     return { ...emptyCredentials };
   }
 };

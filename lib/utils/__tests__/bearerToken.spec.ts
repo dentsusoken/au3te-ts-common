@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseBearerToken } from './bearerToken';
+import { parseBearerToken } from '../bearerToken';
 
 describe('parseBearerToken', () => {
   it('should return undefined for undefined input', () => {

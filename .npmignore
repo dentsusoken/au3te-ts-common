@@ -1,0 +1,55 @@
+# Source code (only dist should be included)
+lib/
+src/
+
+# Test files
+**/*.spec.ts
+**/*.test.ts
+**/__tests__/
+**/*.integration.spec.ts
+
+# Configuration files
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+.eslintrc*
+.prettierrc*
+
+# Documentation
+docs/
+README.md
+
+# Development files
+.gitignore
+.npmignore
+package-lock.json
+
+# Environment files
+.env
+.env.*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build artifacts (except dist which is included)
+dist-ssr/
+*.local
+
+# Dependencies (should be installed by consumers)
+node_modules/

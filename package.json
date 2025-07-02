@@ -1,11 +1,34 @@
 {
-  "name": "au3te-ts-common",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@vecrea/au3te-ts-common",
+  "version": "0.1.0",
+  "description": "Common TypeScript utilities and schemas for AU3TE (Authorization and User Authentication for Trusted Ecosystems)",
   "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/dentsusoken/au3te-ts-common"
+  },
+  "homepage": "https://github.com/dentsusoken/au3te-ts-common#readme",
+  "bugs": {
+    "url": "https://github.com/dentsusoken/au3te-ts-common/issues"
+  },
+  "keywords": [
+    "typescript",
+    "authentication",
+    "authorization",
+    "oauth2",
+    "openid-connect",
+    "verifiable-credentials",
+    "au3te"
+  ],
+  "author": "Dentsu Soken Inc.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist"
@@ -13,138 +36,140 @@
   "exports": {
     "./handler": {
       "types": "./dist/handler/index.d.ts",
-      "import": "./dist/handler/index.js",
+      "import": "./dist/handler/index.mjs",
       "require": "./dist/handler/index.cjs"
     },
     "./handler.authorization-page": {
       "types": "./dist/handler/authorization-page/index.d.ts",
-      "import": "./dist/handler/authorization-page/index.js",
+      "import": "./dist/handler/authorization-page/index.mjs",
       "require": "./dist/handler/authorization-page/index.cjs"
     },
     "./handler.credential": {
       "types": "./dist/handler/credential/index.d.ts",
-      "import": "./dist/handler/credential/index.js",
+      "import": "./dist/handler/credential/index.mjs",
       "require": "./dist/handler/credential/index.cjs"
     },
     "./handler.user": {
       "types": "./dist/handler/user/index.d.ts",
-      "import": "./dist/handler/user/index.js",
+      "import": "./dist/handler/user/index.mjs",
       "require": "./dist/handler/user/index.cjs"
     },
     "./api": {
       "types": "./dist/api/index.d.ts",
-      "import": "./dist/api/index.js",
+      "import": "./dist/api/index.mjs",
       "require": "./dist/api/index.cjs"
     },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js",
+      "import": "./dist/utils/index.mjs",
       "require": "./dist/utils/index.cjs"
     },
     "./conf": {
       "types": "./dist/conf/index.d.ts",
-      "import": "./dist/conf/index.js",
+      "import": "./dist/conf/index.mjs",
       "require": "./dist/conf/index.cjs"
     },
     "./schemas.common": {
       "types": "./dist/schemas/common/index.d.ts",
-      "import": "./dist/schemas/common/index.js",
+      "import": "./dist/schemas/common/index.mjs",
       "require": "./dist/schemas/common/index.cjs"
     },
     "./schemas.par": {
       "types": "./dist/schemas/par/index.d.ts",
-      "import": "./dist/schemas/par/index.js",
+      "import": "./dist/schemas/par/index.mjs",
       "require": "./dist/schemas/par/index.cjs"
     },
     "./schemas.authorization": {
       "types": "./dist/schemas/authorization/index.d.ts",
-      "import": "./dist/schemas/authorization/index.js",
+      "import": "./dist/schemas/authorization/index.mjs",
       "require": "./dist/schemas/authorization/index.cjs"
     },
     "./schemas.authorization-fail": {
       "types": "./dist/schemas/authorization-fail/index.d.ts",
-      "import": "./dist/schemas/authorization-fail/index.js",
+      "import": "./dist/schemas/authorization-fail/index.mjs",
       "require": "./dist/schemas/authorization-fail/index.cjs"
     },
     "./schemas.authorization-issue": {
       "types": "./dist/schemas/authorization-issue/index.d.ts",
-      "import": "./dist/schemas/authorization-issue/index.js",
+      "import": "./dist/schemas/authorization-issue/index.mjs",
       "require": "./dist/schemas/authorization-issue/index.cjs"
     },
     "./schemas.authorization-decision": {
       "types": "./dist/schemas/authorization-decision/index.d.ts",
-      "import": "./dist/schemas/authorization-decision/index.js",
+      "import": "./dist/schemas/authorization-decision/index.mjs",
       "require": "./dist/schemas/authorization-decision/index.cjs"
     },
     "./schemas.authorization-page": {
       "types": "./dist/schemas/authorization-page/index.d.ts",
-      "import": "./dist/schemas/authorization-page/index.js",
+      "import": "./dist/schemas/authorization-page/index.mjs",
       "require": "./dist/schemas/authorization-page/index.cjs"
     },
     "./schemas.token": {
       "types": "./dist/schemas/token/index.d.ts",
-      "import": "./dist/schemas/token/index.js",
+      "import": "./dist/schemas/token/index.mjs",
       "require": "./dist/schemas/token/index.cjs"
     },
     "./schemas.token-issue": {
       "types": "./dist/schemas/token-issue/index.d.ts",
-      "import": "./dist/schemas/token-issue/index.js",
+      "import": "./dist/schemas/token-issue/index.mjs",
       "require": "./dist/schemas/token-issue/index.cjs"
     },
     "./schemas.token-fail": {
       "types": "./dist/schemas/token-fail/index.d.ts",
-      "import": "./dist/schemas/token-fail/index.js",
+      "import": "./dist/schemas/token-fail/index.mjs",
       "require": "./dist/schemas/token-fail/index.cjs"
     },
     "./schemas.token-create": {
       "types": "./dist/schemas/token-create/index.d.ts",
-      "import": "./dist/schemas/token-create/index.js",
+      "import": "./dist/schemas/token-create/index.mjs",
       "require": "./dist/schemas/token-create/index.cjs"
     },
     "./schemas.credential": {
       "types": "./dist/schemas/credential/index.d.ts",
-      "import": "./dist/schemas/credential/index.js",
+      "import": "./dist/schemas/credential/index.mjs",
       "require": "./dist/schemas/credential/index.cjs"
     },
     "./schemas.credential-single-issue": {
       "types": "./dist/schemas/credential-single-issue/index.d.ts",
-      "import": "./dist/schemas/credential-single-issue/index.js",
+      "import": "./dist/schemas/credential-single-issue/index.mjs",
       "require": "./dist/schemas/credential-single-issue/index.cjs"
     },
     "./schemas.credential-single-parse": {
       "types": "./dist/schemas/credential-single-parse/index.d.ts",
-      "import": "./dist/schemas/credential-single-parse/index.js",
+      "import": "./dist/schemas/credential-single-parse/index.mjs",
       "require": "./dist/schemas/credential-single-parse/index.cjs"
     },
     "./schemas.introspection": {
       "types": "./dist/schemas/introspection/index.d.ts",
-      "import": "./dist/schemas/introspection/index.js",
+      "import": "./dist/schemas/introspection/index.mjs",
       "require": "./dist/schemas/introspection/index.cjs"
     },
     "./schemas.service-configuration": {
       "types": "./dist/schemas/service-configuration/index.d.ts",
-      "import": "./dist/schemas/service-configuration/index.js",
+      "import": "./dist/schemas/service-configuration/index.mjs",
       "require": "./dist/schemas/service-configuration/index.cjs"
     },
     "./schemas.credential-metadata": {
       "types": "./dist/schemas/credential-metadata/index.d.ts",
-      "import": "./dist/schemas/credential-metadata/index.js",
+      "import": "./dist/schemas/credential-metadata/index.mjs",
       "require": "./dist/schemas/credential-metadata/index.cjs"
     },
     "./schemas.service-jwks": {
       "types": "./dist/schemas/service-jwks/index.d.ts",
-      "import": "./dist/schemas/service-jwks/index.js",
+      "import": "./dist/schemas/service-jwks/index.mjs",
       "require": "./dist/schemas/service-jwks/index.cjs"
     },
     "./schemas.credential-issuer-jwks": {
       "types": "./dist/schemas/credential-issuer-jwks/index.d.ts",
-      "import": "./dist/schemas/credential-issuer-jwks/index.js",
+      "import": "./dist/schemas/credential-issuer-jwks/index.mjs",
       "require": "./dist/schemas/credential-issuer-jwks/index.cjs"
     }
   },
   "scripts": {
-    "build": "vite build && tsc --emitDeclarationOnly",
-    "test": "vitest --run"
+    "build": "npm run typecheck && vite build",
+    "test": "vitest --run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm test && npm run build"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
@@ -153,16 +178,15 @@
     "eslint": "^8.57.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
+    "vite-plugin-dts": "^4.5.4",
     "vite-plugin-node-polyfills": "^0.21.0",
     "vitest": "^1.4.0"
   },
   "dependencies": {
-    "base64-ts": "^2.0.1",
-    "dotenv": "^16.4.5",
-    "memfs": "^4.8.2",
-    "properties-file": "^3.5.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "@vecrea/oid4vc-core": "^0.1.0",
+    "u8a-utils": "^1.0.12"
   }
 }

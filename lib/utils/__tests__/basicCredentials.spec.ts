@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseBasicCredentials } from './basicCredentials';
+import { parseBasicCredentials } from '../basicCredentials';
 
 describe('parseBasicCredentials', () => {
   it('should return empty credentials for undefined input', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { nextYear } from './nextYear';
+import { nextYear } from '../nextYear';
 
 describe('nextYear', () => {
   it('returns a date exactly one year after the input date', () => {

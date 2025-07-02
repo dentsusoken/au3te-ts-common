@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
@@ -44,8 +45,9 @@ export default defineConfig({
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',
+      formats: ['es', 'cjs'],
       fileName: (format, entry) => {
-        const ext = format === 'es' ? 'js' : format;
+        const ext = format === 'es' ? 'mjs' : format;
         const indexFile = `index.${ext}`;
 
         return entry === 'main' ? indexFile : `${entry}/${indexFile}`;
@@ -60,9 +62,10 @@ export default defineConfig({
         global: 'build',
         process: 'build',
       },
-      overrides: {
-        fs: 'memfs',
-      },
+    }),
+    dts({
+      rollupTypes: true,
+      insertTypesEntry: true,
     }),
   ],
 });

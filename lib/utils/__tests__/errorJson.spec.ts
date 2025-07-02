@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { errorJson } from './errorJson';
+import { errorJson } from '../errorJson';
 
 describe('errorJson', () => {
   // Test basic error response creation

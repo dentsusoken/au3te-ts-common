@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseQueryString } from './parseQueryString';
+import { parseQueryString } from '../parseQueryString';
 
 describe('parseQueryString', () => {
   it('should parse query string into correct object', () => {
