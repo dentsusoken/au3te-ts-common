@@ -127,13 +127,9 @@
  */
 
 import { z } from 'zod';
-import {
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalStringSchema,
-} from '../common/stringSchema';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import { nullableButOptionalPropertyArraySchema } from '../common/Property';
-import { nullableButOptionalAuthzDetailsSchema } from '../common/AuthzDetails';
+import { stringArraySchema } from '../common/stringSchema';
+import { propertySchema } from '../common/Property';
+import { authzDetailsSchema } from '../common/AuthzDetails';
 
 export const authorizationIssueRequestSchema = z.object({
   /**
@@ -144,13 +140,13 @@ export const authorizationIssueRequestSchema = z.object({
   /**
    * The subject (end-user) managed by the service.
    */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
 
   /**
    * The value of the 'sub' claim in an ID token.
    * When this field is empty, 'subject' is used.
    */
-  sub: nullableButOptionalStringSchema,
+  sub: z.string().nullish(),
 
   /**
    * Get the value of {@code "authTime"} which is the time
@@ -159,23 +155,23 @@ export const authorizationIssueRequestSchema = z.object({
    * The time when the end-user authentication occurred.
    * It is the number of seconds since 1970-01-01.
    */
-  authTime: nullableButOptionalNumberSchema,
+  authTime: z.number().nullish(),
 
   /**
    * The authentication context class reference.
    */
-  acr: nullableButOptionalStringSchema,
+  acr: z.string().nullish(),
 
   /**
    * Claims in JSON format.
    */
-  claims: nullableButOptionalStringSchema,
+  claims: z.string().nullish(),
 
   /**
    * Extra properties to associate with an access token and/or
    * an authorization code.
    */
-  properties: nullableButOptionalPropertyArraySchema,
+  properties: z.array(propertySchema).nullish(),
 
   /**
    * Scopes to associate with an access token and/or an authorization code.
@@ -184,7 +180,7 @@ export const authorizationIssueRequestSchema = z.object({
    * cases, including the case of an empty array, the scopes here will
    * replace the original scopes contained in the original request.
    */
-  scopes: nullableButOptionalStringArraySchema,
+  scopes: stringArraySchema.nullish(),
 
   /**
    * JSON that represents additional JWS header parameters for ID tokens
@@ -192,19 +188,19 @@ export const authorizationIssueRequestSchema = z.object({
    *
    * @since 2.76
    */
-  idtHeaderParams: nullableButOptionalStringSchema,
+  idtHeaderParams: z.string().nullish(),
 
   /**
    * The authorization details to associate with the access token.
    */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
 
   /**
    * Claims that the user has consented for the client application to know.
    *
    * @since 3.7
    */
-  consentedClaims: nullableButOptionalStringArraySchema,
+  consentedClaims: stringArraySchema.nullish(),
 
   /**
    * Claim key-value pairs that are used to compute values of transformed
@@ -212,7 +208,7 @@ export const authorizationIssueRequestSchema = z.object({
    *
    * @since 3.8
    */
-  claimsForTx: nullableButOptionalStringSchema,
+  claimsForTx: z.string().nullish(),
 
   /**
    * Verified claim key-value pairs that are used to compute values of
@@ -220,7 +216,7 @@ export const authorizationIssueRequestSchema = z.object({
    *
    * @since 3.8
    */
-  verifiedClaimsForTx: nullableButOptionalStringArraySchema,
+  verifiedClaimsForTx: stringArraySchema.nullish(),
 
   /**
    * Additional claims that are added to the payload part of the JWT
@@ -229,7 +225,7 @@ export const authorizationIssueRequestSchema = z.object({
    * @since 3.23
    * @since Authlete 2.3
    */
-  jwtAtClaims: nullableButOptionalStringSchema,
+  jwtAtClaims: z.string().nullish(),
 
   /**
    * The representation of an access token that may be issued as a
@@ -238,7 +234,7 @@ export const authorizationIssueRequestSchema = z.object({
    * @since 3.24
    * @since Authlete 2.2.27
    */
-  accessToken: nullableButOptionalStringSchema,
+  accessToken: z.string().nullish(),
 
   /**
    * The type of the {@code aud} claim in the ID token being issued.
@@ -246,7 +242,7 @@ export const authorizationIssueRequestSchema = z.object({
    * @since 3.57
    * @since Authlete 2.3.3
    */
-  idTokenAudType: nullableButOptionalStringSchema,
+  idTokenAudType: z.string().nullish(),
 
   /**
    * The duration of the access token that may be issued as a result
@@ -257,7 +253,7 @@ export const authorizationIssueRequestSchema = z.object({
    * @since Authlete 2.3.5
    * @since Authlete 3.0
    */
-  accessTokenDuration: nullableButOptionalNumberSchema,
+  accessTokenDuration: z.number().nullish(),
 });
 
 /**

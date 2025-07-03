@@ -108,9 +108,7 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalStringSchema } from '../common/stringSchema';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import { nullableButOptionalAuthorizationTicketInfoSchema } from '../common/AuthorizationTicketInfo';
+import { authorizationTicketInfoSchema } from '../common/AuthorizationTicketInfo';
 
 const actionSchema = z.enum([
   /**
@@ -151,7 +149,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * The response content which can be used as the entity body
    * of the response returned to the client application.
    */
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 
   /**
    * The access token. An access token is issued when the
@@ -167,7 +165,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    *
    * @see jwtAccessToken
    */
-  accessToken: nullableButOptionalStringSchema,
+  accessToken: z.string().nullish(),
 
   /**
    * The date in seconds since the Unix epoch at which
@@ -178,7 +176,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @type {number|undefined}
    * @since 1.34
    */
-  accessTokenExpiresAt: nullableButOptionalNumberSchema,
+  accessTokenExpiresAt: z.number().nullish(),
 
   /**
    * The duration of the access token in seconds.
@@ -189,7 +187,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @type {number|undefined}
    * @since 1.34
    */
-  accessTokenDuration: nullableButOptionalNumberSchema,
+  accessTokenDuration: z.number().nullish(),
 
   /**
    * The newly issued ID token.
@@ -200,7 +198,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @type {string|undefined}
    * @since 1.34
    */
-  idToken: nullableButOptionalStringSchema,
+  idToken: z.string().nullish(),
 
   /**
    * The newly issued authorization code.
@@ -211,7 +209,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @type {string|undefined}
    * @since 1.34
    */
-  authorizationCode: nullableButOptionalStringSchema,
+  authorizationCode: z.string().nullish(),
 
   /**
    * The newly issued access token in JWT format.
@@ -228,7 +226,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @see accessToken
    * @since 2.37
    */
-  jwtAccessToken: nullableButOptionalStringSchema,
+  jwtAccessToken: z.string().nullish(),
 
   /**
    * The information attached to the ticket that was presented to the
@@ -238,7 +236,7 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
    * @since 3.88
    * @since Authlete 3.0
    */
-  ticketInfo: nullableButOptionalAuthorizationTicketInfoSchema,
+  ticketInfo: authorizationTicketInfoSchema.nullish(),
 });
 
 /**
