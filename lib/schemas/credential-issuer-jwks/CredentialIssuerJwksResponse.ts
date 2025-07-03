@@ -109,7 +109,6 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalStringSchema } from '../common/stringSchema';
 
 /**
  * Zod schema for the action of a credential issuer jwks request response.
@@ -128,7 +127,7 @@ const actionSchema = z.enum(['OK', 'NOT_FOUND', 'INTERNAL_SERVER_ERROR']);
  */
 export const credentialIssuerJwksResponseSchema = apiResponseSchema.extend({
   action: actionSchema,
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 });
 
 /**
