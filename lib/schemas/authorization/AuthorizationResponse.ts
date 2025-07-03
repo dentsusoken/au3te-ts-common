@@ -752,18 +752,13 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import {
-  nullableButOptionalStringArrayArraySchema,
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalStringSchema,
-} from '../common/stringSchema';
-import { nullableButOptionalServiceSchema } from '../common/Service';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import { nullableButOptionalScopeArraySchema } from '../common/Scope';
-import { nullableButOptionalDynamicScopeArraySchema } from '../common/DynamicScope';
-import { nullableButOptionalClientSchema } from '../common/Client';
-import { nullableButOptionalPromptArraySchema } from '../common/Prompt';
-import { nullableButOptionalAuthzDetailsSchema } from '../common/AuthzDetails';
+import { stringArraySchema } from '../common/stringSchema';
+import { serviceSchema } from '../common/Service';
+import { scopeSchema } from '../common/Scope';
+import { dynamicScopeSchema } from '../common/DynamicScope';
+import { clientSchema } from '../common/Client';
+import { promptSchema } from '../common/Prompt';
+import { authzDetailsSchema } from '../common/AuthzDetails';
 
 /**
  * Enum representing possible actions for the authorization response.
@@ -789,45 +784,45 @@ export const authorizationResponseSchema = apiResponseSchema.extend({
   /** The action to be taken based on the authorization result. */
   action: actionSchema,
   /** Optional response content, such as a redirect URL. */
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
   /** Information about the service. */
-  service: nullableButOptionalServiceSchema,
+  service: serviceSchema.nullish(),
   /** Information about the client. */
-  client: nullableButOptionalClientSchema,
+  client: clientSchema.nullish(),
   /** Maximum authentication age. */
-  maxAge: nullableButOptionalNumberSchema,
+  maxAge: z.number().nullish(),
   /** Scopes associated with the authorization. */
-  scopes: nullableButOptionalScopeArraySchema,
+  scopes: z.array(scopeSchema).nullish(),
   /** Dynamic scopes associated with the authorization. */
-  dynamicScopes: nullableButOptionalDynamicScopeArraySchema,
+  dynamicScopes: z.array(dynamicScopeSchema).nullish(),
   /** Claims requested in the authorization. */
-  claims: nullableButOptionalStringArraySchema,
+  claims: stringArraySchema.nullish(),
   /** Claims to be included in the UserInfo response. */
-  claimsAtUserInfo: nullableButOptionalStringArraySchema,
+  claimsAtUserInfo: stringArraySchema.nullish(),
   /** Authentication Context Class References. */
-  acrs: nullableButOptionalStringArraySchema,
+  acrs: stringArraySchema.nullish(),
   /** Subject identifier. */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
   /** Login hint provided in the request. */
-  loginHint: nullableButOptionalStringSchema,
+  loginHint: z.string().nullish(),
   /** Prompts requested in the authorization. */
-  prompts: nullableButOptionalPromptArraySchema,
+  prompts: z.array(promptSchema).nullish(),
   /** Claims to be included in the ID Token. */
-  idTokenClaims: nullableButOptionalStringSchema,
+  idTokenClaims: z.string().nullish(),
   /** Detailed authorization request information. */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
   /** Purpose of the authorization request. */
-  purpose: nullableButOptionalStringSchema,
+  purpose: z.string().nullish(),
   /** Claims to be included in the UserInfo response. */
-  userInfoClaims: nullableButOptionalStringSchema,
+  userInfoClaims: z.string().nullish(),
   /** Ticket for the authorization session. */
-  ticket: nullableButOptionalStringSchema,
+  ticket: z.string().nullish(),
   /** Requested locales for claims. */
-  claimsLocales: nullableButOptionalStringArraySchema,
+  claimsLocales: stringArraySchema.nullish(),
   /** Claims requested for a specific transaction. */
-  requestedClaimsForTx: nullableButOptionalStringArraySchema,
+  requestedClaimsForTx: stringArraySchema.nullish(),
   /** Verified claims requested for a specific transaction. */
-  requestedVerifiedClaimsForTx: nullableButOptionalStringArrayArraySchema,
+  requestedVerifiedClaimsForTx: stringArraySchema.nullish(),
 });
 
 /**

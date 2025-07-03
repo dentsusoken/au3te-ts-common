@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { authorizationRequestSchema } from './AuthorizationRequest';
+import { authorizationRequestSchema } from '../AuthorizationRequest';
 
 describe('authorizationRequestSchema', () => {
   it('should validate a valid authorization request with parameters only', () => {

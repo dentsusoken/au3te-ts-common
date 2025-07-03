@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   authorizationResponseSchema,
   AuthorizationResponse,
-} from './AuthorizationResponse';
+} from '../AuthorizationResponse';
 
 describe('authorizationResponseSchema', () => {
   it('should accept a valid AuthorizationResponse object', () => {
@@ -14,22 +14,22 @@ describe('authorizationResponseSchema', () => {
       maxAge: 3600,
       scopes: [{ name: 'read' }],
       dynamicScopes: [{ name: 'dynamic', value: 'dynamic:123' }],
-      claims: ['name', 'email'],
-      claimsAtUserInfo: ['profile'],
-      acrs: ['urn:mace:incommon:iap:silver'],
+      claims: { array: ['name', 'email'] },
+      claimsAtUserInfo: { array: ['profile'] },
+      acrs: { array: ['urn:mace:incommon:iap:silver'] },
       subject: 'user123',
       loginHint: 'john@example.com',
       prompts: ['login', 'consent'],
       idTokenClaims: '{"sub":"user123"}',
       authorizationDetails: {
-        elements: [{ type: 'payment', actions: ['initiate'] }],
+        elements: [{ type: 'payment', actions: { array: ['initiate'] } }],
       },
       purpose: 'account linking',
       userInfoClaims: '{"given_name":"John"}',
       ticket: 'ticket123',
-      claimsLocales: ['en', 'fr'],
-      requestedClaimsForTx: ['verified_claims'],
-      requestedVerifiedClaimsForTx: [{ array: ['name', 'birthdate'] }],
+      claimsLocales: { array: ['en', 'fr'] },
+      requestedClaimsForTx: { array: ['verified_claims'] },
+      requestedVerifiedClaimsForTx: { array: ['name', 'birthdate'] },
     };
     const result = authorizationResponseSchema.safeParse(validResponse);
     expect(result.success).toBe(true);
@@ -95,7 +95,7 @@ describe('authorizationResponseSchema', () => {
       service: { serviceName: 'TestService' },
       client: { clientName: 'TestClient' },
       authorizationDetails: {
-        elements: [{ type: 'payment', actions: ['initiate'] }],
+        elements: [{ type: 'payment', actions: { array: ['initiate'] } }],
       },
     };
     const result = authorizationResponseSchema.safeParse(
@@ -107,10 +107,7 @@ describe('authorizationResponseSchema', () => {
   it('should handle requestedVerifiedClaimsForTx correctly', () => {
     const response: AuthorizationResponse = {
       action: 'INTERACTION',
-      requestedVerifiedClaimsForTx: [
-        { array: ['name', 'birthdate'] },
-        { array: ['address'] },
-      ],
+      requestedVerifiedClaimsForTx: { array: ['name', 'birthdate'] },
     };
     const result = authorizationResponseSchema.safeParse(response);
     expect(result.success).toBe(true);
