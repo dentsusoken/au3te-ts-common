@@ -34,11 +34,7 @@
  */
 
 import { z } from 'zod';
-import {
-  nullableButOptionalStringSchema,
-  nullableButOptionalUrlStringSchema,
-} from './stringSchema';
-import { nullableButOptionalSubjectTypeSchema } from './SubjectType';
+import { subjectTypeSchema } from './SubjectType';
 
 /**
  * Schema for client application information.
@@ -54,14 +50,14 @@ import { nullableButOptionalSubjectTypeSchema } from './SubjectType';
  */
 export const clientSchema = z
   .object({
-    clientName: nullableButOptionalStringSchema,
-    description: nullableButOptionalStringSchema,
-    logoUri: nullableButOptionalUrlStringSchema,
-    clientUri: nullableButOptionalUrlStringSchema,
-    policyUri: nullableButOptionalUrlStringSchema,
-    tosUri: nullableButOptionalUrlStringSchema,
-    subjectType: nullableButOptionalSubjectTypeSchema,
-    derivedSectorIdentifier: nullableButOptionalStringSchema,
+    clientName: z.string().nullish(),
+    description: z.string().nullish(),
+    logoUri: z.string().url().nullish(),
+    clientUri: z.string().url().nullish(),
+    policyUri: z.string().url().nullish(),
+    tosUri: z.string().url().nullish(),
+    subjectType: subjectTypeSchema.nullish(),
+    derivedSectorIdentifier: z.string().nullish(),
   })
   .passthrough();
 
@@ -71,29 +67,3 @@ export const clientSchema = z
  * @typedef {z.infer<typeof clientSchema>} Client
  */
 export type Client = z.infer<typeof clientSchema>;
-
-/**
- * Schema for a nullable but optional client.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional clientSchema. This allows the schema to
- * accept null, undefined, or a valid Client object.
- *
- * @type {z.ZodType<Client | undefined>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalClientSchema.parse(null); // returns undefined
- * nullableButOptionalClientSchema.parse(undefined); // returns undefined
- * nullableButOptionalClientSchema.parse({ clientName: 'Test Client' }); // returns the Client object
- *
- * @example
- * // Invalid input
- * nullableButOptionalClientSchema.parse('not an object'); // throws ZodError
- *
- * @see {@link clientSchema} for the underlying client schema
- */
-export const nullableButOptionalClientSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(clientSchema)
-) as z.ZodType<Client | undefined>;

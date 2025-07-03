@@ -15,16 +15,9 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalNumberSchema } from './numberSchema';
-import { nullableButOptionalBooleanSchema } from './booleanSchema';
-import { nullableButOptionalPropertyArraySchema } from './Property';
-import { nullableButOptionalAuthzDetailsSchema } from './AuthzDetails';
-import { nullableButOptionalScopeArraySchema } from './Scope';
-import {
-  nullableButOptionalStringSchema,
-  nullableButOptionalUrlStringSchema,
-  nullableButOptionalUrlStringArraySchema,
-} from './stringSchema';
+import { propertySchema } from './Property';
+import { authzDetailsSchema } from './AuthzDetails';
+import { scopeSchema } from './Scope';
 
 /**
  * Information about a token of the type "urn:ietf:params:oauth:token-type:access_token"
@@ -39,66 +32,66 @@ export const tokenInfoSchema = z.object({
   /**
    * (OPTIONAL) The client ID.
    */
-  clientId: nullableButOptionalNumberSchema,
+  clientId: z.number().nullish(),
 
   /**
    * (OPTIONAL) Resource owner's unique identifier.
    */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
 
   /**
    * (OPTIONAL) Scopes granted to the token.
    */
-  scopes: nullableButOptionalScopeArraySchema,
+  scopes: z.array(scopeSchema).nullish(),
 
   /**
    * (OPTIONAL) The time at which the token expires in seconds since the Unix epoch.
    */
-  expiresAt: nullableButOptionalNumberSchema,
+  expiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) Extra properties associated with the token.
    * @see https://www.authlete.com/developers/definitive_guide/extra_properties/
    */
-  properties: nullableButOptionalPropertyArraySchema,
+  properties: z.array(propertySchema).nullish(),
 
   /**
    * (OPTIONAL) The client ID alias when the authorization request or the token request was made.
    * @see https://kb.authlete.com/en/s/oauth-and-openid-connect/a/client-id-alias
    */
-  clientIdAlias: nullableButOptionalStringSchema,
+  clientIdAlias: z.string().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating whether the client ID alias was used.
    * @see https://kb.authlete.com/en/s/oauth-and-openid-connect/a/client-id-alias
    */
-  clientIdAliasUsed: nullableButOptionalBooleanSchema,
+  clientIdAliasUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) The entity ID of the client.
    * @see https://openid.net/specs/openid-federation-1_0.html OpenID Federation 1.0
    * @since Authlete 2.3
    */
-  clientEntityId: nullableButOptionalUrlStringSchema,
+  clientEntityId: z.string().url().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating whether the entity ID of the client was used.
    * @see https://openid.net/specs/openid-federation-1_0.html OpenID Federation 1.0
    * @since Authlete 2.3
    */
-  clientEntityIdUsed: nullableButOptionalBooleanSchema,
+  clientEntityIdUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) The resources associated with the token.
    * @see https://www.rfc-editor.org/rfc/rfc8707.html RFC 8707 Resource Indicators
    */
-  resources: nullableButOptionalUrlStringArraySchema,
+  resources: z.array(z.string().url()).nullish(),
 
   /**
    * (OPTIONAL) The authorization details associated with the token.
    * @see https://www.rfc-editor.org/rfc/rfc9396.html RFC 9396 OAuth 2.0 Rich Authorization Requests
    */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
 });
 
 /**
@@ -106,12 +99,3 @@ export const tokenInfoSchema = z.object({
  * Inferred from the tokenInfoSchema.
  */
 export type TokenInfo = z.infer<typeof tokenInfoSchema>;
-
-/**
- * Schema for validating optional token information.
- * Converts null to undefined and validates using tokenInfoSchema.
- */
-export const nullableButOptionalTokenInfoSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  tokenInfoSchema.optional()
-) as z.ZodType<TokenInfo | undefined>;

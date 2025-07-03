@@ -28,30 +28,24 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
-import { nullableButOptionalBooleanSchema } from './booleanSchema';
 
 /**
- * Schema definition for a property object using Zod.
+ * Zod schema for a property object.
  *
- * @typedef {Object} PropertySchema
- * @property {import('./stringSchema').NullableButOptionalString} key - The key of the property. Can be a string, null, or undefined.
- * @property {import('./stringSchema').NullableButOptionalString} value - The value of the property. Can be a string, null, or undefined.
- * @property {import('./booleanSchema').NullableButOptionalBoolean} hidden - Indicates if the property is hidden. Can be a boolean, null, or undefined.
+ * This schema defines a property with a string key, a string value, and a hidden flag.
  *
- * @type {import('zod').ZodObject<PropertySchema>}
+ * @typedef {Object} Property
+ * @property {string|undefined} [key] - The key of the property.
+ * @property {string|undefined} [value] - The value associated with the key.
+ * @property {boolean|undefined} [hidden] - A flag indicating if the property is hidden.
  */
 export const propertySchema = z.object({
-  key: nullableButOptionalStringSchema,
-  value: nullableButOptionalStringSchema,
-  hidden: nullableButOptionalBooleanSchema,
+  key: z.string().nullish(),
+  value: z.string().nullish(),
+  hidden: z.boolean().nullish(),
 });
 
+/**
+ * Represents a property object with optional fields.
+ */
 export type Property = z.infer<typeof propertySchema>;
-
-type OptionalPropertyArray = Property[] | undefined;
-
-export const nullableButOptionalPropertyArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.array(propertySchema).optional()
-) as z.ZodType<OptionalPropertyArray>;

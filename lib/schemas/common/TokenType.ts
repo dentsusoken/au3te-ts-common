@@ -69,11 +69,6 @@ export const tokenTypes = [
 export type TokenType = (typeof tokenTypes)[number];
 
 /**
- * Type representing an optional token type.
- */
-type OptionalTokenType = TokenType | undefined;
-
-/**
  * Schema for validating token types.
  * Converts input to lowercase before validation.
  */
@@ -81,12 +76,3 @@ export const tokenTypeSchema = z.preprocess(
   (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
   z.enum(tokenTypes)
 ) as z.ZodType<TokenType>;
-
-/**
- * Schema for validating optional token types.
- * Converts null to undefined and validates using tokenTypeSchema.
- */
-export const nullableButOptionalTokenTypeSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(tokenTypeSchema)
-) as z.ZodType<OptionalTokenType>;

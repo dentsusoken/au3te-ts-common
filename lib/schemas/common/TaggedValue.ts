@@ -24,7 +24,6 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
 
 /**
  * Schema for a tagged value.
@@ -32,8 +31,8 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  * @type {z.ZodType<TaggedValue>}
  */
 export const taggedValueSchema = z.object({
-  tag: nullableButOptionalStringSchema,
-  value: nullableButOptionalStringSchema,
+  tag: z.string().nullish(),
+  value: z.string().nullish(),
 });
 
 /**
@@ -45,37 +44,3 @@ export const taggedValueSchema = z.object({
  */
 
 export type TaggedValue = z.infer<typeof taggedValueSchema>;
-
-/**
- * Represents an optional array of TaggedValue objects.
- *
- * @typedef {TaggedValue[]|undefined} OptionalTaggedValueArray
- */
-type OptionalTaggedValueArray = TaggedValue[] | undefined;
-
-/**
- * Schema for a nullable but optional array of tagged values.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of taggedValueSchema. This allows the schema to
- * accept null, undefined, or a valid array of TaggedValue objects.
- *
- * @type {z.ZodType<OptionalTaggedValueArray>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalTaggedValueArraySchema.parse(null); // returns undefined
- * nullableButOptionalTaggedValueArraySchema.parse(undefined); // returns undefined
- * nullableButOptionalTaggedValueArraySchema.parse([
- *   { tag: 'en', value: 'Hello' },
- *   { tag: 'fr', value: 'Bonjour' }
- * ]); // returns the array of TaggedValue objects
- *
- * @example
- * // Invalid input
- * nullableButOptionalTaggedValueArraySchema.parse('not an array'); // throws ZodError
- */
-export const nullableButOptionalTaggedValueArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(z.array(taggedValueSchema))
-) as z.ZodType<OptionalTaggedValueArray>;

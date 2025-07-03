@@ -16,9 +16,7 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
-import { nullableButOptionalAddressSchema } from './Address';
-import { nullableButOptionalBooleanSchema } from './booleanSchema';
+import { addressSchema } from './Address';
 
 /**
  * Schema for a user object containing OpenID Connect standard claims.
@@ -49,28 +47,28 @@ import { nullableButOptionalBooleanSchema } from './booleanSchema';
  */
 export const userSchema = z.object({
   subject: z.string(),
-  loginId: nullableButOptionalStringSchema,
-  password: nullableButOptionalStringSchema,
-  name: nullableButOptionalStringSchema,
-  email: nullableButOptionalStringSchema,
-  address: nullableButOptionalAddressSchema,
-  phoneNumber: nullableButOptionalStringSchema,
-  code: nullableButOptionalStringSchema,
-  phoneNumberVerified: nullableButOptionalBooleanSchema,
-  emailVerified: nullableButOptionalBooleanSchema,
-  givenName: nullableButOptionalStringSchema,
-  familyName: nullableButOptionalStringSchema,
-  middleName: nullableButOptionalStringSchema,
-  nickname: nullableButOptionalStringSchema,
-  profile: nullableButOptionalStringSchema,
-  picture: nullableButOptionalStringSchema,
-  website: nullableButOptionalStringSchema,
-  gender: nullableButOptionalStringSchema,
-  zoneinfo: nullableButOptionalStringSchema,
-  locale: nullableButOptionalStringSchema,
-  preferredUsername: nullableButOptionalStringSchema,
-  birthdate: nullableButOptionalStringSchema,
-  updatedAt: nullableButOptionalStringSchema,
+  loginId: z.string().nullish(),
+  password: z.string().nullish(),
+  name: z.string().nullish(),
+  email: z.string().nullish(),
+  address: addressSchema.nullish(),
+  phoneNumber: z.string().nullish(),
+  code: z.string().nullish(),
+  phoneNumberVerified: z.boolean().nullish(),
+  emailVerified: z.boolean().nullish(),
+  givenName: z.string().nullish(),
+  familyName: z.string().nullish(),
+  middleName: z.string().nullish(),
+  nickname: z.string().nullish(),
+  profile: z.string().nullish(),
+  picture: z.string().nullish(),
+  website: z.string().nullish(),
+  gender: z.string().nullish(),
+  zoneinfo: z.string().nullish(),
+  locale: z.string().nullish(),
+  preferredUsername: z.string().nullish(),
+  birthdate: z.string().nullish(),
+  updatedAt: z.string().nullish(),
 });
 
 /**
@@ -79,30 +77,3 @@ export const userSchema = z.object({
  * which is required, and verification flags which are boolean.
  */
 export type User = z.infer<typeof userSchema>;
-
-/**
- * Type representing an optional User object.
- */
-type OptionalUser = User | undefined;
-
-/**
- * Schema for a nullable but optional user object.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional userSchema. This allows the schema to
- * accept null, undefined, or a valid User object.
- *
- * @example
- * // Valid inputs
- * nullableButOptionalUserSchema.parse(null); // returns undefined
- * nullableButOptionalUserSchema.parse(undefined); // returns undefined
- * nullableButOptionalUserSchema.parse({
- *   subject: '123',
- *   name: 'John Doe',
- *   email: 'john@example.com'
- * }); // returns the User object
- */
-export const nullableButOptionalUserSchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(userSchema)
-) as z.ZodType<OptionalUser>;

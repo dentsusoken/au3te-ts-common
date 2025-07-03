@@ -196,7 +196,6 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
 
 /**
  * Schema for a dynamic scope.
@@ -204,8 +203,8 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  * @type {z.ZodType<DynamicScope>}
  */
 export const dynamicScopeSchema = z.object({
-  name: nullableButOptionalStringSchema,
-  value: nullableButOptionalStringSchema,
+  name: z.string().nullish(),
+  value: z.string().nullish(),
 });
 
 /**
@@ -216,45 +215,3 @@ export const dynamicScopeSchema = z.object({
  * @property {string|undefined} [value] - The value of the dynamic scope.
  */
 export type DynamicScope = z.infer<typeof dynamicScopeSchema>;
-
-/**
- * Represents an optional dynamic scope.
- *
- * @typedef {DynamicScope|undefined} OptionalDynamicScope
- */
-type OptionalDynamicScope = DynamicScope | undefined;
-
-/**
- * Represents an optional array of dynamic scopes.
- *
- * @typedef {DynamicScope[]|undefined} OptionalDynamicScopeArray
- */
-type OptionalDynamicScopeArray = DynamicScope[] | undefined;
-
-/**
- * Schema for a nullable but optional dynamic scope.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional dynamicScopeSchema. This allows the schema to
- * accept null, undefined, or a valid DynamicScope object.
- *
- * @type {z.ZodType<OptionalDynamicScope>}
- */
-export const nullableButOptionalDynamicScopeSchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(dynamicScopeSchema)
-) as z.ZodType<OptionalDynamicScope>;
-
-/**
- * Schema for a nullable but optional array of dynamic scopes.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of dynamicScopeSchema. This allows the schema to
- * accept null, undefined, or a valid array of DynamicScope objects.
- *
- * @type {z.ZodType<OptionalDynamicScopeArray>}
- */
-export const nullableButOptionalDynamicScopeArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(z.array(dynamicScopeSchema))
-) as z.ZodType<OptionalDynamicScopeArray>;

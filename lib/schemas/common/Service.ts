@@ -25,7 +25,6 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
 
 /**
  * Schema for service information.
@@ -41,7 +40,7 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  */
 export const serviceSchema = z
   .object({
-    serviceName: nullableButOptionalStringSchema,
+    serviceName: z.string().nullish(),
   })
   .passthrough();
 
@@ -50,15 +49,3 @@ export const serviceSchema = z
  *
  */
 export type Service = z.infer<typeof serviceSchema>;
-
-/**
- * Schema for a nullable but optional service.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional serviceSchema. This allows the schema to
- * accept null, undefined, or a valid Service object.
- */
-export const nullableButOptionalServiceSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(serviceSchema)
-) as z.ZodType<Service | undefined>;

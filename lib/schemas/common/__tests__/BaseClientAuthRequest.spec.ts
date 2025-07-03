@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   baseClientAuthRequestSchema,
   type BaseClientAuthRequest,
-} from './BaseClientAuthRequest';
+} from '../BaseClientAuthRequest';
 
 describe('BaseClientAuthRequest', () => {
   it('should accept valid request with required fields', () => {

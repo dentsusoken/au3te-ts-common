@@ -15,7 +15,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { grantSchema, type Grant } from './Grant';
+import { grantSchema, type Grant } from '../Grant';
 
 describe('grantSchema', () => {
   // Test for empty object
@@ -61,8 +61,8 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'account_information',
-            actions: ['list_accounts', 'read_balances'],
-            locations: ['https://example.com/accounts'],
+            actions: { array: ['list_accounts', 'read_balances'] },
+            locations: { array: ['https://example.com/accounts'] },
           },
         ],
       },
@@ -89,8 +89,8 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'account_information',
-            actions: ['read_balances'],
-            locations: ['https://example.com/accounts'],
+            actions: { array: ['read_balances'] },
+            locations: { array: ['https://example.com/accounts'] },
           },
         ],
       },
@@ -128,6 +128,31 @@ describe('grantSchema', () => {
     expect(result.authorizationDetails).toBeUndefined();
   });
 
+  // Test for mixed null and valid values
+  it('should accept mixed null and valid values', () => {
+    const grant: Grant = {
+      scopes: [
+        {
+          scope: 'contacts read write',
+          resource: ['https://rs.example.com/api'],
+        },
+      ],
+      claims: null,
+      authorizationDetails: {
+        elements: [
+          {
+            type: 'payment_initiation',
+            actions: { array: ['initiate_payment'] },
+            locations: { array: ['https://example.com/payments'] },
+          },
+        ],
+      },
+    };
+
+    const result = grantSchema.parse(grant);
+    expect(result).toEqual(grant);
+  });
+
   // Test for invalid scopes array
   it('should reject invalid scopes array', () => {
     const grant = {
@@ -139,9 +164,8 @@ describe('grantSchema', () => {
       ],
     };
 
-    expect(() => grantSchema.parse(grant)).toThrow(
-      /Invalid input|Expected string/
-    );
+    const result = grantSchema.safeParse(grant);
+    expect(result.success).toBe(false);
   });
 
   // Test for invalid claims array
@@ -150,7 +174,8 @@ describe('grantSchema', () => {
       claims: [123, true], // Should be strings
     };
 
-    expect(() => grantSchema.parse(grant)).toThrow(/Expected string/);
+    const result = grantSchema.safeParse(grant);
+    expect(result.success).toBe(false);
   });
 
   // Test for invalid authorization details
@@ -167,8 +192,61 @@ describe('grantSchema', () => {
       },
     };
 
-    expect(() => grantSchema.parse(grant)).toThrow(
-      /Expected array|Expected string/
-    );
+    const result = grantSchema.safeParse(grant);
+    expect(result.success).toBe(false);
+  });
+
+  // Test for non-object values
+  it('should reject non-object values', () => {
+    const invalidValues = [
+      'not an object',
+      123,
+      true,
+      ['array'],
+      null,
+      undefined,
+    ];
+
+    invalidValues.forEach((value) => {
+      const result = grantSchema.safeParse(value);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  // Test for type inference
+  it('should infer the correct output type', () => {
+    type SchemaType = typeof grantSchema._type;
+    type ExpectedType = Grant;
+
+    const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;
+    expect(assertTypeCompatibility).toBeDefined();
+  });
+
+  // Test for complex authorization details examples
+  it('should handle complex authorization details examples', () => {
+    const grant: Grant = {
+      authorizationDetails: {
+        elements: [
+          {
+            type: 'payment_initiation',
+            actions: { array: ['initiate_payment', 'read_payment_status'] },
+            locations: { array: ['https://bank.com/payments'] },
+            datatypes: { array: ['payment', 'account'] },
+            identifier: 'payment123',
+            privileges: { array: ['user', 'admin'] },
+          },
+          {
+            type: 'account_information',
+            actions: {
+              array: ['list_accounts', 'read_balances', 'read_transactions'],
+            },
+            locations: { array: ['https://bank.com/accounts'] },
+          },
+        ],
+      },
+    };
+
+    const result = grantSchema.parse(grant);
+    expect(result).toEqual(grant);
   });
 });

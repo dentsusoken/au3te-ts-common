@@ -24,27 +24,27 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
-import { nullableButOptionalBooleanSchema } from './booleanSchema';
-import { nullableButOptionalTaggedValueArraySchema } from './TaggedValue';
-import { nullableButOptionalPairArraySchema } from './Pair';
+import { taggedValueSchema } from './TaggedValue';
+import { pairSchema } from './Pair';
 
 /**
- * Zod schema for validating Scope objects.
+ * Zod schema for a scope object.
  *
- * This schema uses nullableButOptional schemas for its properties, which means:
- * - null values are converted to undefined
- * - undefined values are allowed
- * - when a value is provided, it must match the specified type
+ * This schema defines the structure of a scope in the OAuth 2.0 / OpenID Connect context.
  *
- * @type {z.ZodType<Scope>}
+ * @typedef {Object} ScopeSchema
+ * @property {string|undefined} [name] - The name of the scope.
+ * @property {boolean|undefined} [defaultEntry] - Indicates if this is a default scope.
+ * @property {string|undefined} [description] - A description of the scope.
+ * @property {Array<TaggedValue>|undefined} [descriptions] - Localized descriptions of the scope.
+ * @property {Array<Pair>|undefined} [attributes] - Additional attributes associated with the scope.
  */
 export const scopeSchema = z.object({
-  name: nullableButOptionalStringSchema,
-  defaultEntry: nullableButOptionalBooleanSchema,
-  description: nullableButOptionalStringSchema,
-  descriptions: nullableButOptionalTaggedValueArraySchema,
-  attributes: nullableButOptionalPairArraySchema,
+  name: z.string().nullish(),
+  defaultEntry: z.boolean().nullish(),
+  description: z.string().nullish(),
+  descriptions: z.array(taggedValueSchema).nullish(),
+  attributes: z.array(pairSchema).nullish(),
 });
 
 /**
@@ -59,77 +59,3 @@ export const scopeSchema = z.object({
  */
 
 export type Scope = z.infer<typeof scopeSchema>;
-
-/**
- * Represents an optional scope.
- *
- * @typedef {Scope|undefined} OptionalScope
- */
-type OptionalScope = Scope | undefined;
-
-/**
- * Represents an optional array of scopes.
- *
- * @typedef {Scope[]|undefined} OptionalScopeArray
- */
-type OptionalScopeArray = Scope[] | undefined;
-
-/**
- * Schema for a nullable but optional scope.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional scopeSchema. This allows the schema to
- * accept null, undefined, or a valid Scope object.
- *
- * @type {z.ZodType<OptionalScope>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalScopeSchema.parse(null); // returns undefined
- * nullableButOptionalScopeSchema.parse(undefined); // returns undefined
- * nullableButOptionalScopeSchema.parse({ name: 'read', description: 'Read access' }); // returns the Scope object
- *
- * @example
- * // Invalid input
- * nullableButOptionalScopeSchema.parse('not an object'); // throws ZodError
- *
- * @see {@link scopeSchema} for the underlying scope schema
- */
-export const nullableButOptionalScopeSchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(scopeSchema)
-) as z.ZodType<OptionalScope>;
-
-/**
- * Schema for a nullable but optional array of scopes.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of scopeSchema. This allows the schema to
- * accept null, undefined, or a valid array of Scope objects.
- *
- * In OAuth 2.0 and OpenID Connect, scopes represent permissions requested by
- * the client application. This schema is particularly useful for handling
- * the 'scopes' parameter in authorization requests and responses.
- *
- * @type {z.ZodType<OptionalScopeArray>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalScopeArraySchema.parse(null); // returns undefined
- * nullableButOptionalScopeArraySchema.parse(undefined); // returns undefined
- * nullableButOptionalScopeArraySchema.parse([
- *   { name: 'read', description: 'Read access' },
- *   { name: 'write', description: 'Write access' }
- * ]); // returns the array of Scope objects
- *
- * @example
- * // Invalid input
- * nullableButOptionalScopeArraySchema.parse('not an array'); // throws ZodError
- *
- * @see {@link scopeSchema} for the underlying scope schema
- * @see {@link https://tools.ietf.org/html/rfc6749#section-3.3|OAuth 2.0 Scope}
- */
-export const nullableButOptionalScopeArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(z.array(scopeSchema))
-) as z.ZodType<OptionalScopeArray>;

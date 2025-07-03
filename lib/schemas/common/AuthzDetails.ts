@@ -15,7 +15,7 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalAuthzDetailsElementArraySchema } from './AuthzDetailsElement';
+import { authzDetailsElementSchema } from './AuthzDetailsElement';
 
 /**
  * Schema for Authorization Details as defined in OAuth 2.0 Rich Authorization Requests.
@@ -23,7 +23,7 @@ import { nullableButOptionalAuthzDetailsElementArraySchema } from './AuthzDetail
  * @see {@link https://www.rfc-editor.org/rfc/rfc9396.html|RFC 9396 OAuth 2.0 Rich Authorization Requests}
  */
 export const authzDetailsSchema = z.object({
-  elements: nullableButOptionalAuthzDetailsElementArraySchema,
+  elements: z.array(authzDetailsElementSchema).default([]),
 });
 
 /**
@@ -33,36 +33,3 @@ export const authzDetailsSchema = z.object({
  * @property {AuthzDetailsElement[]|undefined} [elements] - An array of Authorization Details elements.
  */
 export type AuthzDetails = z.infer<typeof authzDetailsSchema>;
-
-/**
- * Represents an optional Authorization Details structure.
- *
- * @typedef {AuthzDetails|undefined} OptionalAuthzDetails
- */
-type OptionalAuthzDetails = AuthzDetails | undefined;
-
-/**
- * Schema for a nullable but optional Authorization Details structure.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional authzDetailsSchema. This allows the schema to
- * accept null, undefined, or a valid AuthzDetails object.
- *
- * @type {z.ZodType<OptionalAuthzDetails>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalAuthzDetailsSchema.parse(null); // returns undefined
- * nullableButOptionalAuthzDetailsSchema.parse(undefined); // returns undefined
- * nullableButOptionalAuthzDetailsSchema.parse({
- *   elements: [{ type: 'example', actions: ['read'] }]
- * }); // returns the AuthzDetails object
- *
- * @example
- * // Invalid input
- * nullableButOptionalAuthzDetailsSchema.parse('not an object'); // throws ZodError
- */
-export const nullableButOptionalAuthzDetailsSchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(authzDetailsSchema)
-) as z.ZodType<OptionalAuthzDetails>;

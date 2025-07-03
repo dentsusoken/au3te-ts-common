@@ -23,7 +23,6 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from './stringSchema';
 
 /**
  * Schema for a key-value pair.
@@ -31,8 +30,8 @@ import { nullableButOptionalStringSchema } from './stringSchema';
  * @type {z.ZodType<Pair>}
  */
 export const pairSchema = z.object({
-  key: nullableButOptionalStringSchema,
-  value: nullableButOptionalStringSchema,
+  key: z.string().nullish(),
+  value: z.string().nullish(),
 });
 
 /**
@@ -43,37 +42,3 @@ export const pairSchema = z.object({
  * @property {string|undefined} [value] - The value associated with the key.
  */
 export type Pair = z.infer<typeof pairSchema>;
-
-/**
- * Represents an optional array of Pair objects.
- *
- * @typedef {Pair[]|undefined} OptionalPairArray
- */
-type OptionalPairArray = Pair[] | undefined;
-
-/**
- * Schema for a nullable but optional array of key-value pairs.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of pairSchema. This allows the schema to
- * accept null, undefined, or a valid array of Pair objects.
- *
- * @type {z.ZodType<OptionalPairArray>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalPairArraySchema.parse(null); // returns undefined
- * nullableButOptionalPairArraySchema.parse(undefined); // returns undefined
- * nullableButOptionalPairArraySchema.parse([
- *   { key: 'name', value: 'John' },
- *   { key: 'age', value: '30' }
- * ]); // returns the array of Pair objects
- *
- * @example
- * // Invalid input
- * nullableButOptionalPairArraySchema.parse('not an array'); // throws ZodError
- */
-export const nullableButOptionalPairArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(z.array(pairSchema))
-) as z.ZodType<OptionalPairArray>;

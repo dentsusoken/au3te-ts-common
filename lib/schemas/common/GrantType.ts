@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 202024 Authlete, Inc.
+ * Copyright (C) 2014-2024 Authlete, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,11 +102,6 @@ export const grantTypes = [
 export type GrantType = (typeof grantTypes)[number];
 
 /**
- * Type representing an optional grant type.
- */
-type OptionalGrantType = GrantType | undefined;
-
-/**
  * Schema for validating grant types.
  * Converts input to lowercase before validation.
  */
@@ -114,12 +109,3 @@ export const grantTypeSchema = z.preprocess(
   (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
   z.enum(grantTypes)
 ) as z.ZodType<GrantType>;
-
-/**
- * Schema for validating optional grant types.
- * Converts null to undefined and validates using grantTypeSchema.
- */
-export const nullableButOptionalGrantTypeSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(grantTypeSchema)
-) as z.ZodType<OptionalGrantType>;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { apiResponseSchema } from './ApiResponse';
+import { apiResponseSchema } from '../ApiResponse';
 
 describe('apiResponseSchema', () => {
   it('should validate a valid API response object', () => {
@@ -8,17 +8,15 @@ describe('apiResponseSchema', () => {
       resultMessage: 'Operation completed successfully',
     };
 
-    const result = apiResponseSchema.safeParse(validResponse);
-    expect(result.success).toBe(true);
-    expect(result.data).toEqual(validResponse);
+    const result = apiResponseSchema.parse(validResponse);
+    expect(result).toEqual(validResponse);
   });
 
   it('should allow optional fields to be omitted', () => {
     const validResponse = {};
 
-    const result = apiResponseSchema.safeParse(validResponse);
-    expect(result.success).toBe(true);
-    expect(result.data).toEqual({});
+    const result = apiResponseSchema.parse(validResponse);
+    expect(result).toEqual({});
   });
 
   it('should invalidate an object with non-string fields', () => {

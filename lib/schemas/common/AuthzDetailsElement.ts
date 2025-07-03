@@ -15,10 +15,7 @@
  */
 
 import { z } from 'zod';
-import {
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalStringSchema,
-} from './stringSchema';
+import { stringArraySchema } from './stringSchema';
 
 /**
  * Schema for an Authorization Details element as defined in OAuth 2.0 Rich Authorization Requests.
@@ -29,12 +26,12 @@ import {
  */
 export const authzDetailsElementSchema = z
   .object({
-    type: nullableButOptionalStringSchema,
-    locations: nullableButOptionalStringArraySchema,
-    actions: nullableButOptionalStringArraySchema,
-    datatypes: nullableButOptionalStringArraySchema,
-    identifier: nullableButOptionalStringSchema,
-    privileges: nullableButOptionalStringArraySchema,
+    type: z.string().nullish(),
+    locations: stringArraySchema.nullish(),
+    actions: stringArraySchema.nullish(),
+    datatypes: stringArraySchema.nullish(),
+    identifier: z.string().nullish(),
+    privileges: stringArraySchema.nullish(),
   })
   .passthrough();
 
@@ -50,37 +47,3 @@ export const authzDetailsElementSchema = z
  * @property {string[]|undefined} [privileges] - The privileges granted by this element.
  */
 export type AuthzDetailsElement = z.infer<typeof authzDetailsElementSchema>;
-
-/**
- * Represents an optional array of Authorization Details elements.
- *
- * @typedef {AuthzDetailsElement[]|undefined} OptionalAuthzDetailsElementArray
- */
-type OptionalAuthzDetailsElementArray = AuthzDetailsElement[] | undefined;
-
-/**
- * Schema for a nullable but optional array of Authorization Details elements.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of authzDetailsElementSchema. This allows the schema to
- * accept null, undefined, or a valid array of AuthzDetailsElement objects.
- *
- * @type {z.ZodType<OptionalAuthzDetailsElementArray>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalAuthzDetailsElementArraySchema.parse(null); // returns undefined
- * nullableButOptionalAuthzDetailsElementArraySchema.parse(undefined); // returns undefined
- * nullableButOptionalAuthzDetailsElementArraySchema.parse([
- *   { type: 'example', actions: ['read'] },
- *   { type: 'another', locations: ['https://example.com'] }
- * ]); // returns the array of AuthzDetailsElement objects
- *
- * @example
- * // Invalid input
- * nullableButOptionalAuthzDetailsElementArraySchema.parse('not an array'); // throws ZodError
- */
-export const nullableButOptionalAuthzDetailsElementArraySchema = z.preprocess(
-  (value) => (value === null ? undefined : value),
-  z.optional(z.array(authzDetailsElementSchema))
-) as z.ZodType<OptionalAuthzDetailsElementArray>;

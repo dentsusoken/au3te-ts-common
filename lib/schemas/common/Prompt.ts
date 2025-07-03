@@ -38,50 +38,23 @@ export const prompts = [
 export type Prompt = (typeof prompts)[number];
 
 /**
- * Represents an optional array of Prompt values.
+ * Zod schema for validating prompt values.
  *
- * @typedef {Prompt[]|undefined} OptionalPromptArray
- */
-type OptionalPromptArray = Prompt[] | undefined;
-
-/**
- * Schema for validating a single Prompt value.
+ * This schema preprocesses the input by converting it to lowercase if it's a string,
+ * and then validates it against the predefined prompt values using `z.enum`.
+ * The resulting schema accepts values of type `Prompt`, which is a union of the predefined prompts.
  *
- * This schema preprocesses the input to convert string values to lowercase,
- * and then validates against the enum of valid prompt values.
+ * @example
+ * const validPrompt = promptSchema.parse('login');
+ * // validPrompt: 'login'
  *
- * @type {z.ZodType<Prompt>}
+ * const validPromptCaseInsensitive = promptSchema.parse('LOGIN');
+ * // validPromptCaseInsensitive: 'login'
+ *
+ * const invalidPrompt = promptSchema.parse('invalid');
+ * // throws a ZodError
  */
 export const promptSchema = z.preprocess(
   (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
   z.enum(prompts)
 ) as z.ZodType<Prompt>;
-
-/**
- * Schema for a nullable but optional array of Prompt values.
- *
- * This schema preprocesses the input to convert null values to undefined,
- * and then applies an optional array of promptSchema. This allows the schema to
- * accept null, undefined, or a valid array of Prompt values.
- *
- * In OAuth 2.0 and OpenID Connect, the 'prompt' parameter is used to specify
- * the type of authentication and consent experience the user should encounter.
- *
- * @type {z.ZodType<OptionalPromptArray>}
- *
- * @example
- * // Valid inputs
- * nullableButOptionalPromptArraySchema.parse(null); // returns undefined
- * nullableButOptionalPromptArraySchema.parse(undefined); // returns undefined
- * nullableButOptionalPromptArraySchema.parse(['login', 'consent']); // returns ['login', 'consent']
- *
- * @example
- * // Invalid input
- * nullableButOptionalPromptArraySchema.parse(['invalid']); // throws ZodError
- *
- * @see {@link https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest|OpenID Connect Core 1.0 - Authentication Request}
- */
-export const nullableButOptionalPromptArraySchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(z.array(promptSchema))
-) as z.ZodType<OptionalPromptArray>;

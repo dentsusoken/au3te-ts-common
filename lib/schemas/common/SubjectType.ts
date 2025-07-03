@@ -17,18 +17,29 @@
 
 import { z } from 'zod';
 
+/**
+ * An array of valid subject types.
+ *
+ * @constant {readonly string[]}
+ */
 export const subjectTypes = ['public', 'pairwise'] as const;
 
+/**
+ * Type representing a valid subject type.
+ *
+ * @typedef {('public' | 'pairwise')} SubjectType
+ */
 export type SubjectType = (typeof subjectTypes)[number];
 
-type OptionalSubjectType = SubjectType | undefined;
-
+/**
+ * Zod schema for validating and transforming subject types.
+ *
+ * This schema preprocesses the input to convert it to lowercase if it's a string,
+ * and then validates it against the defined subject types.
+ *
+ * @type {z.ZodType<SubjectType>}
+ */
 export const subjectTypeSchema = z.preprocess(
   (v) => (v && typeof v === 'string' ? v.toLowerCase() : v),
   z.enum(subjectTypes)
 ) as z.ZodType<SubjectType>;
-
-export const nullableButOptionalSubjectTypeSchema = z.preprocess(
-  (v) => (v === null ? undefined : v),
-  z.optional(subjectTypeSchema)
-) as z.ZodType<OptionalSubjectType>;
