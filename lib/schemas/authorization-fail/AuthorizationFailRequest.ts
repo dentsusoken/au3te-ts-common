@@ -15,7 +15,6 @@
  */
 
 import { z } from 'zod';
-import { nullableButOptionalStringSchema } from '../common/stringSchema';
 
 export const authorizationFailReasonSchema = z.enum([
   /**
@@ -368,8 +367,8 @@ export type AuthorizationFailReason = z.infer<
  */
 export const authorizationFailRequestSchema = z.object({
   reason: authorizationFailReasonSchema,
-  ticket: nullableButOptionalStringSchema,
-  description: nullableButOptionalStringSchema,
+  ticket: z.string().nullish(),
+  description: z.string().nullish(),
 });
 
 /**

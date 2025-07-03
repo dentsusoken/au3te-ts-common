@@ -124,7 +124,6 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalStringSchema } from '../common/stringSchema';
 
 const actionSchema = z.enum([
   'INTERNAL_SERVER_ERROR',
@@ -157,7 +156,7 @@ const actionSchema = z.enum([
  */
 export const authorizationFailResponseSchema = apiResponseSchema.extend({
   action: actionSchema,
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 });
 
 /**
