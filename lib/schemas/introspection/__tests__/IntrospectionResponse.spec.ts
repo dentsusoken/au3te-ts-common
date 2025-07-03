@@ -18,7 +18,7 @@ import { describe, expect, it } from 'vitest';
 import {
   introspectionResponseSchema,
   type IntrospectionResponse,
-} from './IntrospectionResponse';
+} from '../IntrospectionResponse';
 
 describe('introspectionResponseSchema', () => {
   // Test for minimal valid response
@@ -29,7 +29,6 @@ describe('introspectionResponseSchema', () => {
       action: 'OK',
       clientId: 123456,
     };
-
     const result = introspectionResponseSchema.parse(response);
     expect(result).toEqual(response);
   });
@@ -67,8 +66,8 @@ describe('introspectionResponseSchema', () => {
         elements: [
           {
             type: 'account_information',
-            actions: ['read'],
-            locations: ['https://example.com/accounts'],
+            actions: { array: ['read'] },
+            locations: { array: ['https://example.com/accounts'] },
           },
         ],
       },
@@ -98,7 +97,6 @@ describe('introspectionResponseSchema', () => {
       dpopNonce: 'dpop_nonce123',
       responseSigningRequired: true,
     };
-
     const result = introspectionResponseSchema.parse(response);
     expect(result).toEqual(response);
   });
@@ -112,7 +110,6 @@ describe('introspectionResponseSchema', () => {
       'FORBIDDEN',
       'OK',
     ] as const;
-
     actions.forEach((action) => {
       const response: IntrospectionResponse = {
         resultCode: 'A000000',
@@ -120,7 +117,6 @@ describe('introspectionResponseSchema', () => {
         action,
         clientId: 123456,
       };
-
       const result = introspectionResponseSchema.parse(response);
       expect(result).toEqual(response);
     });
@@ -134,8 +130,8 @@ describe('introspectionResponseSchema', () => {
       action: 'INVALID_ACTION',
       clientId: 123456,
     };
-
-    expect(() => introspectionResponseSchema.parse(response)).toThrow();
+    const result = introspectionResponseSchema.safeParse(response);
+    expect(result.success).toBe(false);
   });
 
   // Test for missing required fields
@@ -144,8 +140,8 @@ describe('introspectionResponseSchema', () => {
       resultMessage: 'success',
       action: 'OK',
     };
-
-    expect(() => introspectionResponseSchema.parse(response)).toThrow();
+    const result = introspectionResponseSchema.safeParse(response);
+    expect(result.success).toBe(false);
   });
 
   // Test for nullish fields
@@ -161,7 +157,6 @@ describe('introspectionResponseSchema', () => {
       authTime: null,
       cnonceExpiresAt: null,
     };
-
     const result = introspectionResponseSchema.parse(response);
     expect(result.subject).toBeNull();
     expect(result.scopes).toBeNull();
@@ -180,7 +175,34 @@ describe('introspectionResponseSchema', () => {
       expiresAt: '1735689600000', // Should be number
       scopes: 'read write', // Should be array
     };
+    const result = introspectionResponseSchema.safeParse(response);
+    expect(result.success).toBe(false);
+  });
 
-    expect(() => introspectionResponseSchema.parse(response)).toThrow();
+  // Additional edge/invalid cases
+  it('should reject missing all required fields', () => {
+    const result = introspectionResponseSchema.safeParse({});
+    expect(result.success).toBe(false);
+  });
+
+  it('should reject null object', () => {
+    const result = introspectionResponseSchema.safeParse(null);
+    expect(result.success).toBe(false);
+  });
+
+  it('should reject undefined object', () => {
+    const result = introspectionResponseSchema.safeParse(undefined);
+    expect(result.success).toBe(false);
+  });
+
+  it('should reject non-object values', () => {
+    const result1 = introspectionResponseSchema.safeParse('not-an-object');
+    expect(result1.success).toBe(false);
+    const result2 = introspectionResponseSchema.safeParse(123);
+    expect(result2.success).toBe(false);
+    const result3 = introspectionResponseSchema.safeParse(true);
+    expect(result3.success).toBe(false);
+    const result4 = introspectionResponseSchema.safeParse([]);
+    expect(result4.success).toBe(false);
   });
 });
