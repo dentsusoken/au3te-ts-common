@@ -16,21 +16,14 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalClientAuthMethodSchema } from '../common/ClientAuthMethod';
-import { nullableButOptionalGrantTypeSchema } from '../common/GrantType';
-import { nullableButOptionalPropertyArraySchema } from '../common/Property';
-import { nullableButOptionalPairArraySchema } from '../common/Pair';
-import { nullableButOptionalAuthzDetailsSchema } from '../common/AuthzDetails';
-import { nullableButOptionalTokenInfoSchema } from '../common/TokenInfo';
-import { nullableButOptionalBooleanSchema } from '../common/booleanSchema';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import {
-  nullableButOptionalStringSchema,
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalUrlStringSchema,
-  nullableButOptionalUrlStringArraySchema,
-} from '../common/stringSchema';
-import { nullableButOptionalTokenTypeSchema } from '../common/TokenType';
+import { clientAuthMethodSchema } from '../common/ClientAuthMethod';
+import { grantTypeSchema } from '../common/GrantType';
+import { propertySchema } from '../common/Property';
+import { pairSchema } from '../common/Pair';
+import { authzDetailsSchema } from '../common/AuthzDetails';
+import { tokenInfoSchema } from '../common/TokenInfo';
+import { stringArraySchema } from '../common/stringSchema';
+import { tokenTypeSchema } from '../common/TokenType';
 
 /**
  * Zod schema for the action of a token response.
@@ -167,278 +160,278 @@ export const tokenResponseSchema = apiResponseSchema.extend({
    * (OPTIONAL) Response content to return to the client.
    * This JSON string should be used as the response body to the client.
    */
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 
   /**
    * (OPTIONAL) Username from resource owner password credentials grant.
    * Available when the grant type is "password".
    */
-  username: nullableButOptionalStringSchema,
+  username: z.string().nullish(),
 
   /**
    * (OPTIONAL) Password from resource owner password credentials grant.
    * Available when the grant type is "password".
    */
-  password: nullableButOptionalStringSchema,
+  password: z.string().nullish(),
 
   /**
    * (OPTIONAL) Ticket used for token operations.
    * This value is required when calling /auth/token/issue or /auth/token/fail APIs.
    */
-  ticket: nullableButOptionalStringSchema,
+  ticket: z.string().nullish(),
 
   /**
    * (OPTIONAL) Issued access token.
    * The access token that was issued by this token request.
    */
-  accessToken: nullableButOptionalStringSchema,
+  accessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Access token expiration time in milliseconds since epoch.
    * The time at which the access token will expire.
    */
-  accessTokenExpiresAt: nullableButOptionalNumberSchema,
+  accessTokenExpiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) Access token duration in seconds.
    * The duration of validity for the access token.
    */
-  accessTokenDuration: nullableButOptionalNumberSchema,
+  accessTokenDuration: z.number().nullish(),
 
   /**
    * (OPTIONAL) Issued refresh token.
    * The refresh token that was issued by this token request.
    */
-  refreshToken: nullableButOptionalStringSchema,
+  refreshToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Refresh token expiration time in milliseconds since epoch.
    * The time at which the refresh token will expire.
    */
-  refreshTokenExpiresAt: nullableButOptionalNumberSchema,
+  refreshTokenExpiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) Refresh token duration in seconds.
    * The duration of validity for the refresh token.
    */
-  refreshTokenDuration: nullableButOptionalNumberSchema,
+  refreshTokenDuration: z.number().nullish(),
 
   /**
    * (OPTIONAL) Issued ID token.
    * The ID token that was issued by this token request.
    */
-  idToken: nullableButOptionalStringSchema,
+  idToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Grant type of the token request.
    * The grant type used in the token request.
    */
-  grantType: nullableButOptionalGrantTypeSchema,
+  grantType: grantTypeSchema.nullish(),
 
   /**
    * (OPTIONAL) Client ID.
    * The client identifier of the client application.
    */
-  clientId: nullableButOptionalNumberSchema,
+  clientId: z.number().nullish(),
 
   /**
    * (OPTIONAL) Client ID alias.
    * The alias of the client ID used in this request.
    */
-  clientIdAlias: nullableButOptionalStringSchema,
+  clientIdAlias: z.string().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating if client ID alias was used.
    * True if the client ID alias was used in this request.
    */
-  clientIdAliasUsed: nullableButOptionalBooleanSchema,
+  clientIdAliasUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) Client entity ID.
    * The entity ID of the client.
    */
-  clientEntityId: nullableButOptionalUrlStringSchema,
+  clientEntityId: z.string().url().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating if client entity ID was used.
    * True if the client entity ID was used in this request.
    */
-  clientEntityIdUsed: nullableButOptionalBooleanSchema,
+  clientEntityIdUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) Subject (resource owner) identifier.
    * The identifier of the resource owner who authorized the client application.
    */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
 
   /**
    * (OPTIONAL) Scopes granted to the access token.
    * The scopes that were granted to the access token.
    */
-  scopes: nullableButOptionalStringArraySchema,
+  scopes: stringArraySchema.nullish(),
 
   /**
    * (OPTIONAL) Properties associated with the access token.
    * Additional properties that are associated with the access token.
    */
-  properties: nullableButOptionalPropertyArraySchema,
+  properties: z.array(propertySchema).nullish(),
 
   /**
    * (OPTIONAL) Access token in JWT format.
    * The access token in JWT format if the service is configured to issue JWT access tokens.
    */
-  jwtAccessToken: nullableButOptionalStringSchema,
+  jwtAccessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Client authentication method.
    * The method used to authenticate the client.
    */
-  clientAuthMethod: nullableButOptionalClientAuthMethodSchema,
+  clientAuthMethod: clientAuthMethodSchema.nullish(),
 
   /**
    * (OPTIONAL) Target resources for the access token.
    * The resources that the access token is intended to be used at.
    */
-  resources: nullableButOptionalUrlStringArraySchema,
+  resources: z.array(z.string().url()).nullish(),
 
   /**
    * (OPTIONAL) Resources actually associated with the access token.
    * The resources that were actually associated with the issued access token.
    */
-  accessTokenResources: nullableButOptionalUrlStringArraySchema,
+  accessTokenResources: z.array(z.string().url()).nullish(),
 
   /**
    * (OPTIONAL) Authorization details.
    * Detailed authorization information as defined in OAuth 2.0 Rich Authorization Requests.
    */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
 
   /**
    * (OPTIONAL) Grant identifier.
    * The identifier of the grant that this token is associated with.
    */
-  grantId: nullableButOptionalStringSchema,
+  grantId: z.string().nullish(),
 
   /**
    * (OPTIONAL) Service attributes.
    * The attributes of the service that processed this request.
    */
-  serviceAttributes: nullableButOptionalPairArraySchema,
+  serviceAttributes: z.array(pairSchema).nullish(),
 
   /**
    * (OPTIONAL) Client attributes.
    * The attributes of the client application.
    */
-  clientAttributes: nullableButOptionalPairArraySchema,
+  clientAttributes: z.array(pairSchema).nullish(),
 
   /**
    * (OPTIONAL) Audiences for the access token.
    * The intended audiences of the access token.
    */
-  audiences: nullableButOptionalStringArraySchema,
+  audiences: stringArraySchema.nullish(),
 
   /**
    * (OPTIONAL) Requested token type for token exchange.
    * The type of token requested in a token exchange request.
    * @see https://www.rfc-editor.org/rfc/rfc8693.html
    */
-  requestedTokenType: nullableButOptionalTokenTypeSchema,
+  requestedTokenType: tokenTypeSchema.nullish(),
 
   /**
    * (OPTIONAL) Subject token for token exchange.
    * The security token that represents the identity of the party on behalf of whom the request is being made.
    * @see https://www.rfc-editor.org/rfc/rfc8693.html
    */
-  subjectToken: nullableButOptionalStringSchema,
+  subjectToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Subject token type for token exchange.
    * An identifier for the security token type of the subject token.
    * @see https://www.rfc-editor.org/rfc/rfc8693.html
    */
-  subjectTokenType: nullableButOptionalTokenTypeSchema,
+  subjectTokenType: tokenTypeSchema.nullish(),
 
   /**
    * (OPTIONAL) Information about the subject token.
    * Additional information about the subject token in a token exchange request.
    */
-  subjectTokenInfo: nullableButOptionalTokenInfoSchema,
+  subjectTokenInfo: tokenInfoSchema.nullish(),
 
   /**
    * (OPTIONAL) Actor token for token exchange.
    * The security token that represents the identity of the acting party.
    * @see https://www.rfc-editor.org/rfc/rfc8693.html
    */
-  actorToken: nullableButOptionalStringSchema,
+  actorToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Actor token type for token exchange.
    * An identifier for the security token type of the actor token.
    * @see https://www.rfc-editor.org/rfc/rfc8693.html
    */
-  actorTokenType: nullableButOptionalTokenTypeSchema,
+  actorTokenType: tokenTypeSchema.nullish(),
 
   /**
    * (OPTIONAL) Information about the actor token.
    * Additional information about the actor token in a token exchange request.
    */
-  actorTokenInfo: nullableButOptionalTokenInfoSchema,
+  actorTokenInfo: tokenInfoSchema.nullish(),
 
   /**
    * (OPTIONAL) Assertion for assertion grant.
    * The assertion used in an assertion grant type request.
    * @see https://www.rfc-editor.org/rfc/rfc7521.html
    */
-  assertion: nullableButOptionalStringSchema,
+  assertion: z.string().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating if previous refresh token was used.
    * True if the request used a previous refresh token that was kept for a short time.
    * @since Authlete 2.3
    */
-  previousRefreshTokenUsed: nullableButOptionalBooleanSchema,
+  previousRefreshTokenUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) Client nonce for credential issuance.
    * The nonce value for credential issuance in the pre-authorized code flow.
    * @since Authlete 3.0
    */
-  cnonce: nullableButOptionalStringSchema,
+  cnonce: z.string().nullish(),
 
   /**
    * (OPTIONAL) Client nonce expiration time in milliseconds since epoch.
    * The time at which the client nonce will expire.
    * @since Authlete 3.0
    */
-  cnonceExpiresAt: nullableButOptionalNumberSchema,
+  cnonceExpiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) Client nonce duration in seconds.
    * The duration of validity for the client nonce.
    * @since Authlete 3.0
    */
-  cnonceDuration: nullableButOptionalNumberSchema,
+  cnonceDuration: z.number().nullish(),
 
   /**
    * (OPTIONAL) Claims requested to be included in reissued ID tokens.
    * The claims that were requested to be included in ID tokens.
    * @since Authlete 3.0
    */
-  requestedIdTokenClaims: nullableButOptionalStringArraySchema,
+  requestedIdTokenClaims: stringArraySchema.nullish(),
 
   /**
    * (OPTIONAL) DPoP nonce to be used in DPoP-Nonce header.
    * The nonce value that should be included in the DPoP-Nonce header.
    * @see https://www.rfc-editor.org/rfc/rfc9449.html
    */
-  dpopNonce: nullableButOptionalStringSchema,
+  dpopNonce: z.string().nullish(),
 
   /**
    * (OPTIONAL) Scopes associated with the refresh token.
    * The scopes that are associated with the refresh token.
    * @since Authlete 3.0
    */
-  refreshTokenScopes: nullableButOptionalStringArraySchema,
+  refreshTokenScopes: stringArraySchema.nullish(),
 });
 
 /**
