@@ -16,7 +16,6 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalStringSchema } from '../common/stringArrayArraySchema';
 
 /**
  * The action that the service implementation should take.
@@ -73,7 +72,7 @@ export const tokenFailResponseSchema = apiResponseSchema.extend({
    * (OPTIONAL) Response content to return to the client.
    * This JSON string should be used as the response body to the client.
    */
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 });
 
 /**
