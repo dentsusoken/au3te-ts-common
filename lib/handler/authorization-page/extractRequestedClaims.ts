@@ -15,7 +15,7 @@
  */
 
 import { Pair } from '../../schemas/common/Pair';
-import { runCatching } from 'oid4vc-core/utils';
+import { runCatching } from '@vecrea/oid4vc-core/utils';
 
 /**
  * Represents an object that may contain a purpose.

@@ -6,7 +6,7 @@ import {
   extractRequestedClaimsFromArray,
   defaultExtractRequestedClaims,
   ClaimsContainer,
-} from './extractRequestedClaims';
+} from '../extractRequestedClaims';
 
 describe('Claims Extraction Functions', () => {
   describe('extractPurpose', () => {
@@ -18,6 +18,13 @@ describe('Claims Extraction Functions', () => {
       expect(extractPurpose({ purpose: 123 })).toBeUndefined();
       expect(extractPurpose({ purpose: {} })).toBeUndefined();
       expect(extractPurpose({})).toBeUndefined();
+    });
+
+    it('should handle null and undefined purpose', () => {
+      expect(
+        extractPurpose({ purpose: null as unknown as string })
+      ).toBeUndefined();
+      expect(extractPurpose({ purpose: undefined })).toBeUndefined();
     });
   });
 
@@ -33,6 +40,13 @@ describe('Claims Extraction Functions', () => {
 
     it('should create a pair with undefined value when purpose is not a string', () => {
       expect(extractClaimNamePurposePair('testKey', { purpose: 123 })).toEqual({
+        key: 'testKey',
+        value: undefined,
+      });
+    });
+
+    it('should handle empty string as purpose', () => {
+      expect(extractClaimNamePurposePair('testKey', { purpose: '' })).toEqual({
         key: 'testKey',
         value: undefined,
       });
@@ -56,6 +70,10 @@ describe('Claims Extraction Functions', () => {
     it('should return undefined when there are no claims', () => {
       expect(extractRequestedClaimsFromObject({})).toBeUndefined();
     });
+
+    it('should handle empty claims object', () => {
+      expect(extractRequestedClaimsFromObject({ claims: {} })).toEqual([]);
+    });
   });
 
   describe('extractRequestedClaimsFromArray', () => {
@@ -73,6 +91,11 @@ describe('Claims Extraction Functions', () => {
     it('should return undefined when there are no claims', () => {
       expect(extractRequestedClaimsFromArray([])).toBeUndefined();
       expect(extractRequestedClaimsFromArray([{}, {}])).toBeUndefined();
+    });
+
+    it('should handle array with empty claims objects', () => {
+      const array: ClaimsContainer[] = [{ claims: {} }, { claims: {} }];
+      expect(extractRequestedClaimsFromArray(array)).toBeUndefined();
     });
   });
 
@@ -120,6 +143,39 @@ describe('Claims Extraction Functions', () => {
 
     it('should return undefined when claimsJson is undefined', () => {
       expect(defaultExtractRequestedClaims(undefined)).toBeUndefined();
+    });
+
+    it('should handle empty claims object in verified_claims', () => {
+      const claimsJson = JSON.stringify({
+        verified_claims: { claims: {} },
+      });
+      expect(defaultExtractRequestedClaims(claimsJson)).toEqual([]);
+    });
+
+    it('should handle array of empty claims objects in verified_claims', () => {
+      const claimsJson = JSON.stringify({
+        verified_claims: [{ claims: {} }, { claims: {} }],
+      });
+      expect(defaultExtractRequestedClaims(claimsJson)).toBeUndefined();
+    });
+
+    it('should handle special characters in claim names and purposes', () => {
+      const claimsJson = JSON.stringify({
+        verified_claims: {
+          claims: {
+            'claim-1': { purpose: 'purpose-1' },
+            claim_2: { purpose: 'purpose_2' },
+            'claim 3': { purpose: 'purpose 3' },
+            'claim.4': { purpose: 'purpose.4' },
+          },
+        },
+      });
+      expect(defaultExtractRequestedClaims(claimsJson)).toEqual([
+        { key: 'claim-1', value: 'purpose-1' },
+        { key: 'claim_2', value: 'purpose_2' },
+        { key: 'claim 3', value: 'purpose 3' },
+        { key: 'claim.4', value: 'purpose.4' },
+      ]);
     });
   });
 });

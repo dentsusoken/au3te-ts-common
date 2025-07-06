@@ -16,7 +16,7 @@
 
 import { AuthorizationResponse } from '../../schemas/authorization/AuthorizationResponse';
 import { User } from '../../schemas/common/User';
-import { runCatching } from 'oid4vc-core/utils';
+import { runCatching } from '@vecrea/oid4vc-core/utils';
 import { AuthorizationPageModel } from '../../schemas/authorization-page/AuthorizationPageModel';
 import { ComputeScopes, defaultComputeScopes } from './computeScopes';
 import {
@@ -59,10 +59,10 @@ export const createBuildAuthorizationPageModel =
 
     const purpose = authorizationResponse.purpose;
     const verifiedClaimsForIdToken = extractRequestedClaims(
-      authorizationResponse.idTokenClaims
+      authorizationResponse.idTokenClaims ?? undefined
     );
     const verifiedClaimsForUserInfo = extractRequestedClaims(
-      authorizationResponse.userInfoClaims
+      authorizationResponse.userInfoClaims ?? undefined
     );
     const identityAssuranceRequired =
       purpose !== undefined ||
@@ -88,8 +88,8 @@ export const createBuildAuthorizationPageModel =
       policyUri: client?.policyUri,
       tosUri: client?.tosUri,
       scopes: computeScopes(
-        authorizationResponse.scopes,
-        authorizationResponse.dynamicScopes
+        authorizationResponse.scopes ?? undefined,
+        authorizationResponse.dynamicScopes ?? undefined
       ),
       loginId: authorizationResponse.subject ?? authorizationResponse.loginHint,
       loginIdReadOnly: authorizationResponse.subject ? 'readonly' : undefined,

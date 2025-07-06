@@ -2,9 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   createBuildAuthorizationPageModel,
   defaultBuildAuthorizationPageModel,
-} from './buildAuthorizationPageModel';
-import { AuthorizationResponse } from '../../schemas/authorization/AuthorizationResponse';
-import { User } from '../../schemas/common/User';
+} from '../buildAuthorizationPageModel';
+import { AuthorizationResponse } from '../../../schemas/authorization/AuthorizationResponse';
+import { User } from '../../../schemas/common/User';
 
 describe('buildAuthorizationPageModel', () => {
   const mockUser: User = { subject: 'mockSubject' };
@@ -31,9 +31,8 @@ describe('buildAuthorizationPageModel', () => {
 
   describe('createBuildAuthorizationPageModel', () => {
     it('should build AuthorizationPageModel correctly', () => {
-      const mockComputeScopes = vi.fn((scopes, _) =>
-        scopes ? [...scopes] : []
-      );
+      // Remove unused parameter '_' to fix linter error
+      const mockComputeScopes = vi.fn((scopes) => (scopes ? [...scopes] : []));
       const mockExtractRequestedClaims = vi.fn((claims) =>
         claims ? [{ key: 'mockClaim', value: 'mockValue' }] : undefined
       );
@@ -76,6 +75,74 @@ describe('buildAuthorizationPageModel', () => {
         'mockUserInfoClaims'
       );
     });
+
+    it('should handle missing optional fields gracefully', () => {
+      const minimalAuthzRes: Partial<AuthorizationResponse> = {
+        action: 'INTERACTION',
+        service: {},
+        client: {},
+      };
+      const mockComputeScopes = vi.fn(() => []);
+      const mockExtractRequestedClaims = vi.fn(() => undefined);
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: mockComputeScopes,
+        extractRequestedClaims: mockExtractRequestedClaims,
+      });
+      const result = buildAuthorizationPageModel(
+        minimalAuthzRes as AuthorizationResponse,
+        undefined
+      );
+      expect(result).toMatchObject({
+        serviceName: undefined,
+        clientName: undefined,
+        description: undefined,
+        logoUri: undefined,
+        policyUri: undefined,
+        tosUri: undefined,
+        scopes: [],
+        loginId: undefined,
+        loginIdReadOnly: undefined,
+        authorizationDetails: undefined,
+        user: undefined,
+        purpose: undefined,
+        verifiedClaimsForIdToken: undefined,
+        verifiedClaimsForUserInfo: undefined,
+        identityAssuranceRequired: false,
+        claimsForUserInfo: undefined,
+      });
+    });
+
+    it('should handle empty arrays and strings', () => {
+      const emptyAuthzRes: AuthorizationResponse = {
+        action: 'INTERACTION',
+        service: { serviceName: '' },
+        client: { clientName: '' },
+        scopes: [],
+        dynamicScopes: [],
+        subject: '',
+        purpose: '',
+        idTokenClaims: '',
+        userInfoClaims: '',
+        authorizationDetails: { elements: [] },
+        claimsAtUserInfo: [],
+      };
+      const mockComputeScopes = vi.fn(() => []);
+      const mockExtractRequestedClaims = vi.fn(() => undefined);
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: mockComputeScopes,
+        extractRequestedClaims: mockExtractRequestedClaims,
+      });
+      const result = buildAuthorizationPageModel(emptyAuthzRes, undefined);
+      expect(result.serviceName).toBe('');
+      expect(result.clientName).toBe('');
+      expect(result.scopes).toEqual([]);
+      expect(result.loginId).toBe('');
+      expect(result.purpose).toBe('');
+      expect(result.authorizationDetails).toBe(
+        JSON.stringify({ elements: [] })
+      );
+      expect(result.claimsForUserInfo).toEqual([]);
+    });
   });
 
   describe('defaultBuildAuthorizationPageModel', () => {
@@ -110,6 +177,20 @@ describe('buildAuthorizationPageModel', () => {
         identityAssuranceRequired: false,
         claimsForUserInfo: undefined,
       });
+    });
+
+    it('should handle invalid JSON in claims fields gracefully', () => {
+      const authzRes: AuthorizationResponse = {
+        action: 'INTERACTION',
+        service: {},
+        client: {},
+        idTokenClaims: '{invalidJson}',
+        userInfoClaims: '{invalidJson}',
+      } as AuthorizationResponse;
+      // Should not throw
+      expect(() =>
+        defaultBuildAuthorizationPageModel(authzRes, undefined)
+      ).not.toThrow();
     });
   });
 });
