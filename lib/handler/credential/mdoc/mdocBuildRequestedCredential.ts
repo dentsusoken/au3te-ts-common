@@ -31,14 +31,33 @@ import {
 export const defaultMdocBuildRequestedCredential: BuildRequestedCredential = ({
   issuableCredential,
   requestedCredential,
-}: BuildRequestedCredentialParams) => {
+}: BuildRequestedCredentialParams): Record<string, unknown> => {
+  // Handle undefined/null cases
+  if (!issuableCredential && !requestedCredential) {
+    return {};
+  }
+
+  if (!issuableCredential) {
+    return requestedCredential || {};
+  }
+
+  if (!requestedCredential) {
+    const credential: Record<string, unknown> = {};
+    credential[CLAIMS] = buildRequestedClaims(issuableCredential[CLAIMS]);
+    return credential;
+  }
+
+  // Handle empty objects
   const issuableClaims = issuableCredential[CLAIMS];
   const requestedClaims = requestedCredential[CLAIMS];
+
+  if (!issuableClaims && !requestedClaims) {
+    return {};
+  }
 
   if (!requestedClaims) {
     const credential = { ...requestedCredential };
     credential[CLAIMS] = buildRequestedClaims(issuableClaims);
-
     return credential;
   }
 
