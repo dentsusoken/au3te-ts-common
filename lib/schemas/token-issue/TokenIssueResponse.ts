@@ -16,17 +16,9 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalPropertyArraySchema } from '../common/Property';
-import { nullableButOptionalAuthzDetailsSchema } from '../common/AuthzDetails';
-import {
-  nullableButOptionalStringSchema,
-  nullableButOptionalStringArraySchema,
-  nullableButOptionalUrlStringSchema,
-  nullableButOptionalUrlStringArraySchema,
-} from '../common/stringArrayArraySchema';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import { nullableButOptionalBooleanSchema } from '../common/booleanSchema';
-import { nullableButOptionalPairArraySchema } from '../common/Pair';
+import { propertySchema } from '../common/Property';
+import { authzDetailsSchema } from '../common/AuthzDetails';
+import { pairSchema } from '../common/Pair';
 
 /**
  * The action that the service implementation should take.
@@ -83,121 +75,121 @@ export const tokenIssueResponseSchema = apiResponseSchema.extend({
    * (OPTIONAL) Response content to return to the client.
    * This JSON string should be used as the response body to the client.
    */
-  responseContent: nullableButOptionalStringSchema,
+  responseContent: z.string().nullish(),
 
   /**
    * (OPTIONAL) The newly issued access token.
    * If the service is configured to issue JWT-based access tokens,
    * a JWT-based access token is issued additionally.
    */
-  accessToken: nullableButOptionalStringSchema,
+  accessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) The date in milliseconds since the Unix epoch at which
    * the access token will expire.
    */
-  accessTokenExpiresAt: nullableButOptionalNumberSchema,
+  accessTokenExpiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) The duration of the access token in seconds.
    */
-  accessTokenDuration: nullableButOptionalNumberSchema,
+  accessTokenDuration: z.number().nullish(),
 
   /**
    * (OPTIONAL) The refresh token.
    * Available only when the service supports refresh token flow.
    */
-  refreshToken: nullableButOptionalStringSchema,
+  refreshToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) The date in milliseconds since the Unix epoch at which
    * the refresh token will expire.
    */
-  refreshTokenExpiresAt: nullableButOptionalNumberSchema,
+  refreshTokenExpiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) The duration of the refresh token in seconds.
    */
-  refreshTokenDuration: nullableButOptionalNumberSchema,
+  refreshTokenDuration: z.number().nullish(),
 
   /**
    * (OPTIONAL) The client ID.
    */
-  clientId: nullableButOptionalNumberSchema,
+  clientId: z.number().nullish(),
 
   /**
    * (OPTIONAL) The client ID alias.
    */
-  clientIdAlias: nullableButOptionalStringSchema,
+  clientIdAlias: z.string().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating if client ID alias was used.
    */
-  clientIdAliasUsed: nullableButOptionalBooleanSchema,
+  clientIdAliasUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) The entity ID of the client.
    * @since Authlete 2.3
    */
-  clientEntityId: nullableButOptionalUrlStringSchema,
+  clientEntityId: z.string().url().nullish(),
 
   /**
    * (OPTIONAL) Flag indicating if client entity ID was used.
    * @since Authlete 2.3
    */
-  clientEntityIdUsed: nullableButOptionalBooleanSchema,
+  clientEntityIdUsed: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) The subject (resource owner) identifier.
    */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
 
   /**
    * (OPTIONAL) Scopes granted to the access token.
    */
-  scopes: nullableButOptionalStringArraySchema,
+  scopes: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) Properties associated with the access token.
    */
-  properties: nullableButOptionalPropertyArraySchema,
+  properties: z.array(propertySchema).nullish(),
 
   /**
    * (OPTIONAL) Access token in JWT format.
    * Available only when the service is configured to issue JWT access tokens.
    */
-  jwtAccessToken: nullableButOptionalStringSchema,
+  jwtAccessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) Target resources for the access token.
    * See "Resource Indicators for OAuth 2.0" for details.
    */
-  accessTokenResources: nullableButOptionalUrlStringArraySchema,
+  accessTokenResources: z.array(z.string().url()).nullish(),
 
   /**
    * (OPTIONAL) Authorization details.
    * Represents the value of the "authorization_details" request parameter
    * defined in OAuth 2.0 Rich Authorization Requests.
    */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
 
   /**
    * (OPTIONAL) Service attributes.
    * @since Authlete 2.2
    */
-  serviceAttributes: nullableButOptionalPairArraySchema,
+  serviceAttributes: z.array(pairSchema).nullish(),
 
   /**
    * (OPTIONAL) Client attributes.
    * @since Authlete 2.2
    */
-  clientAttributes: nullableButOptionalPairArraySchema,
+  clientAttributes: z.array(pairSchema).nullish(),
 
   /**
    * (OPTIONAL) Scopes associated with the refresh token.
    * @since Authlete 3.0
    */
-  refreshTokenScopes: nullableButOptionalStringArraySchema,
+  refreshTokenScopes: z.array(z.string()).nullish(),
 });
 
 /**
