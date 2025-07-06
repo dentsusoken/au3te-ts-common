@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { z } from 'zod';
-import { ApiCall } from './ApiCall';
-import { HttpCall } from './HttpCall';
+import { ApiCall } from '../ApiCall';
+import { HttpCall } from '../HttpCall';
 
 describe('ApiCall', () => {
   const call = vi.fn();
