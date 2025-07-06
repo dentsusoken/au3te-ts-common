@@ -196,7 +196,7 @@ export const tokenCreateRequestSchema = z.object({
    *
    * @see {@link https://www.rfc-editor.org/rfc/rfc9396.html|RFC 9396 OAuth 2.0 Rich Authorization Requests}
    */
-  authorizationDetails: z.optional(z.nullable(authzDetailsSchema)),
+  authorizationDetails: authzDetailsSchema.nullish(),
 
   /**
    * (OPTIONAL) The resources.

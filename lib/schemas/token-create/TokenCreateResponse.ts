@@ -16,15 +16,9 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalNumberSchema } from '../common/numberSchema';
-import { nullableButOptionalBooleanSchema } from '../common/booleanSchema';
-import {
-  nullableButOptionalStringSchema,
-  nullableButOptionalStringArraySchema,
-} from '../common/stringSchema';
-import { nullableButOptionalGrantTypeSchema } from '../common/GrantType';
-import { nullableButOptionalPropertyArraySchema } from '../common/Property';
-import { nullableButOptionalAuthzDetailsSchema } from '../common/AuthzDetails';
+import { grantTypeSchema } from '../common/GrantType';
+import { propertySchema } from '../common/Property';
+import { authzDetailsSchema } from '../common/AuthzDetails';
 
 /**
  * The code indicating how the response should be interpreted.
@@ -101,7 +95,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  grantType: nullableButOptionalGrantTypeSchema,
+  grantType: grantTypeSchema.nullish(),
 
   /**
    * (OPTIONAL) The client ID associated with the newly issued access token.
@@ -109,7 +103,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  clientId: nullableButOptionalNumberSchema,
+  clientId: z.number().nullish(),
 
   /**
    * (OPTIONAL) The subject (= unique identifier) of the user associated with
@@ -120,7 +114,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  subject: nullableButOptionalStringSchema,
+  subject: z.string().nullish(),
 
   /**
    * (OPTIONAL) The scopes associated with the newly issued access token.
@@ -128,7 +122,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  scopes: nullableButOptionalStringArraySchema,
+  scopes: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) The newly issued access token.
@@ -136,7 +130,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  accessToken: nullableButOptionalStringSchema,
+  accessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) The token type of the access token.
@@ -145,7 +139,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  tokenType: nullableButOptionalStringSchema,
+  tokenType: z.string().nullish(),
 
   /**
    * (OPTIONAL) The duration of the newly issued access token in seconds.
@@ -153,7 +147,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  expiresIn: nullableButOptionalNumberSchema,
+  expiresIn: z.number().nullish(),
 
   /**
    * (OPTIONAL) The date at which the newly issued access token will expire.
@@ -161,7 +155,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  expiresAt: nullableButOptionalNumberSchema,
+  expiresAt: z.number().nullish(),
 
   /**
    * (OPTIONAL) The newly issued refresh token.
@@ -174,7 +168,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 1.1
    */
-  refreshToken: nullableButOptionalStringSchema,
+  refreshToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) The properties associated with the access token.
@@ -183,7 +177,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since 1.34
    */
-  properties: nullableButOptionalPropertyArraySchema,
+  properties: z.array(propertySchema).nullish(),
 
   /**
    * (OPTIONAL) The newly issued access token in JWT format.
@@ -195,7 +189,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since 3.11
    */
-  jwtAccessToken: nullableButOptionalStringSchema,
+  jwtAccessToken: z.string().nullish(),
 
   /**
    * (OPTIONAL) The authorization details associated with the access token.
@@ -207,7 +201,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    * @see https://www.rfc-editor.org/rfc/rfc9396.html
    * @since 2.99
    */
-  authorizationDetails: nullableButOptionalAuthzDetailsSchema,
+  authorizationDetails: authzDetailsSchema.nullish(),
 
   /**
    * (OPTIONAL) Flag indicating whether the access token is for an external attachment.
@@ -218,7 +212,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    * @see https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#name-external-attachments
    * @since 3.16
    */
-  forExternalAttachment: nullableButOptionalBooleanSchema,
+  forExternalAttachment: z.boolean().nullish(),
 
   /**
    * (OPTIONAL) The unique token identifier.
@@ -228,7 +222,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 3.0
    */
-  tokenId: nullableButOptionalStringSchema,
+  tokenId: z.string().nullish(),
 
   /**
    * (OPTIONAL) The scopes associated with the refresh token.
@@ -238,7 +232,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 3.0
    */
-  refreshTokenScopes: nullableButOptionalStringArraySchema,
+  refreshTokenScopes: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) The client Identifier associated with the newly issued access token.
@@ -249,7 +243,7 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
    *
    * @since Authlete 3.0
    */
-  clientIdentifier: nullableButOptionalStringSchema,
+  clientIdentifier: z.string().nullish(),
 });
 
 /**
