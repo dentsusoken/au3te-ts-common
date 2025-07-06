@@ -16,7 +16,7 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { nullableButOptionalStringSchema } from '../common/stringSchema';
+import { nullableButOptionalStringSchema } from '../common/stringArrayArraySchema';
 
 /**
  * The action that the service implementation should take.

@@ -15,19 +15,19 @@ describe('authorizationIssueRequestSchema', () => {
         acr: 'test-acr',
         claims: '{"claim1": "value1"}',
         properties: [{ key: 'prop1', value: 'value1' }],
-        scopes: { array: ['scope1', 'scope2'] },
+        scopes: ['scope1', 'scope2'],
         idtHeaderParams: '{"alg": "RS256"}',
         authorizationDetails: {
           elements: [
             {
               type: 'payment_initiation',
-              actions: { array: ['read', 'write'] },
+              actions: ['read', 'write'],
             },
           ],
         },
-        consentedClaims: { array: ['claim1', 'claim2'] },
+        consentedClaims: ['claim1', 'claim2'],
         claimsForTx: '{"tx_claim1": "value1"}',
-        verifiedClaimsForTx: { array: ['{"verified_claim1": "value1"}'] },
+        verifiedClaimsForTx: ['{"verified_claim1": "value1"}'],
         jwtAtClaims: '{"additional_claim": "value"}',
         accessToken: 'test-access-token',
         idTokenAudType: 'array',
@@ -74,7 +74,7 @@ describe('authorizationIssueRequestSchema', () => {
         ticket: 'valid-ticket',
         subject: 'test-subject',
         authTime: 1234567890,
-        scopes: { array: ['scope1'] },
+        scopes: ['scope1'],
       };
 
       const result = authorizationIssueRequestSchema.parse(partialRequest);
@@ -129,12 +129,12 @@ describe('authorizationIssueRequestSchema', () => {
     it('should fail when scopes contains non-string elements', () => {
       const invalidRequest = {
         ticket: 'valid-ticket',
-        scopes: { array: ['valid', 123] },
+        scopes: ['valid', 123],
       };
       const result = authorizationIssueRequestSchema.safeParse(invalidRequest);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(['scopes', 'array', 1]);
+        expect(result.error.issues[0].path).toEqual(['scopes', 1]);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
     });
@@ -184,6 +184,32 @@ describe('authorizationIssueRequestSchema', () => {
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
     });
+
+    it('should fail when consentedClaims contains non-string elements', () => {
+      const invalidRequest = {
+        ticket: 'valid-ticket',
+        consentedClaims: ['valid', 123],
+      };
+      const result = authorizationIssueRequestSchema.safeParse(invalidRequest);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['consentedClaims', 1]);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
+
+    it('should fail when verifiedClaimsForTx contains non-string elements', () => {
+      const invalidRequest = {
+        ticket: 'valid-ticket',
+        verifiedClaimsForTx: ['valid', 123],
+      };
+      const result = authorizationIssueRequestSchema.safeParse(invalidRequest);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['verifiedClaimsForTx', 1]);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
   });
 
   describe('type inference', () => {
@@ -192,7 +218,7 @@ describe('authorizationIssueRequestSchema', () => {
         ticket: 'valid-ticket',
         subject: 'test-subject',
         authTime: 1234567890,
-        scopes: { array: ['scope1'] },
+        scopes: ['scope1'],
       };
 
       const result = authorizationIssueRequestSchema.parse(request);
@@ -200,7 +226,7 @@ describe('authorizationIssueRequestSchema', () => {
       expect(typeof result.ticket).toBe('string');
       expect(typeof result.subject).toBe('string');
       expect(typeof result.authTime).toBe('number');
-      expect(Array.isArray(result.scopes?.array)).toBe(true);
+      expect(Array.isArray(result.scopes)).toBe(true);
     });
 
     it('should handle undefined optional fields in type inference', () => {
@@ -274,16 +300,16 @@ describe('authorizationIssueRequestSchema', () => {
       const request: AuthorizationIssueRequest = {
         ticket: 'valid-ticket',
         properties: [],
-        scopes: { array: [] },
-        consentedClaims: { array: [] },
-        verifiedClaimsForTx: { array: [] },
+        scopes: [],
+        consentedClaims: [],
+        verifiedClaimsForTx: [],
       };
 
       const result = authorizationIssueRequestSchema.parse(request);
       expect(result.properties).toEqual([]);
-      expect(result.scopes?.array).toEqual([]);
-      expect(result.consentedClaims?.array).toEqual([]);
-      expect(result.verifiedClaimsForTx?.array).toEqual([]);
+      expect(result.scopes).toEqual([]);
+      expect(result.consentedClaims).toEqual([]);
+      expect(result.verifiedClaimsForTx).toEqual([]);
     });
 
     it('should handle large numbers', () => {
@@ -296,6 +322,52 @@ describe('authorizationIssueRequestSchema', () => {
       const result = authorizationIssueRequestSchema.parse(request);
       expect(result.authTime).toBe(Number.MAX_SAFE_INTEGER);
       expect(result.accessTokenDuration).toBe(Number.MAX_SAFE_INTEGER);
+    });
+
+    it('should handle valid idTokenAudType values', () => {
+      const request1: AuthorizationIssueRequest = {
+        ticket: 'valid-ticket',
+        idTokenAudType: 'string',
+      };
+      const result1 = authorizationIssueRequestSchema.parse(request1);
+      expect(result1.idTokenAudType).toBe('string');
+
+      const request2: AuthorizationIssueRequest = {
+        ticket: 'valid-ticket',
+        idTokenAudType: 'array',
+      };
+      const result2 = authorizationIssueRequestSchema.parse(request2);
+      expect(result2.idTokenAudType).toBe('array');
+    });
+
+    it('should handle complex authorizationDetails structure', () => {
+      const request: AuthorizationIssueRequest = {
+        ticket: 'valid-ticket',
+        authorizationDetails: {
+          elements: [
+            {
+              type: 'payment_initiation',
+              actions: ['read', 'write'],
+              locations: ['https://example.com'],
+              datatypes: ['account'],
+            },
+            {
+              type: 'openid_credential',
+              actions: ['read'],
+              locations: ['https://example.org'],
+            },
+          ],
+        },
+      };
+
+      const result = authorizationIssueRequestSchema.parse(request);
+      expect(result.authorizationDetails?.elements).toHaveLength(2);
+      expect(result.authorizationDetails?.elements[0].type).toBe(
+        'payment_initiation'
+      );
+      expect(result.authorizationDetails?.elements[1].type).toBe(
+        'openid_credential'
+      );
     });
   });
 });

@@ -752,7 +752,7 @@
 
 import { z } from 'zod';
 import { apiResponseSchema } from '../common/ApiResponse';
-import { stringArraySchema } from '../common/stringSchema';
+import { stringArrayArraySchema } from '../common/stringArrayArraySchema';
 import { serviceSchema } from '../common/Service';
 import { scopeSchema } from '../common/Scope';
 import { dynamicScopeSchema } from '../common/DynamicScope';
@@ -796,11 +796,11 @@ export const authorizationResponseSchema = apiResponseSchema.extend({
   /** Dynamic scopes associated with the authorization. */
   dynamicScopes: z.array(dynamicScopeSchema).nullish(),
   /** Claims requested in the authorization. */
-  claims: stringArraySchema.nullish(),
+  claims: z.array(z.string()).nullish(),
   /** Claims to be included in the UserInfo response. */
-  claimsAtUserInfo: stringArraySchema.nullish(),
+  claimsAtUserInfo: z.array(z.string()).nullish(),
   /** Authentication Context Class References. */
-  acrs: stringArraySchema.nullish(),
+  acrs: z.array(z.string()).nullish(),
   /** Subject identifier. */
   subject: z.string().nullish(),
   /** Login hint provided in the request. */
@@ -818,11 +818,11 @@ export const authorizationResponseSchema = apiResponseSchema.extend({
   /** Ticket for the authorization session. */
   ticket: z.string().nullish(),
   /** Requested locales for claims. */
-  claimsLocales: stringArraySchema.nullish(),
+  claimsLocales: z.array(z.string()).nullish(),
   /** Claims requested for a specific transaction. */
-  requestedClaimsForTx: stringArraySchema.nullish(),
+  requestedClaimsForTx: z.array(z.string()).nullish(),
   /** Verified claims requested for a specific transaction. */
-  requestedVerifiedClaimsForTx: stringArraySchema.nullish(),
+  requestedVerifiedClaimsForTx: stringArrayArraySchema.nullish(),
 });
 
 /**

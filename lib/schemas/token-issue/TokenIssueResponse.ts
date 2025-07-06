@@ -23,7 +23,7 @@ import {
   nullableButOptionalStringArraySchema,
   nullableButOptionalUrlStringSchema,
   nullableButOptionalUrlStringArraySchema,
-} from '../common/stringSchema';
+} from '../common/stringArrayArraySchema';
 import { nullableButOptionalNumberSchema } from '../common/numberSchema';
 import { nullableButOptionalBooleanSchema } from '../common/booleanSchema';
 import { nullableButOptionalPairArraySchema } from '../common/Pair';

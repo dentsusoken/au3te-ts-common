@@ -15,7 +15,7 @@ export * from './Prompt';
 export * from './Property';
 export * from './Scope';
 export * from './Service';
-export * from './stringSchema';
+export * from './stringArrayArraySchema';
 export * from './SubjectType';
 export * from './TaggedValue';
 export * from './TokenInfo';

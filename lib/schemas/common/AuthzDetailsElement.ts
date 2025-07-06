@@ -15,7 +15,6 @@
  */
 
 import { z } from 'zod';
-import { stringArraySchema } from './stringSchema';
 
 /**
  * Schema for an Authorization Details element as defined in OAuth 2.0 Rich Authorization Requests.
@@ -27,11 +26,11 @@ import { stringArraySchema } from './stringSchema';
 export const authzDetailsElementSchema = z
   .object({
     type: z.string().nullish(),
-    locations: stringArraySchema.nullish(),
-    actions: stringArraySchema.nullish(),
-    datatypes: stringArraySchema.nullish(),
+    locations: z.array(z.string()).nullish(),
+    actions: z.array(z.string()).nullish(),
+    datatypes: z.array(z.string()).nullish(),
     identifier: z.string().nullish(),
-    privileges: stringArraySchema.nullish(),
+    privileges: z.array(z.string()).nullish(),
   })
   .passthrough();
 

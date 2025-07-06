@@ -15,7 +15,7 @@
  */
 
 import { z } from 'zod';
-import { stringArraySchema } from '../common/stringSchema';
+import { stringArrayArraySchema } from '../common/stringArrayArraySchema';
 
 /**
  * Schema for authorization decision parameters.
@@ -56,7 +56,7 @@ export const authorizationDecisionParamsSchema = z.object({
    * An array of requested verified claims for transaction purposes.
    * This can be an array of strings, null, or undefined.
    */
-  requestedVerifiedClaimsForTx: z.array(stringArraySchema).nullish(),
+  requestedVerifiedClaimsForTx: stringArrayArraySchema.nullish(),
 });
 
 /**

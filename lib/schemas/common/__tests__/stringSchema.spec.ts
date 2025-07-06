@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { stringArraySchema, type StringArray } from '../stringSchema';
+import { stringArraySchema, type StringArray } from '../stringArrayArraySchema';
 
 describe('StringSchema', () => {
   describe('stringArraySchema', () => {

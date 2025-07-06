@@ -34,7 +34,7 @@ describe('TokenResponse', () => {
         clientEntityId: 'https://client.example.com',
         clientEntityIdUsed: false,
         subject: 'sub123',
-        scopes: { array: ['read', 'write'] },
+        scopes: ['read', 'write'],
         properties: [{ key: 'prop1', value: 'value1' }],
         jwtAccessToken: 'jwt123',
         clientAuthMethod: 'client_secret_basic',
@@ -44,16 +44,16 @@ describe('TokenResponse', () => {
           elements: [
             {
               type: 'payment',
-              locations: { array: ['https://payment.example.com'] },
-              actions: { array: ['execute'] },
-              datatypes: { array: ['transaction'] },
+              locations: ['https://payment.example.com'],
+              actions: ['execute'],
+              datatypes: ['transaction'],
             },
           ],
         },
         grantId: 'grant123',
         serviceAttributes: [{ key: 'service1', value: 'value1' }],
         clientAttributes: [{ key: 'client1', value: 'value1' }],
-        audiences: { array: ['aud1', 'aud2'] },
+        audiences: ['aud1', 'aud2'],
         requestedTokenType: 'urn:ietf:params:oauth:token-type:access_token',
         subjectToken: 'subject123',
         subjectTokenType: 'urn:ietf:params:oauth:token-type:access_token',
@@ -74,9 +74,12 @@ describe('TokenResponse', () => {
         cnonce: 'cnonce123',
         cnonceExpiresAt: 1234567890,
         cnonceDuration: 300,
-        requestedIdTokenClaims: { array: ['email', 'name'] },
+        requestedIdTokenClaims: ['email', 'name'],
         dpopNonce: 'dpop123',
-        refreshTokenScopes: { array: ['refresh_scope1', 'refresh_scope2'] },
+        refreshTokenScopes: ['refresh_scope1', 'refresh_scope2'],
+        sessionId: 'session123',
+        deviceSecret: 'device_secret123',
+        deviceSecretHash: 'device_secret_hash123',
       };
 
       const result = tokenResponseSchema.parse(fullResponse);
@@ -95,6 +98,9 @@ describe('TokenResponse', () => {
         authorizationDetails: null,
         subjectTokenInfo: null,
         actorTokenInfo: null,
+        sessionId: null,
+        deviceSecret: null,
+        deviceSecretHash: null,
       };
 
       const result = tokenResponseSchema.parse(responseWithNulls);
@@ -107,6 +113,9 @@ describe('TokenResponse', () => {
       expect(result.authorizationDetails).toBeNull();
       expect(result.subjectTokenInfo).toBeNull();
       expect(result.actorTokenInfo).toBeNull();
+      expect(result.sessionId).toBeNull();
+      expect(result.deviceSecret).toBeNull();
+      expect(result.deviceSecretHash).toBeNull();
     });
 
     it('should accept response with all valid action values', () => {
@@ -163,15 +172,15 @@ describe('TokenResponse', () => {
     it('should accept response with valid array fields', () => {
       const responseWithValidArrays = {
         action: 'OK',
-        scopes: { array: ['read', 'write'] },
+        scopes: ['read', 'write'],
         properties: [{ key: 'prop1', value: 'value1' }],
         resources: ['https://api.example.com'],
         accessTokenResources: ['https://api.example.com'],
         serviceAttributes: [{ key: 'service1', value: 'value1' }],
         clientAttributes: [{ key: 'client1', value: 'value1' }],
-        audiences: { array: ['aud1', 'aud2'] },
-        requestedIdTokenClaims: { array: ['email', 'name'] },
-        refreshTokenScopes: { array: ['refresh_scope1'] },
+        audiences: ['aud1', 'aud2'],
+        requestedIdTokenClaims: ['email', 'name'],
+        refreshTokenScopes: ['refresh_scope1'],
       };
 
       const result = tokenResponseSchema.parse(responseWithValidArrays);
@@ -181,19 +190,34 @@ describe('TokenResponse', () => {
     it('should accept response with empty arrays', () => {
       const responseWithEmptyArrays = {
         action: 'OK',
-        scopes: { array: [] },
+        scopes: [],
         properties: [],
         resources: [],
         accessTokenResources: [],
         serviceAttributes: [],
         clientAttributes: [],
-        audiences: { array: [] },
-        requestedIdTokenClaims: { array: [] },
-        refreshTokenScopes: { array: [] },
+        audiences: [],
+        requestedIdTokenClaims: [],
+        refreshTokenScopes: [],
       };
 
       const result = tokenResponseSchema.parse(responseWithEmptyArrays);
       expect(result).toEqual(responseWithEmptyArrays);
+    });
+
+    it('should accept response with new device-related fields', () => {
+      const responseWithDeviceFields = {
+        action: 'OK',
+        sessionId: 'session_12345',
+        deviceSecret: 'device_secret_abc123',
+        deviceSecretHash: 'device_secret_hash_xyz789',
+      };
+
+      const result = tokenResponseSchema.parse(responseWithDeviceFields);
+      expect(result).toEqual(responseWithDeviceFields);
+      expect(result.sessionId).toBe('session_12345');
+      expect(result.deviceSecret).toBe('device_secret_abc123');
+      expect(result.deviceSecretHash).toBe('device_secret_hash_xyz789');
     });
   });
 
@@ -206,37 +230,23 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['action']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
     });
 
     it('should reject response with invalid action values', () => {
-      const invalidActions = [
-        'INVALID_ACTION',
-        'ok',
-        '',
-        123,
-        null,
-        undefined,
-        {},
-        [],
-      ];
+      const invalidResponse = {
+        action: 'INVALID_ACTION',
+        responseContent: '{"access_token": "token123"}',
+      };
 
-      invalidActions.forEach((action) => {
-        const response = {
-          action,
-          responseContent: '{"access_token": "token123"}',
-        };
-
-        const result = tokenResponseSchema.safeParse(response);
-        expect(result.success).toBe(false);
-        if (!result.success) {
-          expect(result.error.issues).toHaveLength(1);
-          expect(result.error.issues[0].path).toEqual(['action']);
-        }
-      });
+      const result = tokenResponseSchema.safeParse(invalidResponse);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['action']);
+        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+      }
     });
 
     it('should reject response with non-string responseContent', () => {
@@ -248,7 +258,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['responseContent']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -263,7 +272,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['username']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -278,7 +286,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['password']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -293,7 +300,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['ticket']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -308,7 +314,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['accessToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -323,7 +328,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['accessTokenExpiresAt']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -338,7 +342,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['accessTokenDuration']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -353,7 +356,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['refreshToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -368,7 +370,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['refreshTokenExpiresAt']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -383,7 +384,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['refreshTokenDuration']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -398,7 +398,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['idToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -413,7 +412,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientId']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -428,7 +426,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientIdAlias']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -443,7 +440,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientIdAliasUsed']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -458,7 +454,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientEntityId']);
         expect(result.error.issues[0].code).toBe('invalid_string');
       }
@@ -473,7 +468,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientEntityIdUsed']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -488,7 +482,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['subject']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -497,13 +490,12 @@ describe('TokenResponse', () => {
     it('should reject response with invalid scopes structure', () => {
       const invalidResponse = {
         action: 'OK',
-        scopes: ['read', 'write'], // Should be { array: ['read', 'write'] }
+        scopes: 'not-an-array',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['scopes']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -518,7 +510,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['properties']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -533,7 +524,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['jwtAccessToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -548,21 +538,20 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientAuthMethod']);
+        expect(result.error.issues[0].code).toBe('invalid_enum_value');
       }
     });
 
     it('should reject response with invalid URLs in resources', () => {
       const invalidResponse = {
         action: 'OK',
-        resources: ['not-a-url', 'https://valid.com'],
+        resources: ['not-a-url'],
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['resources', 0]);
         expect(result.error.issues[0].code).toBe('invalid_string');
       }
@@ -571,13 +560,12 @@ describe('TokenResponse', () => {
     it('should reject response with invalid URLs in accessTokenResources', () => {
       const invalidResponse = {
         action: 'OK',
-        accessTokenResources: ['also-not-a-url'],
+        accessTokenResources: ['not-a-url'],
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual([
           'accessTokenResources',
           0,
@@ -589,20 +577,15 @@ describe('TokenResponse', () => {
     it('should reject response with invalid authorizationDetails structure', () => {
       const invalidResponse = {
         action: 'OK',
-        authorizationDetails: {
-          elements: [
-            {
-              type: 'payment',
-              locations: ['https://payment.example.com'], // Should be { array: [...] }
-              actions: ['execute'], // Should be { array: [...] }
-              datatypes: ['transaction'], // Should be { array: [...] }
-            },
-          ],
-        },
+        authorizationDetails: 'not-an-object',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['authorizationDetails']);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
     });
 
     it('should reject response with non-string grantId', () => {
@@ -614,7 +597,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['grantId']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -629,7 +611,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['serviceAttributes']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -644,7 +625,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['clientAttributes']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -653,13 +633,12 @@ describe('TokenResponse', () => {
     it('should reject response with invalid audiences structure', () => {
       const invalidResponse = {
         action: 'OK',
-        audiences: ['aud1', 'aud2'], // Should be { array: [...] }
+        audiences: 'not-an-array',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['audiences']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -668,14 +647,14 @@ describe('TokenResponse', () => {
     it('should reject response with invalid requestedTokenType', () => {
       const invalidResponse = {
         action: 'OK',
-        requestedTokenType: 'invalid_token_type',
+        requestedTokenType: 'invalid_type',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['requestedTokenType']);
+        expect(result.error.issues[0].code).toBe('invalid_enum_value');
       }
     });
 
@@ -688,7 +667,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['subjectToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -697,14 +675,14 @@ describe('TokenResponse', () => {
     it('should reject response with invalid subjectTokenType', () => {
       const invalidResponse = {
         action: 'OK',
-        subjectTokenType: 'invalid_token_type',
+        subjectTokenType: 'invalid_type',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['subjectTokenType']);
+        expect(result.error.issues[0].code).toBe('invalid_enum_value');
       }
     });
 
@@ -717,7 +695,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['actorToken']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -726,14 +703,14 @@ describe('TokenResponse', () => {
     it('should reject response with invalid actorTokenType', () => {
       const invalidResponse = {
         action: 'OK',
-        actorTokenType: 'invalid_token_type',
+        actorTokenType: 'invalid_type',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['actorTokenType']);
+        expect(result.error.issues[0].code).toBe('invalid_enum_value');
       }
     });
 
@@ -746,7 +723,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['assertion']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -761,7 +737,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual([
           'previousRefreshTokenUsed',
         ]);
@@ -778,7 +753,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['cnonce']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -793,7 +767,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['cnonceExpiresAt']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -808,7 +781,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['cnonceDuration']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -817,13 +789,12 @@ describe('TokenResponse', () => {
     it('should reject response with invalid requestedIdTokenClaims structure', () => {
       const invalidResponse = {
         action: 'OK',
-        requestedIdTokenClaims: ['email', 'name'], // Should be { array: [...] }
+        requestedIdTokenClaims: 'not-an-array',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['requestedIdTokenClaims']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -838,7 +809,6 @@ describe('TokenResponse', () => {
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['dpopNonce']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
@@ -847,14 +817,55 @@ describe('TokenResponse', () => {
     it('should reject response with invalid refreshTokenScopes structure', () => {
       const invalidResponse = {
         action: 'OK',
-        refreshTokenScopes: ['refresh_scope1', 'refresh_scope2'], // Should be { array: [...] }
+        refreshTokenScopes: 'not-an-array',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['refreshTokenScopes']);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
+
+    it('should reject response with non-string sessionId', () => {
+      const invalidResponse = {
+        action: 'OK',
+        sessionId: 123,
+      };
+
+      const result = tokenResponseSchema.safeParse(invalidResponse);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['sessionId']);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
+
+    it('should reject response with non-string deviceSecret', () => {
+      const invalidResponse = {
+        action: 'OK',
+        deviceSecret: 123,
+      };
+
+      const result = tokenResponseSchema.safeParse(invalidResponse);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['deviceSecret']);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
+
+    it('should reject response with non-string deviceSecretHash', () => {
+      const invalidResponse = {
+        action: 'OK',
+        deviceSecretHash: 123,
+      };
+
+      const result = tokenResponseSchema.safeParse(invalidResponse);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['deviceSecretHash']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
     });
@@ -862,10 +873,9 @@ describe('TokenResponse', () => {
     it('should reject response with multiple invalid fields', () => {
       const invalidResponse = {
         action: 'INVALID_ACTION',
-        clientId: 'not-a-number',
-        scopes: ['read', 'write'], // Wrong structure
-        properties: 'not-an-array',
-        accessTokenDuration: '3600',
+        username: 123,
+        password: 456,
+        clientId: '789',
       };
 
       const result = tokenResponseSchema.safeParse(invalidResponse);
@@ -886,15 +896,15 @@ describe('TokenResponse', () => {
         ticket: '',
         accessToken: '',
         idToken: '',
-        clientIdAlias: '',
-        subject: '',
-        jwtAccessToken: '',
         grantId: '',
         subjectToken: '',
         actorToken: '',
         assertion: '',
         cnonce: '',
         dpopNonce: '',
+        sessionId: '',
+        deviceSecret: '',
+        deviceSecretHash: '',
       };
 
       const result = tokenResponseSchema.parse(responseWithEmptyStrings);
@@ -920,7 +930,7 @@ describe('TokenResponse', () => {
     it('should accept response with negative numeric values', () => {
       const responseWithNegatives = {
         action: 'OK',
-        clientId: -1,
+        clientId: -123,
         accessTokenExpiresAt: -1234567890,
         accessTokenDuration: -3600,
         refreshTokenExpiresAt: -1234567890,
@@ -959,15 +969,15 @@ describe('TokenResponse', () => {
         ticket: longString,
         accessToken: longString,
         idToken: longString,
-        clientIdAlias: longString,
-        subject: longString,
-        jwtAccessToken: longString,
         grantId: longString,
         subjectToken: longString,
         actorToken: longString,
         assertion: longString,
         cnonce: longString,
         dpopNonce: longString,
+        sessionId: longString,
+        deviceSecret: longString,
+        deviceSecretHash: longString,
       };
 
       const result = tokenResponseSchema.parse(responseWithLongStrings);

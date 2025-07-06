@@ -33,9 +33,9 @@ describe('TokenCreateResponse', () => {
           elements: [
             {
               type: 'payment',
-              locations: { array: ['https://payment.example.com'] },
-              actions: { array: ['execute'] },
-              datatypes: { array: ['transaction'] },
+              locations: ['https://payment.example.com'],
+              actions: ['execute'],
+              datatypes: ['transaction'],
             },
           ],
         },
@@ -128,13 +128,13 @@ describe('TokenCreateResponse', () => {
           elements: [
             {
               type: 'payment',
-              locations: { array: ['https://payment.example.com'] },
-              actions: { array: ['read', 'write'] },
-              datatypes: { array: ['transaction'] },
+              locations: ['https://payment.example.com'],
+              actions: ['read', 'write'],
+              datatypes: ['transaction'],
             },
             {
               type: 'account',
-              actions: { array: ['read'] },
+              actions: ['read'],
             },
           ],
         },
@@ -427,16 +427,7 @@ describe('TokenCreateResponse', () => {
     it('should reject response with invalid authorization details structure', () => {
       const invalidResponse = {
         action: 'OK',
-        authorizationDetails: {
-          elements: [
-            {
-              type: 'payment',
-              locations: ['https://payment.example.com'], // Should be { array: [...] }
-              actions: ['execute'], // Should be { array: [...] }
-              datatypes: ['transaction'], // Should be { array: [...] }
-            },
-          ],
-        },
+        authorizationDetails: 'not-an-object',
       };
 
       const result = tokenCreateResponseSchema.safeParse(invalidResponse);

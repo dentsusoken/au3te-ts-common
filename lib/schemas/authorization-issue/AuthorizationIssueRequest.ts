@@ -127,7 +127,6 @@
  */
 
 import { z } from 'zod';
-import { stringArraySchema } from '../common/stringSchema';
 import { propertySchema } from '../common/Property';
 import { authzDetailsSchema } from '../common/AuthzDetails';
 
@@ -180,7 +179,7 @@ export const authorizationIssueRequestSchema = z.object({
    * cases, including the case of an empty array, the scopes here will
    * replace the original scopes contained in the original request.
    */
-  scopes: stringArraySchema.nullish(),
+  scopes: z.array(z.string()).nullish(),
 
   /**
    * JSON that represents additional JWS header parameters for ID tokens
@@ -200,7 +199,7 @@ export const authorizationIssueRequestSchema = z.object({
    *
    * @since 3.7
    */
-  consentedClaims: stringArraySchema.nullish(),
+  consentedClaims: z.array(z.string()).nullish(),
 
   /**
    * Claim key-value pairs that are used to compute values of transformed
@@ -216,7 +215,7 @@ export const authorizationIssueRequestSchema = z.object({
    *
    * @since 3.8
    */
-  verifiedClaimsForTx: stringArraySchema.nullish(),
+  verifiedClaimsForTx: z.array(z.string()).nullish(),
 
   /**
    * Additional claims that are added to the payload part of the JWT

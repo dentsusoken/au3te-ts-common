@@ -22,7 +22,6 @@ import { propertySchema } from '../common/Property';
 import { pairSchema } from '../common/Pair';
 import { authzDetailsSchema } from '../common/AuthzDetails';
 import { tokenInfoSchema } from '../common/TokenInfo';
-import { stringArraySchema } from '../common/stringSchema';
 import { tokenTypeSchema } from '../common/TokenType';
 
 /**
@@ -268,7 +267,7 @@ export const tokenResponseSchema = apiResponseSchema.extend({
    * (OPTIONAL) Scopes granted to the access token.
    * The scopes that were granted to the access token.
    */
-  scopes: stringArraySchema.nullish(),
+  scopes: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) Properties associated with the access token.
@@ -328,7 +327,7 @@ export const tokenResponseSchema = apiResponseSchema.extend({
    * (OPTIONAL) Audiences for the access token.
    * The intended audiences of the access token.
    */
-  audiences: stringArraySchema.nullish(),
+  audiences: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) Requested token type for token exchange.
@@ -417,7 +416,7 @@ export const tokenResponseSchema = apiResponseSchema.extend({
    * The claims that were requested to be included in ID tokens.
    * @since Authlete 3.0
    */
-  requestedIdTokenClaims: stringArraySchema.nullish(),
+  requestedIdTokenClaims: z.array(z.string()).nullish(),
 
   /**
    * (OPTIONAL) DPoP nonce to be used in DPoP-Nonce header.
@@ -431,11 +430,79 @@ export const tokenResponseSchema = apiResponseSchema.extend({
    * The scopes that are associated with the refresh token.
    * @since Authlete 3.0
    */
-  refreshTokenScopes: stringArraySchema.nullish(),
+  refreshTokenScopes: z.array(z.string()).nullish(),
+
+  /**
+   * (OPTIONAL) The session ID of the user's authentication session.
+   * The identifier for the user's authentication session.
+   * @since 4.18
+   * @since Authlete 3.0
+   */
+  sessionId: z.string().nullish(),
+
+  /**
+   * (OPTIONAL) The device secret.
+   * A secret value associated with the device for authentication purposes.
+   * @since 4.18
+   * @since Authlete 3.0
+   */
+  deviceSecret: z.string().nullish(),
+
+  /**
+   * (OPTIONAL) The device secret hash.
+   * A hash of the device secret for security purposes.
+   * @since 4.18
+   * @since Authlete 3.0
+   */
+  deviceSecretHash: z.string().nullish(),
 });
 
 /**
  * Type representing a token response.
  * Inferred from the tokenResponseSchema.
+ *
+ * @typedef {Object} TokenResponse
+ * @property {string} action - The action that the implementation should take
+ * @property {string|null|undefined} [responseContent] - Response content to return to the client
+ * @property {string|null|undefined} [username] - Username from resource owner password credentials grant
+ * @property {string|null|undefined} [password] - Password from resource owner password credentials grant
+ * @property {string|null|undefined} [ticket] - Ticket used for token operations
+ * @property {string|null|undefined} [accessToken] - Issued access token
+ * @property {number|null|undefined} [accessTokenExpiresAt] - Access token expiration time in milliseconds since epoch
+ * @property {number|null|undefined} [accessTokenDuration] - Access token duration in seconds
+ * @property {string|null|undefined} [refreshToken] - Issued refresh token
+ * @property {number|null|undefined} [refreshTokenExpiresAt] - Refresh token expiration time in milliseconds since epoch
+ * @property {number|null|undefined} [refreshTokenDuration] - Refresh token duration in seconds
+ * @property {string|null|undefined} [idToken] - Issued ID token
+ * @property {string|null|undefined} [grantType] - Grant type used for the token request
+ * @property {string[]|null|undefined} [scopes] - Scopes granted to the access token
+ * @property {Array<{key: string, value: string, hidden: boolean}>|null|undefined} [properties] - Properties associated with the access token
+ * @property {string|null|undefined} [jwtAccessToken] - Access token in JWT format
+ * @property {string|null|undefined} [clientAuthMethod] - Client authentication method
+ * @property {string[]|null|undefined} [resources] - Target resources for the access token
+ * @property {string[]|null|undefined} [accessTokenResources] - Resources actually associated with the access token
+ * @property {Object|null|undefined} [authorizationDetails] - Authorization details
+ * @property {string|null|undefined} [grantId] - Grant identifier
+ * @property {Array<{key: string, value: string}>|null|undefined} [serviceAttributes] - Service attributes
+ * @property {Array<{key: string, value: string}>|null|undefined} [clientAttributes] - Client attributes
+ * @property {string[]|null|undefined} [audiences] - Audiences for the access token
+ * @property {string|null|undefined} [requestedTokenType] - Requested token type for token exchange
+ * @property {string|null|undefined} [subjectToken] - Subject token for token exchange
+ * @property {string|null|undefined} [subjectTokenType] - Subject token type for token exchange
+ * @property {Object|null|undefined} [subjectTokenInfo] - Information about the subject token
+ * @property {string|null|undefined} [actorToken] - Actor token for token exchange
+ * @property {string|null|undefined} [actorTokenType] - Actor token type for token exchange
+ * @property {Object|null|undefined} [actorTokenInfo] - Information about the actor token
+ * @property {string|null|undefined} [assertion] - Assertion for assertion grant
+ * @property {boolean|null|undefined} [previousRefreshTokenUsed] - Flag indicating if previous refresh token was used
+ * @property {string|null|undefined} [cnonce] - Client nonce for credential issuance
+ * @property {number|null|undefined} [cnonceExpiresAt] - Client nonce expiration time in milliseconds since epoch
+ * @property {number|null|undefined} [cnonceDuration] - Client nonce duration in seconds
+ * @property {string[]|null|undefined} [requestedIdTokenClaims] - Claims requested to be included in reissued ID tokens
+ * @property {string|null|undefined} [dpopNonce] - DPoP nonce to be used in DPoP-Nonce header
+ * @property {string[]|null|undefined} [refreshTokenScopes] - Scopes associated with the refresh token
+ * @property {string|null|undefined} [sessionId] - The session ID of the user's authentication session
+ * @property {string|null|undefined} [deviceSecret] - The device secret
+ * @property {string|null|undefined} [deviceSecretHash] - The device secret hash
  */
 export type TokenResponse = z.infer<typeof tokenResponseSchema>;
