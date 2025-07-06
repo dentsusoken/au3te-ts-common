@@ -61,8 +61,8 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'account_information',
-            actions: { array: ['list_accounts', 'read_balances'] },
-            locations: { array: ['https://example.com/accounts'] },
+            actions: ['list_accounts', 'read_balances'],
+            locations: ['https://example.com/accounts'],
           },
         ],
       },
@@ -89,8 +89,8 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'account_information',
-            actions: { array: ['read_balances'] },
-            locations: { array: ['https://example.com/accounts'] },
+            actions: ['read_balances'],
+            locations: ['https://example.com/accounts'],
           },
         ],
       },
@@ -142,8 +142,8 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'payment_initiation',
-            actions: { array: ['initiate_payment'] },
-            locations: { array: ['https://example.com/payments'] },
+            actions: ['initiate_payment'],
+            locations: ['https://example.com/payments'],
           },
         ],
       },
@@ -229,18 +229,16 @@ describe('grantSchema', () => {
         elements: [
           {
             type: 'payment_initiation',
-            actions: { array: ['initiate_payment', 'read_payment_status'] },
-            locations: { array: ['https://bank.com/payments'] },
-            datatypes: { array: ['payment', 'account'] },
+            actions: ['initiate_payment', 'read_payment_status'],
+            locations: ['https://bank.com/payments'],
+            datatypes: ['payment', 'account'],
             identifier: 'payment123',
-            privileges: { array: ['user', 'admin'] },
+            privileges: ['user', 'admin'],
           },
           {
             type: 'account_information',
-            actions: {
-              array: ['list_accounts', 'read_balances', 'read_transactions'],
-            },
-            locations: { array: ['https://bank.com/accounts'] },
+            actions: ['list_accounts', 'read_balances', 'read_transactions'],
+            locations: ['https://bank.com/accounts'],
           },
         ],
       },

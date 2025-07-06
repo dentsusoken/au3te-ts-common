@@ -32,7 +32,7 @@ describe('TokenCreateRequest', () => {
         certificateThumbprint: 'cert-thumb',
         dpopKeyThumbprint: 'dpop-thumb',
         authorizationDetails: {
-          elements: [{ type: 'payment', actions: { array: ['read'] } }],
+          elements: [{ type: 'payment', actions: ['read'] }],
         },
         resources: ['https://api.example.com/v1', 'https://api.example.com/v2'],
         forExternalAttachment: true,
@@ -134,13 +134,13 @@ describe('TokenCreateRequest', () => {
           elements: [
             {
               type: 'payment',
-              locations: { array: ['https://payment.example.com'] },
-              actions: { array: ['read', 'write'] },
-              datatypes: { array: ['transaction'] },
+              locations: ['https://payment.example.com'],
+              actions: ['read', 'write'],
+              datatypes: ['transaction'],
             },
             {
               type: 'account',
-              actions: { array: ['read'] },
+              actions: ['read'],
             },
           ],
         },
@@ -475,16 +475,21 @@ describe('TokenCreateRequest', () => {
       }
     });
 
-    it('should reject request with invalid authorization details structure', () => {
-      const invalidRequest = {
+    it('should accept request with authorization details using plain arrays', () => {
+      const validRequest = {
         grantType: 'authorization_code',
         authorizationDetails: {
-          elements: [{ type: 'payment', actions: ['read'] }], // Should be { array: [...] }
+          elements: [{ type: 'payment', actions: ['read'] }],
         },
       };
 
-      const result = tokenCreateRequestSchema.safeParse(invalidRequest);
-      expect(result.success).toBe(false);
+      const result = tokenCreateRequestSchema.safeParse(validRequest);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.authorizationDetails?.elements[0].actions).toEqual([
+          'read',
+        ]);
+      }
     });
 
     it('should reject request with non-array resources', () => {

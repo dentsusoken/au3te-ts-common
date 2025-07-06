@@ -5,8 +5,8 @@ describe('authzDetailsSchema', () => {
   it('should accept a valid AuthzDetails object', () => {
     const validAuthzDetails: AuthzDetails = {
       elements: [
-        { type: 'example1', actions: { array: ['read'] } },
-        { type: 'example2', locations: { array: ['https://example.com'] } },
+        { type: 'example1', actions: ['read'] },
+        { type: 'example2', locations: ['https://example.com'] },
       ],
     };
     const result = authzDetailsSchema.parse(validAuthzDetails);
@@ -54,11 +54,11 @@ describe('authzDetailsSchema', () => {
       elements: [
         {
           type: 'payment_initiation',
-          locations: { array: ['https://bank.com'] },
-          actions: { array: ['read', 'write'] },
-          datatypes: { array: ['account', 'transaction'] },
+          locations: ['https://bank.com'],
+          actions: ['read', 'write'],
+          datatypes: ['account', 'transaction'],
           identifier: 'account123',
-          privileges: { array: ['admin'] },
+          privileges: ['admin'],
           extraProp: 'extra value', // Additional property should be allowed
         },
       ],
