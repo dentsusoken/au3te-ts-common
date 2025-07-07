@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createProcessError } from './processError';
+import { createProcessError } from '../processError';
 import { vi } from 'vitest';
 
 describe('createProcessError', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { defaultOutputErrorMessage } from './outputErrorMessage';
+import { defaultOutputErrorMessage } from '../outputErrorMessage';
 
 describe('defaultOutputErrorMessage', () => {
   it('should log the error message to the console', async () => {

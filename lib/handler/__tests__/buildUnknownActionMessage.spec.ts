@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createBuildUnknownActionMessage } from './buildUnknownActionMessage';
+import { createBuildUnknownActionMessage } from '../buildUnknownActionMessage';
 
 describe('createBuildUnknownActionMessage', () => {
   it('should create a function that builds unknown action messages', () => {

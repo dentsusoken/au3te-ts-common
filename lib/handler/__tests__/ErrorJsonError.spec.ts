@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ErrorJsonError } from './ErrorJsonError';
+import { ErrorJsonError } from '../ErrorJsonError';
 
 describe('ErrorJsonError', () => {
   // Should create an error with the correct name and message

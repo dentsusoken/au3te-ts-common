@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CommonHandlerConfigurationImpl } from './CommonHandlerConfigurationImpl';
+import { CommonHandlerConfigurationImpl } from '../CommonHandlerConfigurationImpl';
 
 describe('CommonHandlerConfigurationImpl', () => {
   it('should verify that buildApiErrorMessage property is defined', () => {

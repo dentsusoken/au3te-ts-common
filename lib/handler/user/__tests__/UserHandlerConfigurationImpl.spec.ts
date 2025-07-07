@@ -16,7 +16,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { UserHandlerConfigurationImpl } from './UserHandlerConfigurationImpl';
+import { UserHandlerConfigurationImpl } from '../UserHandlerConfigurationImpl';
 
 describe('UserHandlerConfigurationImpl', () => {
   it('should have required properties defined', () => {

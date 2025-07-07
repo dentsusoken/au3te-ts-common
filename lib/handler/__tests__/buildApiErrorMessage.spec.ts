@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultBuildApiErrorMessage } from './buildApiErrorMessage';
+import { defaultBuildApiErrorMessage } from '../buildApiErrorMessage';
 
 describe('defaultBuildApiErrorMessage', () => {
   // Test for successful case

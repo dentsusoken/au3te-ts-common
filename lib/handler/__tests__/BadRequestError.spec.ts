@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { BadRequestError } from './BadRequestError';
-import { ErrorJsonError } from './ErrorJsonError';
+import { BadRequestError } from '../BadRequestError';
+import { ErrorJsonError } from '../ErrorJsonError';
 
 describe('BadRequestError', () => {
   // Should create an error with the correct name and message
