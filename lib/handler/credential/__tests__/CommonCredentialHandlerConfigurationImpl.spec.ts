@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { CommonCredentialHandlerConfigurationImpl } from './CommonCredentialHandlerConfigurationImpl';
-import { UserHandlerConfiguration } from '../user/UserHandlerConfiguration';
+import { CommonCredentialHandlerConfigurationImpl } from '../CommonCredentialHandlerConfigurationImpl';
+import { UserHandlerConfiguration } from '../../user/UserHandlerConfiguration';
 
 describe('CommonCredentialHandlerConfigurationImpl', () => {
   it('should have all properties defined', () => {

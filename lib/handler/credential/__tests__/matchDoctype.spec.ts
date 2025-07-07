@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { matchDoctype } from './matchDoctype';
-import { DOCTYPE } from './constants';
-import type { Claims } from './types';
+import { matchDoctype } from '../matchDoctype';
+import { DOCTYPE } from '../constants';
+import type { Claims } from '../types';
 
 describe('matchDoctype', () => {
   // Basic test cases

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createCreateOrder } from './createOrder';
+import { createCreateOrder } from '../createOrder';
 
 describe('createCreateOrder', () => {
   // Mock function for computeCredentialDuration

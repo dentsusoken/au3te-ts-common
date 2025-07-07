@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { matchFormat } from './matchFormat';
-import { FORMAT } from './constants';
-import type { Claims } from './types';
-import { CredentialFormat } from '../../schemas/credential/CredentialFormat';
+import { matchFormat } from '../matchFormat';
+import { FORMAT } from '../constants';
+import type { Claims } from '../types';
+import { CredentialFormat } from '../../../schemas/credential/CredentialFormat';
 
 describe('matchFormat', () => {
   // Basic test cases

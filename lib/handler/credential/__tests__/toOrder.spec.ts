@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createToOrder } from './toOrder';
-import { CredentialType } from '../../schemas/credential/CredentialType';
-import { CredentialRequestInfo } from '../../schemas/credential/CredentialRequestInfo';
-import { IntrospectionResponse } from '../../schemas/introspection/IntrospectionResponse';
+import { createToOrder } from '../toOrder';
+import { CredentialType } from '../../../schemas/credential/CredentialType';
+import { CredentialRequestInfo } from '../../../schemas/credential/CredentialRequestInfo';
+import { IntrospectionResponse } from '../../../schemas/introspection/IntrospectionResponse';
 
 describe('createToOrder', () => {
   const mockGetBySubject = vi.fn();

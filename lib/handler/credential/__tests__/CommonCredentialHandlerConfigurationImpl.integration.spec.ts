@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { CommonCredentialHandlerConfigurationImpl } from './CommonCredentialHandlerConfigurationImpl';
-import { UserHandlerConfigurationImpl } from '../user/UserHandlerConfigurationImpl';
-import { CLAIMS, DOCTYPE, FORMAT, MSO_MDOC } from './constants';
-import type { CredentialRequestInfo } from '../../schemas/credential/CredentialRequestInfo';
-import type { IntrospectionResponse } from '../../schemas/introspection/IntrospectionResponse';
+import { CommonCredentialHandlerConfigurationImpl } from '../CommonCredentialHandlerConfigurationImpl';
+import { UserHandlerConfigurationImpl } from '../../user/UserHandlerConfigurationImpl';
+import { CLAIMS, DOCTYPE, FORMAT, MSO_MDOC } from '../constants';
+import type { CredentialRequestInfo } from '../../../schemas/credential/CredentialRequestInfo';
+import type { IntrospectionResponse } from '../../../schemas/introspection/IntrospectionResponse';
 
 describe('CommonCredentialHandlerConfigurationImpl integration tests', () => {
   const userHandlerConfiguration = new UserHandlerConfigurationImpl();

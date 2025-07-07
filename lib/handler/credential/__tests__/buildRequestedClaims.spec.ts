@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildRequestedClaims } from './buildRequestedClaims';
+import { buildRequestedClaims } from '../buildRequestedClaims';
 
 describe('buildRequestedClaims', () => {
   it('should return empty claims when input is undefined', () => {
