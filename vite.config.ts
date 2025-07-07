@@ -64,8 +64,9 @@ export default defineConfig({
       },
     }),
     dts({
-      rollupTypes: true,
-      insertTypesEntry: true,
+      rollupTypes: false,
+      include: ['lib/**/*.ts'],
+      exclude: ['lib/**/*.spec.ts'],
     }),
   ],
 });
