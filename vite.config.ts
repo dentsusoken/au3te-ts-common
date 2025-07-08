@@ -54,6 +54,9 @@ export default defineConfig({
         //return `${dir}/index.${ext}`;
       },
     },
+    rollupOptions: {
+      external: ['zod', '@vecrea/oid4vc-core', 'u8a-utils'],
+    },
   },
   plugins: [
     nodePolyfills({
