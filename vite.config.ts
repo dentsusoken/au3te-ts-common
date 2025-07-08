@@ -59,13 +59,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    nodePolyfills({
-      globals: {
-        Buffer: 'build',
-        global: 'build',
-        process: 'build',
-      },
-    }),
     dts({
       rollupTypes: false,
       include: ['lib/**/*.ts'],
