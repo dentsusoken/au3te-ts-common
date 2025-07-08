@@ -254,6 +254,6 @@ export const authorizationIssueResponseSchema = apiResponseSchema.extend({
  * @property {string|null} [jwtAccessToken] - The newly issued access token in JWT format, if the server is configured to issue JWT-based tokens.
  * @property {Object|null} [ticketInfo] - The information attached to the ticket presented to the `/auth/authorization/issue` API.
  */
-export type AuthorizationIssueResponse = z.infer<
+export type AuthorizationIssueResponse = z.input<
   typeof authorizationIssueResponseSchema
 >;

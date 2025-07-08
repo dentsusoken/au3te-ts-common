@@ -23,7 +23,7 @@ import { authzDetailsElementSchema } from './AuthzDetailsElement';
  * @see {@link https://www.rfc-editor.org/rfc/rfc9396.html|RFC 9396 OAuth 2.0 Rich Authorization Requests}
  */
 export const authzDetailsSchema = z.object({
-  elements: z.array(authzDetailsElementSchema).default([]),
+  elements: z.array(authzDetailsElementSchema).nullish(),
 });
 
 /**
@@ -32,4 +32,4 @@ export const authzDetailsSchema = z.object({
  * @typedef {Object} AuthzDetails
  * @property {AuthzDetailsElement[]|undefined} [elements] - An array of Authorization Details elements.
  */
-export type AuthzDetails = z.infer<typeof authzDetailsSchema>;
+export type AuthzDetails = z.input<typeof authzDetailsSchema>;

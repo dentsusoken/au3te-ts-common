@@ -46,6 +46,6 @@ export const authorizationTicketInfoSchema = z.object({
  * @typedef {Object} AuthorizationTicketInfo
  * @property {string|undefined} [context] - The context of the authorization ticket.
  */
-export type AuthorizationTicketInfo = z.infer<
+export type AuthorizationTicketInfo = z.input<
   typeof authorizationTicketInfoSchema
 >;

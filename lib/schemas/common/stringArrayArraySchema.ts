@@ -7,7 +7,7 @@ import { z } from 'zod';
  * which is an array of strings.
  */
 const stringArraySchema = z.object({
-  array: z.array(z.string()).default([]),
+  array: z.array(z.string()),
 });
 
 /**
@@ -22,4 +22,4 @@ export const stringArrayArraySchema = z.array(stringArraySchema);
  * Type representing an array of string array objects.
  * Inferred from the stringArrayArraySchema.
  */
-export type StringArrayArray = z.infer<typeof stringArrayArraySchema>;
+export type StringArrayArray = z.input<typeof stringArrayArraySchema>;

@@ -41,4 +41,4 @@ export const addressSchema = z
  * Type representing an address with optional fields.
  * All fields are nullable and optional strings.
  */
-export type Address = z.infer<typeof addressSchema>;
+export type Address = z.input<typeof addressSchema>;

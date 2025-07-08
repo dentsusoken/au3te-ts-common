@@ -45,4 +45,4 @@ export const authzDetailsElementSchema = z
  * @property {string|undefined} [identifier] - A unique identifier for the resource.
  * @property {string[]|undefined} [privileges] - The privileges granted by this element.
  */
-export type AuthzDetailsElement = z.infer<typeof authzDetailsElementSchema>;
+export type AuthzDetailsElement = z.input<typeof authzDetailsElementSchema>;

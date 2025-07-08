@@ -143,7 +143,7 @@ describe('TokenIssueResponse', () => {
       };
       const result = tokenIssueResponseSchema.parse(validAuthzDetails);
       expect(result.authorizationDetails?.elements).toHaveLength(1);
-      expect(result.authorizationDetails?.elements[0].type).toBe('payment');
+      expect(result.authorizationDetails?.elements?.[0].type).toBe('payment');
     });
   });
 

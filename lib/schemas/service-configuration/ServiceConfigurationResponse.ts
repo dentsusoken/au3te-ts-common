@@ -63,6 +63,6 @@ export const serviceConfigurationResponseSchema = z.string();
  *
  * @since 3.43
  */
-export type ServiceConfigurationResponse = z.infer<
+export type ServiceConfigurationResponse = z.input<
   typeof serviceConfigurationResponseSchema
 >;

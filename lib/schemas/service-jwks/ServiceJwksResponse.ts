@@ -73,4 +73,4 @@ export const serviceJwksResponseSchema = z.string();
  *
  * @since 3.43
  */
-export type ServiceJwksResponse = z.infer<typeof serviceJwksResponseSchema>;
+export type ServiceJwksResponse = z.input<typeof serviceJwksResponseSchema>;

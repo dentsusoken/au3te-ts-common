@@ -362,10 +362,10 @@ describe('authorizationIssueRequestSchema', () => {
 
       const result = authorizationIssueRequestSchema.parse(request);
       expect(result.authorizationDetails?.elements).toHaveLength(2);
-      expect(result.authorizationDetails?.elements[0].type).toBe(
+      expect(result.authorizationDetails?.elements?.[0].type).toBe(
         'payment_initiation'
       );
-      expect(result.authorizationDetails?.elements[1].type).toBe(
+      expect(result.authorizationDetails?.elements?.[1].type).toBe(
         'openid_credential'
       );
     });

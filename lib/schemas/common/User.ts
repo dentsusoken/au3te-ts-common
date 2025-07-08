@@ -76,4 +76,4 @@ export const userSchema = z.object({
  * Most fields are nullable and optional strings, except for 'subject'
  * which is required, and verification flags which are boolean.
  */
-export type User = z.infer<typeof userSchema>;
+export type User = z.input<typeof userSchema>;

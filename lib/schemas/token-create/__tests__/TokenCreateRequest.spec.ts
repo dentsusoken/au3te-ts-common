@@ -486,9 +486,9 @@ describe('TokenCreateRequest', () => {
       const result = tokenCreateRequestSchema.safeParse(validRequest);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.authorizationDetails?.elements[0].actions).toEqual([
-          'read',
-        ]);
+        expect(result.data.authorizationDetails?.elements?.[0].actions).toEqual(
+          ['read']
+        );
       }
     });
 

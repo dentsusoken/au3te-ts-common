@@ -43,4 +43,4 @@ export const taggedValueSchema = z.object({
  * @property {string|undefined} [value] - The value associated with the language tag.
  */
 
-export type TaggedValue = z.infer<typeof taggedValueSchema>;
+export type TaggedValue = z.input<typeof taggedValueSchema>;

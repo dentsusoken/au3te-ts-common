@@ -48,4 +48,4 @@ export const serviceSchema = z
  * Represents a service with properties defined by the serviceSchema.
  *
  */
-export type Service = z.infer<typeof serviceSchema>;
+export type Service = z.input<typeof serviceSchema>;

@@ -66,4 +66,4 @@ export const clientSchema = z
  *
  * @typedef {z.infer<typeof clientSchema>} Client
  */
-export type Client = z.infer<typeof clientSchema>;
+export type Client = z.input<typeof clientSchema>;

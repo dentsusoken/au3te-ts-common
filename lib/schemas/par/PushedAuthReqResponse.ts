@@ -229,4 +229,4 @@ export const pushedAuthReqResponseSchema = apiResponseSchema.extend({
  * @property {string} [requestUri] - The optional request URI.
  * @property {string} [dpopNonce] - The optional DPoP (Demonstration of Proof-of-Possession) nonce.
  */
-export type PushedAuthReqResponse = z.infer<typeof pushedAuthReqResponseSchema>;
+export type PushedAuthReqResponse = z.input<typeof pushedAuthReqResponseSchema>;

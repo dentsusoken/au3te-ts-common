@@ -138,6 +138,6 @@ export const credentialIssuerMetadataResponseSchema = apiResponseSchema.extend({
  * @property {string} action - The action of the credential issuer metadata request response.
  * @property {string} [responseContent] - The optional response content.
  */
-export type CredentialIssuerMetadataResponse = z.infer<
+export type CredentialIssuerMetadataResponse = z.input<
   typeof credentialIssuerMetadataResponseSchema
 >;

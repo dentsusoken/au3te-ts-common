@@ -66,4 +66,4 @@ export const grantScopeSchema = z.object({
  * };
  * ```
  */
-export type GrantScope = z.infer<typeof grantScopeSchema>;
+export type GrantScope = z.input<typeof grantScopeSchema>;

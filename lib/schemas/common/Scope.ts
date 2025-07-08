@@ -58,4 +58,4 @@ export const scopeSchema = z.object({
  * @property {Array<{key: string|undefined, value: string|undefined}>|undefined} [attributes] - Additional attributes associated with the scope.
  */
 
-export type Scope = z.infer<typeof scopeSchema>;
+export type Scope = z.input<typeof scopeSchema>;

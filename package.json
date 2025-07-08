@@ -1,6 +1,6 @@
 {
   "name": "@vecrea/au3te-ts-common",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Common TypeScript utilities and schemas for AU3TE (Authorization and User Authentication for Trusted Ecosystems)",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -98,4 +98,4 @@ export const tokenInfoSchema = z.object({
  * Type representing token information.
  * Inferred from the tokenInfoSchema.
  */
-export type TokenInfo = z.infer<typeof tokenInfoSchema>;
+export type TokenInfo = z.input<typeof tokenInfoSchema>;

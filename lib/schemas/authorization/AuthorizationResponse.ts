@@ -830,4 +830,4 @@ export const authorizationResponseSchema = apiResponseSchema.extend({
  *
  * @typedef {z.infer<typeof authorizationResponseSchema>} AuthorizationResponse
  */
-export type AuthorizationResponse = z.infer<typeof authorizationResponseSchema>;
+export type AuthorizationResponse = z.input<typeof authorizationResponseSchema>;

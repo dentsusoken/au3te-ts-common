@@ -219,6 +219,6 @@ export const credentialSingleIssueResponseSchema = z.object({
  *
  * @see [OpenID for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)
  */
-export type CredentialSingleIssueResponse = z.infer<
+export type CredentialSingleIssueResponse = z.input<
   typeof credentialSingleIssueResponseSchema
 >;

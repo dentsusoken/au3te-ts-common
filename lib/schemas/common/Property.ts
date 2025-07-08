@@ -48,4 +48,4 @@ export const propertySchema = z.object({
 /**
  * Represents a property object with optional fields.
  */
-export type Property = z.infer<typeof propertySchema>;
+export type Property = z.input<typeof propertySchema>;

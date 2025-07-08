@@ -79,4 +79,4 @@ export const tokenFailResponseSchema = apiResponseSchema.extend({
  * Type representing a token fail response.
  * Inferred from the tokenFailResponseSchema.
  */
-export type TokenFailResponse = z.infer<typeof tokenFailResponseSchema>;
+export type TokenFailResponse = z.input<typeof tokenFailResponseSchema>;

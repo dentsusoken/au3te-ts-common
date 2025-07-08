@@ -182,6 +182,6 @@ export const credentialSingleParseResponseSchema = z.object({
  *
  * @see [OpenID for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)
  */
-export type CredentialSingleParseResponse = z.infer<
+export type CredentialSingleParseResponse = z.input<
   typeof credentialSingleParseResponseSchema
 >;

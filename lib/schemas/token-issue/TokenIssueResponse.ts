@@ -196,4 +196,4 @@ export const tokenIssueResponseSchema = apiResponseSchema.extend({
  * Type representing a token issue response.
  * Inferred from the tokenIssueResponseSchema.
  */
-export type TokenIssueResponse = z.infer<typeof tokenIssueResponseSchema>;
+export type TokenIssueResponse = z.input<typeof tokenIssueResponseSchema>;

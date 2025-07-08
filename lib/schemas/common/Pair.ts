@@ -41,4 +41,4 @@ export const pairSchema = z.object({
  * @property {string|undefined} [key] - The key of the pair.
  * @property {string|undefined} [value] - The value associated with the key.
  */
-export type Pair = z.infer<typeof pairSchema>;
+export type Pair = z.input<typeof pairSchema>;

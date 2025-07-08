@@ -119,4 +119,4 @@ export const grantSchema = z.object({
  * };
  * ```
  */
-export type Grant = z.infer<typeof grantSchema>;
+export type Grant = z.input<typeof grantSchema>;

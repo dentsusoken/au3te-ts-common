@@ -418,4 +418,4 @@ export const introspectionResponseSchema = apiResponseSchema.extend({
 /**
  * Type definition for the response from Authlete's /auth/introspection API.
  */
-export type IntrospectionResponse = z.infer<typeof introspectionResponseSchema>;
+export type IntrospectionResponse = z.input<typeof introspectionResponseSchema>;

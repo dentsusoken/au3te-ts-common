@@ -83,4 +83,4 @@ export const baseClientAuthRequestSchema = z.object({
 /**
  * Type definition for base client authentication request
  */
-export type BaseClientAuthRequest = z.infer<typeof baseClientAuthRequestSchema>;
+export type BaseClientAuthRequest = z.input<typeof baseClientAuthRequestSchema>;

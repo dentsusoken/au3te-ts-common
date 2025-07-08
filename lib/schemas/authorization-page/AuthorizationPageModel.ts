@@ -172,6 +172,6 @@ export const authorizationPageModelSchema = z.object({
  * Type definition for AuthorizationPageModel.
  * This type is inferred from the authorizationPageModelSchema.
  */
-export type AuthorizationPageModel = z.infer<
+export type AuthorizationPageModel = z.input<
   typeof authorizationPageModelSchema
 >;

@@ -139,6 +139,6 @@ export const credentialIssuerJwksResponseSchema = apiResponseSchema.extend({
  * @property {string} action - The action of the credential issuer jwks request response.
  * @property {string|null|undefined} responseContent - The optional response content.
  */
-export type CredentialIssuerJwksResponse = z.infer<
+export type CredentialIssuerJwksResponse = z.input<
   typeof credentialIssuerJwksResponseSchema
 >;

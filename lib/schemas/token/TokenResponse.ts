@@ -505,4 +505,4 @@ export const tokenResponseSchema = apiResponseSchema.extend({
  * @property {string|null|undefined} [deviceSecret] - The device secret
  * @property {string|null|undefined} [deviceSecretHash] - The device secret hash
  */
-export type TokenResponse = z.infer<typeof tokenResponseSchema>;
+export type TokenResponse = z.input<typeof tokenResponseSchema>;

@@ -22,7 +22,7 @@ describe('authzDetailsSchema', () => {
   it('should accept an empty AuthzDetails object', () => {
     const emptyAuthzDetails = {};
     const result = authzDetailsSchema.parse(emptyAuthzDetails);
-    expect(result).toEqual({ elements: [] });
+    expect(result).toEqual({});
   });
 
   it('should reject an AuthzDetails object with invalid elements', () => {

@@ -250,4 +250,4 @@ export const tokenCreateResponseSchema = apiResponseSchema.extend({
  * Type definition for the response from Authlete's /auth/token/create API.
  * This type is inferred from the tokenCreateResponseSchema.
  */
-export type TokenCreateResponse = z.infer<typeof tokenCreateResponseSchema>;
+export type TokenCreateResponse = z.input<typeof tokenCreateResponseSchema>;

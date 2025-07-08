@@ -214,4 +214,4 @@ export const dynamicScopeSchema = z.object({
  * @property {string|undefined} [name] - The name of the dynamic scope.
  * @property {string|undefined} [value] - The value of the dynamic scope.
  */
-export type DynamicScope = z.infer<typeof dynamicScopeSchema>;
+export type DynamicScope = z.input<typeof dynamicScopeSchema>;
