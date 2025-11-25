@@ -7,7 +7,7 @@ import type { Scope } from '../../../schemas/common/Scope';
 import type { DynamicScope } from '../../../schemas/common/DynamicScope';
 import type { AuthorizationResponse } from '../../../schemas/authorization/AuthorizationResponse';
 import type { User } from '../../../schemas/common/User';
-import type { FederationsConfig } from '../../../schemas/federation';
+import type { FederationRegistry } from '../../../schemas/federation';
 
 describe('AuthorizationPageHandlerConfigurationImpl', () => {
   describe('initialization', () => {
@@ -307,10 +307,10 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
       expect(result.loginIdReadOnly).toBeUndefined();
     });
 
-    it('should include federationsConfig when set', () => {
+    it('should include federationRegistry when set', () => {
       // Arrange
       const config = new AuthorizationPageHandlerConfigurationImpl();
-      const federationsConfig: FederationsConfig = {
+      const federationRegistry: FederationRegistry = {
         federations: [
           {
             id: 'federation1',
@@ -326,12 +326,12 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
           },
         ],
       };
-      config.federationsConfig = federationsConfig;
-      // Create a new buildAuthorizationPageModel with federationsConfig
+      config.federationRegistry = federationRegistry;
+      // Create a new buildAuthorizationPageModel with federationRegistry
       const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
         computeScopes: config.computeScopes,
         extractRequestedClaims: config.extractRequestedClaims,
-        federationsConfig: config.federationsConfig,
+        federationRegistry: config.federationRegistry,
       });
       const mockAuthorizationResponse: AuthorizationResponse = {
         action: 'INTERACTION',
@@ -346,10 +346,10 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
       );
 
       // Assert
-      expect(result.federationsConfig).toEqual(federationsConfig);
+      expect(result.federationRegistry).toEqual(federationRegistry);
     });
 
-    it('should handle undefined federationsConfig', () => {
+    it('should handle undefined federationRegistry', () => {
       // Arrange
       const config = new AuthorizationPageHandlerConfigurationImpl();
       const mockAuthorizationResponse: AuthorizationResponse = {
@@ -365,7 +365,7 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
       );
 
       // Assert
-      expect(result.federationsConfig).toBeUndefined();
+      expect(result.federationRegistry).toBeUndefined();
     });
   });
 

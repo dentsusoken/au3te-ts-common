@@ -23,7 +23,7 @@ import {
   defaultExtractRequestedClaims,
   ExtractRequestedClaims,
 } from './extractRequestedClaims';
-import { FederationsConfig } from '../../schemas/federation';
+import { FederationRegistry } from '../../schemas/federation';
 
 /**
  * Builds an AuthorizationPageModel based on the given authorization response and user.
@@ -42,7 +42,7 @@ export type BuildAuthorizationPageModel = (
 type CreateBuildAuthorizationPageModelParams = {
   computeScopes: ComputeScopes;
   extractRequestedClaims: ExtractRequestedClaims;
-  federationsConfig?: FederationsConfig;
+  federationRegistry?: FederationRegistry;
 };
 
 /**
@@ -54,7 +54,7 @@ export const createBuildAuthorizationPageModel =
   ({
     computeScopes,
     extractRequestedClaims,
-    federationsConfig,
+    federationRegistry,
   }: CreateBuildAuthorizationPageModelParams): BuildAuthorizationPageModel =>
   (authorizationResponse, user) => {
     const service = authorizationResponse.service;
@@ -103,7 +103,7 @@ export const createBuildAuthorizationPageModel =
       verifiedClaimsForUserInfo,
       identityAssuranceRequired,
       claimsForUserInfo: authorizationResponse.claimsAtUserInfo,
-      federationsConfig,
+      federationRegistry,
     };
 
     return pageModel;
@@ -116,5 +116,5 @@ export const defaultBuildAuthorizationPageModel: BuildAuthorizationPageModel =
   createBuildAuthorizationPageModel({
     computeScopes: defaultComputeScopes,
     extractRequestedClaims: defaultExtractRequestedClaims,
-    federationsConfig: undefined,
+    federationRegistry: undefined,
   });

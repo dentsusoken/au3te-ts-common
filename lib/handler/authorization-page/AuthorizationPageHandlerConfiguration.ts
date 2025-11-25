@@ -17,7 +17,7 @@
 import { BuildAuthorizationPageModel } from './buildAuthorizationPageModel';
 import { ComputeScopes } from './computeScopes';
 import { ExtractRequestedClaims } from './extractRequestedClaims';
-import { FederationsConfig } from '../../schemas/federation';
+import { FederationRegistry } from '../../schemas/federation';
 
 /**
  * Configuration interface for the Authorization Page Handler.
@@ -39,7 +39,7 @@ export interface AuthorizationPageHandlerConfiguration {
   buildAuthorizationPageModel: BuildAuthorizationPageModel;
 
   /**
-   * Configuration for federations.
+   * Registry of federation configurations.
    */
-  federationsConfig?: FederationsConfig;
+  federationRegistry?: FederationRegistry;
 }

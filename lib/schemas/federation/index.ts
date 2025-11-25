@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './AuthenticationRequest';
-export * from './ClientConfig';
+export * from './FederationAuthenticationRequest';
+export * from './FederationCallbackParams';
+export * from './FederationClientConfig';
 export * from './FederationConfig';
-export * from './FederationParams';
-export * from './FederationsConfig';
-export * from './ServerConfig';
+export * from './FederationRegistry';
+export * from './FederationServerConfig';
 

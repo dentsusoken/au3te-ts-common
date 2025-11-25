@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import {
-  authenticationRequestSchema,
-  type AuthenticationRequest,
-} from '../AuthenticationRequest';
+  federationAuthenticationRequestSchema,
+  type FederationAuthenticationRequest,
+} from '../FederationAuthenticationRequest';
 
-describe('AuthenticationRequest', () => {
-  describe('authenticationRequestSchema', () => {
-    it('should accept a valid AuthenticationRequest object with all fields', () => {
-      const validRequest: AuthenticationRequest = {
+describe('FederationAuthenticationRequest', () => {
+  describe('federationAuthenticationRequestSchema', () => {
+    it('should accept a valid FederationAuthenticationRequest object with all fields', () => {
+      const validRequest: FederationAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid profile',
         client_id: 'client123',
@@ -16,24 +16,24 @@ describe('AuthenticationRequest', () => {
         code_challenge: 'challenge123',
         code_challenge_method: 'S256',
       };
-      const result = authenticationRequestSchema.parse(validRequest);
+      const result = federationAuthenticationRequestSchema.parse(validRequest);
       expect(result).toEqual(validRequest);
     });
 
-    it('should accept a valid AuthenticationRequest object without optional fields', () => {
-      const minimalRequest: AuthenticationRequest = {
+    it('should accept a valid FederationAuthenticationRequest object without optional fields', () => {
+      const minimalRequest: FederationAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
         redirect_uri: 'https://example.com/callback',
         state: 'state123',
       };
-      const result = authenticationRequestSchema.parse(minimalRequest);
+      const result = federationAuthenticationRequestSchema.parse(minimalRequest);
       expect(result).toEqual(minimalRequest);
     });
 
-    it('should accept a valid AuthenticationRequest object with null optional fields', () => {
-      const requestWithNulls: AuthenticationRequest = {
+    it('should accept a valid FederationAuthenticationRequest object with null optional fields', () => {
+      const requestWithNulls: FederationAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
@@ -42,12 +42,12 @@ describe('AuthenticationRequest', () => {
         code_challenge: null,
         code_challenge_method: null,
       };
-      const result = authenticationRequestSchema.parse(requestWithNulls);
+      const result = federationAuthenticationRequestSchema.parse(requestWithNulls);
       expect(result).toEqual(requestWithNulls);
     });
 
-    it('should accept a valid AuthenticationRequest object with undefined optional fields', () => {
-      const requestWithUndefined: AuthenticationRequest = {
+    it('should accept a valid FederationAuthenticationRequest object with undefined optional fields', () => {
+      const requestWithUndefined: FederationAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
@@ -56,11 +56,11 @@ describe('AuthenticationRequest', () => {
         code_challenge: undefined,
         code_challenge_method: undefined,
       };
-      const result = authenticationRequestSchema.parse(requestWithUndefined);
+      const result = federationAuthenticationRequestSchema.parse(requestWithUndefined);
       expect(result).toEqual(requestWithUndefined);
     });
 
-    it('should reject an AuthenticationRequest object with missing required fields', () => {
+    it('should reject a FederationAuthenticationRequest object with missing required fields', () => {
       const invalidRequests = [
         {},
         { response_type: 'code' },
@@ -75,12 +75,12 @@ describe('AuthenticationRequest', () => {
       ];
 
       invalidRequests.forEach((invalidRequest) => {
-        const result = authenticationRequestSchema.safeParse(invalidRequest);
+        const result = federationAuthenticationRequestSchema.safeParse(invalidRequest);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject an AuthenticationRequest object with invalid field types', () => {
+    it('should reject a FederationAuthenticationRequest object with invalid field types', () => {
       const invalidRequests = [
         {
           response_type: 123,
@@ -136,7 +136,7 @@ describe('AuthenticationRequest', () => {
       ];
 
       invalidRequests.forEach((invalidRequest) => {
-        const result = authenticationRequestSchema.safeParse(invalidRequest);
+        const result = federationAuthenticationRequestSchema.safeParse(invalidRequest);
         expect(result.success).toBe(false);
       });
     });
@@ -154,26 +154,26 @@ describe('AuthenticationRequest', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = authenticationRequestSchema.safeParse(value);
+        const result = federationAuthenticationRequestSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
 
     it('should accept empty strings for required fields', () => {
-      const requestWithEmptyStrings: AuthenticationRequest = {
+      const requestWithEmptyStrings: FederationAuthenticationRequest = {
         response_type: '',
         scope: '',
         client_id: '',
         redirect_uri: '',
         state: '',
       };
-      const result = authenticationRequestSchema.parse(requestWithEmptyStrings);
+      const result = federationAuthenticationRequestSchema.parse(requestWithEmptyStrings);
       expect(result).toEqual(requestWithEmptyStrings);
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof authenticationRequestSchema._type;
-      type ExpectedType = AuthenticationRequest;
+      type SchemaType = typeof federationAuthenticationRequestSchema._type;
+      type ExpectedType = FederationAuthenticationRequest;
 
       const assertTypeCompatibility = (
         value: SchemaType

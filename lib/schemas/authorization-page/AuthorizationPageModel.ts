@@ -19,7 +19,7 @@ import { authorizationResponseSchema } from '../authorization';
 import { pairSchema } from '../common/Pair';
 import { scopeSchema } from '../common/Scope';
 import { userSchema } from '../common/User';
-import { federationsConfigSchema } from '../federation';
+import { federationRegistrySchema } from '../federation';
 
 /**
  * Schema for authorization page model.
@@ -168,7 +168,7 @@ export const authorizationPageModelSchema = z.object({
    */
   claimsForUserInfo: z.array(z.string()).nullish(),
 
-  federationsConfig: federationsConfigSchema.nullish(),
+  federationRegistry: federationRegistrySchema.nullish(),
 });
 
 /**

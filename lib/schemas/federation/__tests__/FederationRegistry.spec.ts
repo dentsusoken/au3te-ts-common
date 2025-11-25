@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
-  federationsConfigSchema,
-  type FederationsConfig,
-} from '../FederationsConfig';
+  federationRegistrySchema,
+  type FederationRegistry,
+} from '../FederationRegistry';
 
-describe('FederationsConfig', () => {
-  describe('federationsConfigSchema', () => {
+describe('FederationRegistry', () => {
+  describe('federationRegistrySchema', () => {
     const validFederationConfig = {
       id: 'federation1',
       client: {
@@ -19,47 +19,47 @@ describe('FederationsConfig', () => {
       },
     };
 
-    it('should accept a valid FederationsConfig object with multiple federations', () => {
-      const validConfig: FederationsConfig = {
+    it('should accept a valid FederationRegistry object with multiple federations', () => {
+      const validConfig: FederationRegistry = {
         federations: [validFederationConfig, { ...validFederationConfig, id: 'federation2' }],
       };
-      const result = federationsConfigSchema.parse(validConfig);
+      const result = federationRegistrySchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
-    it('should accept a valid FederationsConfig object with a single federation', () => {
-      const validConfig: FederationsConfig = {
+    it('should accept a valid FederationRegistry object with a single federation', () => {
+      const validConfig: FederationRegistry = {
         federations: [validFederationConfig],
       };
-      const result = federationsConfigSchema.parse(validConfig);
+      const result = federationRegistrySchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
-    it('should accept a valid FederationsConfig object with an empty array', () => {
-      const validConfig: FederationsConfig = {
+    it('should accept a valid FederationRegistry object with an empty array', () => {
+      const validConfig: FederationRegistry = {
         federations: [],
       };
-      const result = federationsConfigSchema.parse(validConfig);
+      const result = federationRegistrySchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
     it('should accept null', () => {
-      const result = federationsConfigSchema.parse(null);
+      const result = federationRegistrySchema.parse(null);
       expect(result).toBeNull();
     });
 
     it('should accept undefined', () => {
-      const result = federationsConfigSchema.parse(undefined);
+      const result = federationRegistrySchema.parse(undefined);
       expect(result).toBeUndefined();
     });
 
-    it('should reject a FederationsConfig object with missing federations field', () => {
+    it('should reject a FederationRegistry object with missing federations field', () => {
       const invalidConfig = {};
-      const result = federationsConfigSchema.safeParse(invalidConfig);
+      const result = federationRegistrySchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a FederationsConfig object with invalid federations array', () => {
+    it('should reject a FederationRegistry object with invalid federations array', () => {
       const invalidConfigs = [
         {
           federations: [{}],
@@ -97,12 +97,12 @@ describe('FederationsConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationsConfigSchema.safeParse(invalidConfig);
+        const result = federationRegistrySchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationsConfig object with invalid field types', () => {
+    it('should reject a FederationRegistry object with invalid field types', () => {
       const invalidConfigs = [
         {
           federations: 'not-an-array',
@@ -119,7 +119,7 @@ describe('FederationsConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationsConfigSchema.safeParse(invalidConfig);
+        const result = federationRegistrySchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
@@ -128,14 +128,14 @@ describe('FederationsConfig', () => {
       const invalidValues = ['string', 123, true, false, [], () => {}];
 
       invalidValues.forEach((value) => {
-        const result = federationsConfigSchema.safeParse(value);
+        const result = federationRegistrySchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationsConfigSchema._type;
-      type ExpectedType = FederationsConfig;
+      type SchemaType = typeof federationRegistrySchema._type;
+      type ExpectedType = FederationRegistry;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

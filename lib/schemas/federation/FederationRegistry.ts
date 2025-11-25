@@ -17,10 +17,10 @@ import { z } from 'zod';
 import { federationConfigSchema } from './FederationConfig';
 
 /**
- * Schema for federations configuration.
+ * Schema for federation registry.
  * This represents a collection of federation configurations.
  */
-export const federationsConfigSchema = z.object({
+export const federationRegistrySchema = z.object({
   /**
    * Array of federation configurations.
    */
@@ -28,6 +28,6 @@ export const federationsConfigSchema = z.object({
 }).nullish();
 
 /**
- * Type definition for FederationsConfig.
+ * Type definition for FederationRegistry.
  */
-export type FederationsConfig = z.infer<typeof federationsConfigSchema>;
+export type FederationRegistry = z.infer<typeof federationRegistrySchema>;

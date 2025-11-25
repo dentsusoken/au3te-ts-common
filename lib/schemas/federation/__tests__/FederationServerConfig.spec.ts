@@ -1,36 +1,36 @@
 import { describe, it, expect } from 'vitest';
-import { serverConfigSchema, type ServerConfig } from '../ServerConfig';
+import { federationServerConfigSchema, type FederationServerConfig } from '../FederationServerConfig';
 
-describe('ServerConfig', () => {
-  describe('serverConfigSchema', () => {
-    it('should accept a valid ServerConfig object', () => {
-      const validConfig: ServerConfig = {
+describe('FederationServerConfig', () => {
+  describe('federationServerConfigSchema', () => {
+    it('should accept a valid FederationServerConfig object', () => {
+      const validConfig: FederationServerConfig = {
         name: 'Test Server',
         issuer: 'https://example.com',
       };
-      const result = serverConfigSchema.parse(validConfig);
+      const result = federationServerConfigSchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
-    it('should reject a ServerConfig object with empty name', () => {
+    it('should reject a FederationServerConfig object with empty name', () => {
       const invalidConfig = {
         name: '',
         issuer: 'https://example.com',
       };
-      const result = serverConfigSchema.safeParse(invalidConfig);
+      const result = federationServerConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a ServerConfig object with empty issuer', () => {
+    it('should reject a FederationServerConfig object with empty issuer', () => {
       const invalidConfig = {
         name: 'Test Server',
         issuer: '',
       };
-      const result = serverConfigSchema.safeParse(invalidConfig);
+      const result = federationServerConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a ServerConfig object with invalid issuer URL', () => {
+    it('should reject a FederationServerConfig object with invalid issuer URL', () => {
       const invalidUrls = [
         'not-a-url',
         'http://',
@@ -44,21 +44,21 @@ describe('ServerConfig', () => {
           name: 'Test Server',
           issuer: invalidUrl,
         };
-        const result = serverConfigSchema.safeParse(invalidConfig);
+        const result = federationServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a ServerConfig object with missing required fields', () => {
+    it('should reject a FederationServerConfig object with missing required fields', () => {
       const invalidConfigs = [{}, { name: 'Test Server' }, { issuer: 'https://example.com' }];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = serverConfigSchema.safeParse(invalidConfig);
+        const result = federationServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a ServerConfig object with invalid field types', () => {
+    it('should reject a FederationServerConfig object with invalid field types', () => {
       const invalidConfigs = [
         {
           name: 123,
@@ -79,7 +79,7 @@ describe('ServerConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = serverConfigSchema.safeParse(invalidConfig);
+        const result = federationServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
@@ -97,7 +97,7 @@ describe('ServerConfig', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = serverConfigSchema.safeParse(value);
+        const result = federationServerConfigSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
@@ -111,18 +111,18 @@ describe('ServerConfig', () => {
       ];
 
       validUrls.forEach((url) => {
-        const validConfig: ServerConfig = {
+        const validConfig: FederationServerConfig = {
           name: 'Test Server',
           issuer: url,
         };
-        const result = serverConfigSchema.parse(validConfig);
+        const result = federationServerConfigSchema.parse(validConfig);
         expect(result.issuer).toBe(url);
       });
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof serverConfigSchema._type;
-      type ExpectedType = ServerConfig;
+      type SchemaType = typeof federationServerConfigSchema._type;
+      type ExpectedType = FederationServerConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

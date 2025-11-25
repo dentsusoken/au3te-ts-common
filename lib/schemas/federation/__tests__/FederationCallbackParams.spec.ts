@@ -1,56 +1,56 @@
 import { describe, it, expect } from 'vitest';
 import {
-  federationParamsSchema,
-  type FederationParams,
-} from '../FederationParams';
+  federationCallbackParamsSchema,
+  type FederationCallbackParams,
+} from '../FederationCallbackParams';
 
-describe('FederationParams', () => {
-  describe('federationParamsSchema', () => {
-    it('should accept a valid FederationParams object with all fields', () => {
-      const validParams: FederationParams = {
+describe('FederationCallbackParams', () => {
+  describe('federationCallbackParamsSchema', () => {
+    it('should accept a valid FederationCallbackParams object with all fields', () => {
+      const validParams: FederationCallbackParams = {
         state: 'state123',
         codeVerifier: 'verifier123',
       };
-      const result = federationParamsSchema.parse(validParams);
+      const result = federationCallbackParamsSchema.parse(validParams);
       expect(result).toEqual(validParams);
     });
 
-    it('should accept a valid FederationParams object without optional fields', () => {
-      const minimalParams: FederationParams = {
+    it('should accept a valid FederationCallbackParams object without optional fields', () => {
+      const minimalParams: FederationCallbackParams = {
         state: 'state123',
       };
-      const result = federationParamsSchema.parse(minimalParams);
+      const result = federationCallbackParamsSchema.parse(minimalParams);
       expect(result).toEqual(minimalParams);
     });
 
-    it('should accept a valid FederationParams object with null optional fields', () => {
-      const paramsWithNulls: FederationParams = {
+    it('should accept a valid FederationCallbackParams object with null optional fields', () => {
+      const paramsWithNulls: FederationCallbackParams = {
         state: 'state123',
         codeVerifier: null,
       };
-      const result = federationParamsSchema.parse(paramsWithNulls);
+      const result = federationCallbackParamsSchema.parse(paramsWithNulls);
       expect(result).toEqual(paramsWithNulls);
     });
 
-    it('should accept a valid FederationParams object with undefined optional fields', () => {
-      const paramsWithUndefined: FederationParams = {
+    it('should accept a valid FederationCallbackParams object with undefined optional fields', () => {
+      const paramsWithUndefined: FederationCallbackParams = {
         state: 'state123',
         codeVerifier: undefined,
       };
-      const result = federationParamsSchema.parse(paramsWithUndefined);
+      const result = federationCallbackParamsSchema.parse(paramsWithUndefined);
       expect(result).toEqual(paramsWithUndefined);
     });
 
-    it('should reject a FederationParams object with missing required fields', () => {
+    it('should reject a FederationCallbackParams object with missing required fields', () => {
       const invalidParams = [{}, { codeVerifier: 'verifier123' }];
 
       invalidParams.forEach((invalidParam) => {
-        const result = federationParamsSchema.safeParse(invalidParam);
+        const result = federationCallbackParamsSchema.safeParse(invalidParam);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationParams object with invalid field types', () => {
+    it('should reject a FederationCallbackParams object with invalid field types', () => {
       const invalidParams = [
         {
           state: 123,
@@ -71,7 +71,7 @@ describe('FederationParams', () => {
       ];
 
       invalidParams.forEach((invalidParam) => {
-        const result = federationParamsSchema.safeParse(invalidParam);
+        const result = federationCallbackParamsSchema.safeParse(invalidParam);
         expect(result.success).toBe(false);
       });
     });
@@ -89,22 +89,22 @@ describe('FederationParams', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = federationParamsSchema.safeParse(value);
+        const result = federationCallbackParamsSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
 
     it('should accept empty strings for required fields', () => {
-      const paramsWithEmptyStrings: FederationParams = {
+      const paramsWithEmptyStrings: FederationCallbackParams = {
         state: '',
       };
-      const result = federationParamsSchema.parse(paramsWithEmptyStrings);
+      const result = federationCallbackParamsSchema.parse(paramsWithEmptyStrings);
       expect(result).toEqual(paramsWithEmptyStrings);
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationParamsSchema._type;
-      type ExpectedType = FederationParams;
+      type SchemaType = typeof federationCallbackParamsSchema._type;
+      type ExpectedType = FederationCallbackParams;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

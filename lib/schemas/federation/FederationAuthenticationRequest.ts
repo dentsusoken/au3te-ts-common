@@ -19,7 +19,7 @@ import { z } from 'zod';
 /**
  * Schema for authentication request parameters used in federation flows.
  */
-export const authenticationRequestSchema = z.object({
+export const federationAuthenticationRequestSchema = z.object({
   /**
    * The response type for the authorization request.
    */
@@ -57,6 +57,6 @@ export const authenticationRequestSchema = z.object({
 });
 
 /**
- * Type definition for AuthenticationRequest.
+ * Type definition for FederationAuthenticationRequest.
  */
-export type AuthenticationRequest = z.infer<typeof authenticationRequestSchema>;
+export type FederationAuthenticationRequest = z.infer<typeof federationAuthenticationRequestSchema>;

@@ -15,8 +15,8 @@
  */
 
 import { z } from 'zod';
-import { clientConfigSchema } from './ClientConfig';
-import { serverConfigSchema } from './ServerConfig';
+import { federationClientConfigSchema } from './FederationClientConfig';
+import { federationServerConfigSchema } from './FederationServerConfig';
 
 /**
  * Schema for federation configuration.
@@ -31,12 +31,12 @@ export const federationConfigSchema = z.object({
   /**
    * Client configuration for the federation.
    */
-  client: clientConfigSchema,
+  client: federationClientConfigSchema,
 
   /**
    * Server configuration for the federation.
    */
-  server: serverConfigSchema,
+  server: federationServerConfigSchema,
 });
 
 /**

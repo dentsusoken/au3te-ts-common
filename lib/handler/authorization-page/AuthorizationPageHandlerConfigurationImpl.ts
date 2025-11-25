@@ -24,13 +24,13 @@ import {
   ExtractRequestedClaims,
 } from './extractRequestedClaims';
 import { AuthorizationPageHandlerConfiguration } from './AuthorizationPageHandlerConfiguration';
-import { FederationsConfig } from '../../schemas/federation';
+import { FederationRegistry } from '../../schemas/federation';
 
 /**
  * Parameters for the constructor of AuthorizationPageHandlerConfigurationImpl.
  */
 type AuthorizationPageHandlerConfigurationImplConstructorParams = {
-  federationsConfig?: FederationsConfig;
+  federationRegistry?: FederationRegistry;
 };
 
 /**
@@ -54,30 +54,30 @@ export class AuthorizationPageHandlerConfigurationImpl
     defaultExtractRequestedClaims;
 
   /**
-   * Configuration for federations.
+   * Registry of federation configurations.
    */
-  federationsConfig?: FederationsConfig;
+  federationRegistry?: FederationRegistry;
 
   /**
    * Function to build the authorization page model.
-   * Created using the default factory function with computeScopes, extractRequestedClaims, and federationsConfig.
-   * This is a getter to ensure that changes to federationsConfig are reflected.
+   * Created using the default factory function with computeScopes, extractRequestedClaims, and federationRegistry.
+   * This is a getter to ensure that changes to federationRegistry are reflected.
    */
   buildAuthorizationPageModel: BuildAuthorizationPageModel;
 
   /**
    * Constructor for AuthorizationPageHandlerConfigurationImpl.
-   * @param federationsConfig - Configuration for federations.
+   * @param federationRegistry - Registry of federation configurations.
    */
   constructor({
-    federationsConfig,
+    federationRegistry,
   }: AuthorizationPageHandlerConfigurationImplConstructorParams = {}) {
-    this.federationsConfig = federationsConfig;
+    this.federationRegistry = federationRegistry;
 
     this.buildAuthorizationPageModel = createBuildAuthorizationPageModel({
       computeScopes: this.computeScopes,
       extractRequestedClaims: this.extractRequestedClaims,
-      federationsConfig: this.federationsConfig,
+      federationRegistry: this.federationRegistry,
     });
   }
 }

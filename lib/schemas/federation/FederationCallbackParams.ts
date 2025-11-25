@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { z } from 'zod';
 
 /**
- * Schema for server configuration used in federation flows.
+ * Schema for federation callback parameters.
+ * These parameters are stored in session before redirecting to IdP and reused after callback.
  */
-export const serverConfigSchema = z.object({
+export const federationCallbackParamsSchema = z.object({
   /**
-   * The name of the server.
+   * An opaque value used to maintain state between the request and callback.
    */
-  name: z.string().min(1),
+  state: z.string(),
 
   /**
-   * The issuer URL of the server.
+   * The code verifier for PKCE (Proof Key for Code Exchange).
    */
-  issuer: z.string().min(1).url(),
+  codeVerifier: z.string().nullish(),
 });
 
 /**
- * Type definition for ServerConfig.
+ * Type definition for FederationCallbackParams.
  */
-export type ServerConfig = z.infer<typeof serverConfigSchema>;
+export type FederationCallbackParams = z.infer<typeof federationCallbackParamsSchema>;

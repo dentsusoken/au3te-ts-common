@@ -19,7 +19,7 @@ import { z } from 'zod';
 /**
  * Schema for client configuration used in federation flows.
  */
-export const clientConfigSchema = z.object({
+export const federationClientConfigSchema = z.object({
   /**
    * The client identifier.
    */
@@ -42,6 +42,6 @@ export const clientConfigSchema = z.object({
 });
 
 /**
- * Type definition for ClientConfig.
+ * Type definition for FederationClientConfig.
  */
-export type ClientConfig = z.infer<typeof clientConfigSchema>;
+export type FederationClientConfig = z.infer<typeof federationClientConfigSchema>;

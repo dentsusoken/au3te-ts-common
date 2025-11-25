@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { z } from 'zod';
 
 /**
- * Schema for federation parameters used during the authorization flow.
+ * Schema for server configuration used in federation flows.
  */
-export const federationParamsSchema = z.object({
+export const federationServerConfigSchema = z.object({
   /**
-   * An opaque value used to maintain state between the request and callback.
+   * The name of the server.
    */
-  state: z.string(),
+  name: z.string().min(1),
 
   /**
-   * The code verifier for PKCE (Proof Key for Code Exchange).
+   * The issuer URL of the server.
    */
-  codeVerifier: z.string().nullish(),
+  issuer: z.string().min(1).url(),
 });
 
 /**
- * Type definition for FederationParams.
+ * Type definition for FederationServerConfig.
  */
-export type FederationParams = z.infer<typeof federationParamsSchema>;
+export type FederationServerConfig = z.infer<typeof federationServerConfigSchema>;
