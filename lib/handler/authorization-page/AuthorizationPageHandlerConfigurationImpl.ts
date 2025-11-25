@@ -24,6 +24,14 @@ import {
   ExtractRequestedClaims,
 } from './extractRequestedClaims';
 import { AuthorizationPageHandlerConfiguration } from './AuthorizationPageHandlerConfiguration';
+import { FederationsConfig } from '../../schemas/federation';
+
+/**
+ * Parameters for the constructor of AuthorizationPageHandlerConfigurationImpl.
+ */
+type AuthorizationPageHandlerConfigurationImplConstructorParams = {
+  federationsConfig?: FederationsConfig;
+};
 
 /**
  * Implementation of the AuthorizationPageHandlerConfiguration interface.
@@ -46,12 +54,30 @@ export class AuthorizationPageHandlerConfigurationImpl
     defaultExtractRequestedClaims;
 
   /**
-   * Function to build the authorization page model.
-   * Created using the default factory function with computeScopes and extractRequestedClaims.
+   * Configuration for federations.
    */
-  buildAuthorizationPageModel: BuildAuthorizationPageModel =
-    createBuildAuthorizationPageModel({
+  federationsConfig?: FederationsConfig;
+
+  /**
+   * Function to build the authorization page model.
+   * Created using the default factory function with computeScopes, extractRequestedClaims, and federationsConfig.
+   * This is a getter to ensure that changes to federationsConfig are reflected.
+   */
+  buildAuthorizationPageModel: BuildAuthorizationPageModel;
+
+  /**
+   * Constructor for AuthorizationPageHandlerConfigurationImpl.
+   * @param federationsConfig - Configuration for federations.
+   */
+  constructor({
+    federationsConfig,
+  }: AuthorizationPageHandlerConfigurationImplConstructorParams = {}) {
+    this.federationsConfig = federationsConfig;
+
+    this.buildAuthorizationPageModel = createBuildAuthorizationPageModel({
       computeScopes: this.computeScopes,
       extractRequestedClaims: this.extractRequestedClaims,
+      federationsConfig: this.federationsConfig,
     });
+  }
 }
