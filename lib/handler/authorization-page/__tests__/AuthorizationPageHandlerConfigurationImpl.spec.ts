@@ -314,6 +314,7 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
         federations: [
           {
             id: 'federation1',
+            protocol: 'oidc',
             client: {
               clientId: 'client1',
               clientSecret: 'secret1',

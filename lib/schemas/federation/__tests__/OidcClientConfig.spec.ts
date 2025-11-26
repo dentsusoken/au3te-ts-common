@@ -1,72 +1,75 @@
 import { describe, it, expect } from 'vitest';
-import { federationClientConfigSchema, type FederationClientConfig } from '../FederationClientConfig';
+import {
+  oidcClientConfigSchema,
+  type OidcClientConfig,
+} from '../OidcClientConfig';
 
-describe('FederationClientConfig', () => {
-  describe('federationClientConfigSchema', () => {
-    it('should accept a valid FederationClientConfig object with all fields', () => {
-      const validConfig: FederationClientConfig = {
+describe('OidcClientConfig', () => {
+  describe('oidcClientConfigSchema', () => {
+    it('should accept a valid OidcClientConfig object with all fields', () => {
+      const validConfig: OidcClientConfig = {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
         idTokenSignedResponseAlg: 'RS256',
       };
-      const result = federationClientConfigSchema.parse(validConfig);
+      const result = oidcClientConfigSchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
-    it('should accept a valid FederationClientConfig object without optional fields', () => {
-      const minimalConfig: FederationClientConfig = {
+    it('should accept a valid OidcClientConfig object without optional fields', () => {
+      const minimalConfig: OidcClientConfig = {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
       };
-      const result = federationClientConfigSchema.parse(minimalConfig);
+      const result = oidcClientConfigSchema.parse(minimalConfig);
       expect(result).toEqual(minimalConfig);
     });
 
-    it('should accept a valid FederationClientConfig object with null optional fields', () => {
-      const configWithNulls: FederationClientConfig = {
+    it('should accept a valid OidcClientConfig object with null optional fields', () => {
+      const configWithNulls: OidcClientConfig = {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
         idTokenSignedResponseAlg: null,
       };
-      const result = federationClientConfigSchema.parse(configWithNulls);
+      const result = oidcClientConfigSchema.parse(configWithNulls);
       expect(result).toEqual(configWithNulls);
     });
 
-    it('should accept a valid FederationClientConfig object with undefined optional fields', () => {
-      const configWithUndefined: FederationClientConfig = {
+    it('should accept a valid OidcClientConfig object with undefined optional fields', () => {
+      const configWithUndefined: OidcClientConfig = {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
         idTokenSignedResponseAlg: undefined,
       };
-      const result = federationClientConfigSchema.parse(configWithUndefined);
+      const result = oidcClientConfigSchema.parse(configWithUndefined);
       expect(result).toEqual(configWithUndefined);
     });
 
-    it('should reject a FederationClientConfig object with empty clientId', () => {
+    it('should reject an OidcClientConfig object with empty clientId', () => {
       const invalidConfig = {
         clientId: '',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
       };
-      const result = federationClientConfigSchema.safeParse(invalidConfig);
+      const result = oidcClientConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a FederationClientConfig object with empty clientSecret', () => {
+    it('should reject an OidcClientConfig object with empty clientSecret', () => {
       const invalidConfig = {
         clientId: 'client123',
         clientSecret: '',
         redirectUri: 'https://example.com/callback',
       };
-      const result = federationClientConfigSchema.safeParse(invalidConfig);
+      const result = oidcClientConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a FederationClientConfig object with invalid redirectUri', () => {
+    it('should reject an OidcClientConfig object with invalid redirectUri', () => {
       const invalidUrls = [
         'not-a-url',
         'http://',
@@ -81,12 +84,12 @@ describe('FederationClientConfig', () => {
           clientSecret: 'secret123',
           redirectUri: invalidUrl,
         };
-        const result = federationClientConfigSchema.safeParse(invalidConfig);
+        const result = oidcClientConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationClientConfig object with missing required fields', () => {
+    it('should reject an OidcClientConfig object with missing required fields', () => {
       const invalidConfigs = [
         {},
         { clientId: 'client123' },
@@ -94,12 +97,12 @@ describe('FederationClientConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationClientConfigSchema.safeParse(invalidConfig);
+        const result = oidcClientConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationClientConfig object with invalid field types', () => {
+    it('should reject an OidcClientConfig object with invalid field types', () => {
       const invalidConfigs = [
         {
           clientId: 123,
@@ -125,7 +128,7 @@ describe('FederationClientConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationClientConfigSchema.safeParse(invalidConfig);
+        const result = oidcClientConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
@@ -143,7 +146,7 @@ describe('FederationClientConfig', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = federationClientConfigSchema.safeParse(value);
+        const result = oidcClientConfigSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
@@ -157,21 +160,19 @@ describe('FederationClientConfig', () => {
       ];
 
       validUrls.forEach((url) => {
-        const validConfig: FederationClientConfig = {
+        const validConfig: OidcClientConfig = {
           clientId: 'client123',
           clientSecret: 'secret123',
           redirectUri: url,
         };
-        const result = federationClientConfigSchema.parse(validConfig);
-        if ('redirectUri' in result) {
-          expect(result.redirectUri).toBe(url);
-        }
+        const result = oidcClientConfigSchema.parse(validConfig);
+        expect(result.redirectUri).toBe(url);
       });
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationClientConfigSchema._type;
-      type ExpectedType = FederationClientConfig;
+      type SchemaType = typeof oidcClientConfigSchema._type;
+      type ExpectedType = OidcClientConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

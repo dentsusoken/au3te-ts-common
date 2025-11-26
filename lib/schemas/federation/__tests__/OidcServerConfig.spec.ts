@@ -1,36 +1,39 @@
 import { describe, it, expect } from 'vitest';
-import { federationServerConfigSchema, type FederationServerConfig } from '../FederationServerConfig';
+import {
+  oidcServerConfigSchema,
+  type OidcServerConfig,
+} from '../OidcServerConfig';
 
-describe('FederationServerConfig', () => {
-  describe('federationServerConfigSchema', () => {
-    it('should accept a valid FederationServerConfig object', () => {
-      const validConfig: FederationServerConfig = {
+describe('OidcServerConfig', () => {
+  describe('oidcServerConfigSchema', () => {
+    it('should accept a valid OidcServerConfig object', () => {
+      const validConfig: OidcServerConfig = {
         name: 'Test Server',
         issuer: 'https://example.com',
       };
-      const result = federationServerConfigSchema.parse(validConfig);
+      const result = oidcServerConfigSchema.parse(validConfig);
       expect(result).toEqual(validConfig);
     });
 
-    it('should reject a FederationServerConfig object with empty name', () => {
+    it('should reject an OidcServerConfig object with empty name', () => {
       const invalidConfig = {
         name: '',
         issuer: 'https://example.com',
       };
-      const result = federationServerConfigSchema.safeParse(invalidConfig);
+      const result = oidcServerConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a FederationServerConfig object with empty issuer', () => {
+    it('should reject an OidcServerConfig object with empty issuer', () => {
       const invalidConfig = {
         name: 'Test Server',
         issuer: '',
       };
-      const result = federationServerConfigSchema.safeParse(invalidConfig);
+      const result = oidcServerConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
     });
 
-    it('should reject a FederationServerConfig object with invalid issuer URL', () => {
+    it('should reject an OidcServerConfig object with invalid issuer URL', () => {
       const invalidUrls = [
         'not-a-url',
         'http://',
@@ -44,21 +47,25 @@ describe('FederationServerConfig', () => {
           name: 'Test Server',
           issuer: invalidUrl,
         };
-        const result = federationServerConfigSchema.safeParse(invalidConfig);
+        const result = oidcServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationServerConfig object with missing required fields', () => {
-      const invalidConfigs = [{}, { name: 'Test Server' }, { issuer: 'https://example.com' }];
+    it('should reject an OidcServerConfig object with missing required fields', () => {
+      const invalidConfigs = [
+        {},
+        { name: 'Test Server' },
+        { issuer: 'https://example.com' },
+      ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationServerConfigSchema.safeParse(invalidConfig);
+        const result = oidcServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationServerConfig object with invalid field types', () => {
+    it('should reject an OidcServerConfig object with invalid field types', () => {
       const invalidConfigs = [
         {
           name: 123,
@@ -79,7 +86,7 @@ describe('FederationServerConfig', () => {
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
-        const result = federationServerConfigSchema.safeParse(invalidConfig);
+        const result = oidcServerConfigSchema.safeParse(invalidConfig);
         expect(result.success).toBe(false);
       });
     });
@@ -97,7 +104,7 @@ describe('FederationServerConfig', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = federationServerConfigSchema.safeParse(value);
+        const result = oidcServerConfigSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
@@ -111,20 +118,18 @@ describe('FederationServerConfig', () => {
       ];
 
       validUrls.forEach((url) => {
-        const validConfig: FederationServerConfig = {
+        const validConfig: OidcServerConfig = {
           name: 'Test Server',
           issuer: url,
         };
-        const result = federationServerConfigSchema.parse(validConfig);
-        if ('issuer' in result) {
-          expect(result.issuer).toBe(url);
-        }
+        const result = oidcServerConfigSchema.parse(validConfig);
+        expect(result.issuer).toBe(url);
       });
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationServerConfigSchema._type;
-      type ExpectedType = FederationServerConfig;
+      type SchemaType = typeof oidcServerConfigSchema._type;
+      type ExpectedType = OidcServerConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

@@ -8,6 +8,7 @@ describe('FederationRegistry', () => {
   describe('federationRegistrySchema', () => {
     const validFederationConfig = {
       id: 'federation1',
+      protocol: 'oidc' as const,
       client: {
         clientId: 'client123',
         clientSecret: 'secret123',

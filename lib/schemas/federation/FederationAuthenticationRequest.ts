@@ -15,48 +15,28 @@
  */
 
 import { z } from 'zod';
+import {
+  oidcAuthenticationRequestSchema,
+  type OidcAuthenticationRequest,
+} from './OidcAuthenticationRequest';
+import {
+  saml2AuthenticationRequestSchema,
+  type Saml2AuthenticationRequest,
+} from './Saml2AuthenticationRequest';
 
 /**
  * Schema for authentication request parameters used in federation flows.
+ * Supports both OpenID Connect and SAML 2.0 protocols.
  */
-export const federationAuthenticationRequestSchema = z.object({
-  /**
-   * The response type for the authorization request.
-   */
-  response_type: z.string(),
-
-  /**
-   * The scope of the authorization request.
-   */
-  scope: z.string(),
-
-  /**
-   * The client identifier.
-   */
-  client_id: z.string(),
-
-  /**
-   * The redirect URI where the authorization response will be sent.
-   */
-  redirect_uri: z.string(),
-
-  /**
-   * An opaque value used to maintain state between the request and callback.
-   */
-  state: z.string(),
-
-  /**
-   * The code challenge for PKCE (Proof Key for Code Exchange).
-   */
-  code_challenge: z.string().nullish(),
-
-  /**
-   * The code challenge method for PKCE.
-   */
-  code_challenge_method: z.string().nullish(),
-});
+export const federationAuthenticationRequestSchema = z.discriminatedUnion('protocol', [
+  z.object({ protocol: z.literal('oidc') }).merge(oidcAuthenticationRequestSchema),
+  z.object({ protocol: z.literal('saml2') }).merge(saml2AuthenticationRequestSchema),
+]);
 
 /**
  * Type definition for FederationAuthenticationRequest.
+ * This is a discriminated union that supports both OIDC and SAML 2.0 protocols.
  */
-export type FederationAuthenticationRequest = z.infer<typeof federationAuthenticationRequestSchema>;
+export type FederationAuthenticationRequest =
+  | ({ protocol: 'oidc' } & OidcAuthenticationRequest)
+  | ({ protocol: 'saml2' } & Saml2AuthenticationRequest);

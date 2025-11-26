@@ -13,19 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './FederationAuthenticationRequest';
-export * from './FederationCallbackParams';
-export * from './FederationClientConfig';
-export * from './FederationConfig';
-export * from './FederationProtocol';
-export * from './FederationRegistry';
-export * from './FederationServerConfig';
-export * from './OidcAuthenticationRequest';
-export * from './OidcCallbackParams';
-export * from './OidcClientConfig';
-export * from './OidcServerConfig';
-export * from './Saml2AuthenticationRequest';
-export * from './Saml2CallbackParams';
-export * from './Saml2ClientConfig';
-export * from './Saml2ServerConfig';
+
+import { z } from 'zod';
+
+/**
+ * Schema for OpenID Connect server configuration used in federation flows.
+ */
+export const oidcServerConfigSchema = z.object({
+  /**
+   * The name of the server.
+   */
+  name: z.string().min(1),
+
+  /**
+   * The issuer URL of the server.
+   */
+  issuer: z.string().min(1).url(),
+});
+
+/**
+ * Type definition for OidcServerConfig.
+ */
+export type OidcServerConfig = z.infer<typeof oidcServerConfigSchema>;
 

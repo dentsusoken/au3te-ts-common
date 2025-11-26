@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './FederationAuthenticationRequest';
-export * from './FederationCallbackParams';
-export * from './FederationClientConfig';
-export * from './FederationConfig';
-export * from './FederationProtocol';
-export * from './FederationRegistry';
-export * from './FederationServerConfig';
-export * from './OidcAuthenticationRequest';
-export * from './OidcCallbackParams';
-export * from './OidcClientConfig';
-export * from './OidcServerConfig';
-export * from './Saml2AuthenticationRequest';
-export * from './Saml2CallbackParams';
-export * from './Saml2ClientConfig';
-export * from './Saml2ServerConfig';
+
+import { z } from 'zod';
+
+/**
+ * Schema for OpenID Connect callback parameters.
+ * These parameters are stored in session before redirecting to IdP and reused after callback.
+ */
+export const oidcCallbackParamsSchema = z.object({
+  /**
+   * An opaque value used to maintain state between the request and callback.
+   */
+  state: z.string(),
+
+  /**
+   * The code verifier for PKCE (Proof Key for Code Exchange).
+   */
+  codeVerifier: z.string().nullish(),
+});
+
+/**
+ * Type definition for OidcCallbackParams.
+ */
+export type OidcCallbackParams = z.infer<typeof oidcCallbackParamsSchema>;
 

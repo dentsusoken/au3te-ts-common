@@ -20,6 +20,7 @@ describe('FederationConfig', () => {
     it('should accept a valid FederationConfig object', () => {
       const validConfig: FederationConfig = {
         id: 'federation1',
+        protocol: 'oidc',
         client: validClientConfig,
         server: validServerConfig,
       };
@@ -30,6 +31,7 @@ describe('FederationConfig', () => {
     it('should reject a FederationConfig object with empty id', () => {
       const invalidConfig = {
         id: '',
+        protocol: 'oidc' as const,
         client: validClientConfig,
         server: validServerConfig,
       };
@@ -41,8 +43,9 @@ describe('FederationConfig', () => {
       const invalidConfigs = [
         {},
         { id: 'federation1' },
-        { id: 'federation1', client: validClientConfig },
-        { id: 'federation1', server: validServerConfig },
+        { id: 'federation1', protocol: 'oidc' as const },
+        { id: 'federation1', protocol: 'oidc' as const, client: validClientConfig },
+        { id: 'federation1', protocol: 'oidc' as const, server: validServerConfig },
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
@@ -55,16 +58,19 @@ describe('FederationConfig', () => {
       const invalidConfigs = [
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: {},
           server: validServerConfig,
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: { clientId: 'client123' },
           server: validServerConfig,
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: {
             clientId: '',
             clientSecret: 'secret123',
@@ -74,6 +80,7 @@ describe('FederationConfig', () => {
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: {
             clientId: 'client123',
             clientSecret: 'secret123',
@@ -93,16 +100,19 @@ describe('FederationConfig', () => {
       const invalidConfigs = [
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: {},
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: { name: 'Test Server' },
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: {
             name: '',
@@ -111,6 +121,7 @@ describe('FederationConfig', () => {
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: {
             name: 'Test Server',
@@ -129,16 +140,19 @@ describe('FederationConfig', () => {
       const invalidConfigs = [
         {
           id: 123,
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: validServerConfig,
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: 'invalid',
           server: validServerConfig,
         },
         {
           id: 'federation1',
+          protocol: 'oidc' as const,
           client: validClientConfig,
           server: 'invalid',
         },
@@ -171,6 +185,7 @@ describe('FederationConfig', () => {
     it('should accept a FederationConfig object with optional client fields', () => {
       const configWithOptionalFields: FederationConfig = {
         id: 'federation1',
+        protocol: 'oidc',
         client: {
           ...validClientConfig,
           idTokenSignedResponseAlg: 'RS256',

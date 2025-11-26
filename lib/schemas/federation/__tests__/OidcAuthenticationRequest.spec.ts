@@ -1,14 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import {
-  federationAuthenticationRequestSchema,
-  type FederationAuthenticationRequest,
-} from '../FederationAuthenticationRequest';
+  oidcAuthenticationRequestSchema,
+  type OidcAuthenticationRequest,
+} from '../OidcAuthenticationRequest';
 
-describe('FederationAuthenticationRequest', () => {
-  describe('federationAuthenticationRequestSchema', () => {
-    it('should accept a valid FederationAuthenticationRequest object with all fields', () => {
-      const validRequest: FederationAuthenticationRequest = {
-        protocol: 'oidc',
+describe('OidcAuthenticationRequest', () => {
+  describe('oidcAuthenticationRequestSchema', () => {
+    it('should accept a valid OidcAuthenticationRequest object with all fields', () => {
+      const validRequest: OidcAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid profile',
         client_id: 'client123',
@@ -17,26 +16,24 @@ describe('FederationAuthenticationRequest', () => {
         code_challenge: 'challenge123',
         code_challenge_method: 'S256',
       };
-      const result = federationAuthenticationRequestSchema.parse(validRequest);
+      const result = oidcAuthenticationRequestSchema.parse(validRequest);
       expect(result).toEqual(validRequest);
     });
 
-    it('should accept a valid FederationAuthenticationRequest object without optional fields', () => {
-      const minimalRequest: FederationAuthenticationRequest = {
-        protocol: 'oidc',
+    it('should accept a valid OidcAuthenticationRequest object without optional fields', () => {
+      const minimalRequest: OidcAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
         redirect_uri: 'https://example.com/callback',
         state: 'state123',
       };
-      const result = federationAuthenticationRequestSchema.parse(minimalRequest);
+      const result = oidcAuthenticationRequestSchema.parse(minimalRequest);
       expect(result).toEqual(minimalRequest);
     });
 
-    it('should accept a valid FederationAuthenticationRequest object with null optional fields', () => {
-      const requestWithNulls: FederationAuthenticationRequest = {
-        protocol: 'oidc',
+    it('should accept a valid OidcAuthenticationRequest object with null optional fields', () => {
+      const requestWithNulls: OidcAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
@@ -45,13 +42,12 @@ describe('FederationAuthenticationRequest', () => {
         code_challenge: null,
         code_challenge_method: null,
       };
-      const result = federationAuthenticationRequestSchema.parse(requestWithNulls);
+      const result = oidcAuthenticationRequestSchema.parse(requestWithNulls);
       expect(result).toEqual(requestWithNulls);
     });
 
-    it('should accept a valid FederationAuthenticationRequest object with undefined optional fields', () => {
-      const requestWithUndefined: FederationAuthenticationRequest = {
-        protocol: 'oidc',
+    it('should accept a valid OidcAuthenticationRequest object with undefined optional fields', () => {
+      const requestWithUndefined: OidcAuthenticationRequest = {
         response_type: 'code',
         scope: 'openid',
         client_id: 'client123',
@@ -60,16 +56,20 @@ describe('FederationAuthenticationRequest', () => {
         code_challenge: undefined,
         code_challenge_method: undefined,
       };
-      const result = federationAuthenticationRequestSchema.parse(requestWithUndefined);
+      const result = oidcAuthenticationRequestSchema.parse(requestWithUndefined);
       expect(result).toEqual(requestWithUndefined);
     });
 
-    it('should reject a FederationAuthenticationRequest object with missing required fields', () => {
+    it('should reject an OidcAuthenticationRequest object with missing required fields', () => {
       const invalidRequests = [
         {},
         { response_type: 'code' },
         { response_type: 'code', scope: 'openid' },
-        { response_type: 'code', scope: 'openid', client_id: 'client123' },
+        {
+          response_type: 'code',
+          scope: 'openid',
+          client_id: 'client123',
+        },
         {
           response_type: 'code',
           scope: 'openid',
@@ -79,12 +79,13 @@ describe('FederationAuthenticationRequest', () => {
       ];
 
       invalidRequests.forEach((invalidRequest) => {
-        const result = federationAuthenticationRequestSchema.safeParse(invalidRequest);
+        const result =
+          oidcAuthenticationRequestSchema.safeParse(invalidRequest);
         expect(result.success).toBe(false);
       });
     });
 
-    it('should reject a FederationAuthenticationRequest object with invalid field types', () => {
+    it('should reject an OidcAuthenticationRequest object with invalid field types', () => {
       const invalidRequests = [
         {
           response_type: 123,
@@ -111,7 +112,7 @@ describe('FederationAuthenticationRequest', () => {
           response_type: 'code',
           scope: 'openid',
           client_id: 'client123',
-          redirect_uri: true,
+          redirect_uri: 123,
           state: 'state123',
         },
         {
@@ -119,7 +120,7 @@ describe('FederationAuthenticationRequest', () => {
           scope: 'openid',
           client_id: 'client123',
           redirect_uri: 'https://example.com/callback',
-          state: 123,
+          state: {},
         },
         {
           response_type: 'code',
@@ -127,7 +128,7 @@ describe('FederationAuthenticationRequest', () => {
           client_id: 'client123',
           redirect_uri: 'https://example.com/callback',
           state: 'state123',
-          code_challenge: {},
+          code_challenge: 123,
         },
         {
           response_type: 'code',
@@ -140,7 +141,8 @@ describe('FederationAuthenticationRequest', () => {
       ];
 
       invalidRequests.forEach((invalidRequest) => {
-        const result = federationAuthenticationRequestSchema.safeParse(invalidRequest);
+        const result =
+          oidcAuthenticationRequestSchema.safeParse(invalidRequest);
         expect(result.success).toBe(false);
       });
     });
@@ -158,27 +160,26 @@ describe('FederationAuthenticationRequest', () => {
       ];
 
       invalidValues.forEach((value) => {
-        const result = federationAuthenticationRequestSchema.safeParse(value);
+        const result = oidcAuthenticationRequestSchema.safeParse(value);
         expect(result.success).toBe(false);
       });
     });
 
     it('should accept empty strings for required fields', () => {
-      const requestWithEmptyStrings: FederationAuthenticationRequest = {
-        protocol: 'oidc',
+      const requestWithEmptyStrings: OidcAuthenticationRequest = {
         response_type: '',
         scope: '',
         client_id: '',
         redirect_uri: '',
         state: '',
       };
-      const result = federationAuthenticationRequestSchema.parse(requestWithEmptyStrings);
+      const result = oidcAuthenticationRequestSchema.parse(requestWithEmptyStrings);
       expect(result).toEqual(requestWithEmptyStrings);
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationAuthenticationRequestSchema._type;
-      type ExpectedType = FederationAuthenticationRequest;
+      type SchemaType = typeof oidcAuthenticationRequestSchema._type;
+      type ExpectedType = OidcAuthenticationRequest;
 
       const assertTypeCompatibility = (
         value: SchemaType

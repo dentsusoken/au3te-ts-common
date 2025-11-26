@@ -15,31 +15,69 @@
  */
 
 import { z } from 'zod';
-import { federationClientConfigSchema } from './FederationClientConfig';
-import { federationServerConfigSchema } from './FederationServerConfig';
+import { oidcClientConfigSchema, type OidcClientConfig } from './OidcClientConfig';
+import { oidcServerConfigSchema, type OidcServerConfig } from './OidcServerConfig';
+import { saml2ClientConfigSchema, type Saml2ClientConfig } from './Saml2ClientConfig';
+import { saml2ServerConfigSchema, type Saml2ServerConfig } from './Saml2ServerConfig';
 
 /**
  * Schema for federation configuration.
  * This represents a single federation setup with client and server configurations.
+ * The protocol field determines which protocol-specific configurations are used.
  */
-export const federationConfigSchema = z.object({
-  /**
-   * Unique identifier for the federation.
-   */
-  id: z.string().min(1),
-
-  /**
-   * Client configuration for the federation.
-   */
-  client: federationClientConfigSchema,
-
-  /**
-   * Server configuration for the federation.
-   */
-  server: federationServerConfigSchema,
-});
+export const federationConfigSchema = z.discriminatedUnion('protocol', [
+  z.object({
+    /**
+     * Unique identifier for the federation.
+     */
+    id: z.string().min(1),
+    /**
+     * The federation protocol type.
+     */
+    protocol: z.literal('oidc'),
+    /**
+     * Client configuration for the federation.
+     */
+    client: oidcClientConfigSchema,
+    /**
+     * Server configuration for the federation.
+     */
+    server: oidcServerConfigSchema,
+  }),
+  z.object({
+    /**
+     * Unique identifier for the federation.
+     */
+    id: z.string().min(1),
+    /**
+     * The federation protocol type.
+     */
+    protocol: z.literal('saml2'),
+    /**
+     * Client configuration for the federation.
+     */
+    client: saml2ClientConfigSchema,
+    /**
+     * Server configuration for the federation.
+     */
+    server: saml2ServerConfigSchema,
+  }),
+]);
 
 /**
  * Type definition for FederationConfig.
+ * This is a discriminated union that supports both OIDC and SAML 2.0 protocols.
  */
-export type FederationConfig = z.infer<typeof federationConfigSchema>;
+export type FederationConfig =
+  | {
+      id: string;
+      protocol: 'oidc';
+      client: OidcClientConfig;
+      server: OidcServerConfig;
+    }
+  | {
+      id: string;
+      protocol: 'saml2';
+      client: Saml2ClientConfig;
+      server: Saml2ServerConfig;
+    };

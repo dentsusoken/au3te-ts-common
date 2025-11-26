@@ -8,6 +8,7 @@ describe('FederationCallbackParams', () => {
   describe('federationCallbackParamsSchema', () => {
     it('should accept a valid FederationCallbackParams object with all fields', () => {
       const validParams: FederationCallbackParams = {
+        protocol: 'oidc',
         state: 'state123',
         codeVerifier: 'verifier123',
       };
@@ -17,6 +18,7 @@ describe('FederationCallbackParams', () => {
 
     it('should accept a valid FederationCallbackParams object without optional fields', () => {
       const minimalParams: FederationCallbackParams = {
+        protocol: 'oidc',
         state: 'state123',
       };
       const result = federationCallbackParamsSchema.parse(minimalParams);
@@ -25,6 +27,7 @@ describe('FederationCallbackParams', () => {
 
     it('should accept a valid FederationCallbackParams object with null optional fields', () => {
       const paramsWithNulls: FederationCallbackParams = {
+        protocol: 'oidc',
         state: 'state123',
         codeVerifier: null,
       };
@@ -34,6 +37,7 @@ describe('FederationCallbackParams', () => {
 
     it('should accept a valid FederationCallbackParams object with undefined optional fields', () => {
       const paramsWithUndefined: FederationCallbackParams = {
+        protocol: 'oidc',
         state: 'state123',
         codeVerifier: undefined,
       };
@@ -96,6 +100,7 @@ describe('FederationCallbackParams', () => {
 
     it('should accept empty strings for required fields', () => {
       const paramsWithEmptyStrings: FederationCallbackParams = {
+        protocol: 'oidc',
         state: '',
       };
       const result = federationCallbackParamsSchema.parse(paramsWithEmptyStrings);

@@ -15,33 +15,21 @@
  */
 
 import { z } from 'zod';
+import { oidcClientConfigSchema, type OidcClientConfig } from './OidcClientConfig';
+import { saml2ClientConfigSchema, type Saml2ClientConfig } from './Saml2ClientConfig';
 
 /**
  * Schema for client configuration used in federation flows.
+ * Supports both OpenID Connect and SAML 2.0 protocols.
+ * Note: The protocol is determined by the parent FederationConfig.
  */
-export const federationClientConfigSchema = z.object({
-  /**
-   * The client identifier.
-   */
-  clientId: z.string().min(1),
-
-  /**
-   * The client secret.
-   */
-  clientSecret: z.string().min(1),
-
-  /**
-   * The redirect URI where the authorization response will be sent.
-   */
-  redirectUri: z.string().url(),
-
-  /**
-   * The algorithm used to sign the ID token.
-   */
-  idTokenSignedResponseAlg: z.string().nullish(),
-});
+export const federationClientConfigSchema = z.union([
+  oidcClientConfigSchema,
+  saml2ClientConfigSchema,
+]);
 
 /**
  * Type definition for FederationClientConfig.
+ * This is a union that supports both OIDC and SAML 2.0 protocols.
  */
-export type FederationClientConfig = z.infer<typeof federationClientConfigSchema>;
+export type FederationClientConfig = OidcClientConfig | Saml2ClientConfig;
