@@ -23,6 +23,7 @@ export * from './FederationServerConfig';
 export * from './OidcAuthenticationRequest';
 export * from './OidcCallbackParams';
 export * from './OidcClientConfig';
+export * from './OidcScope';
 export * from './OidcServerConfig';
 export * from './Saml2AuthenticationRequest';
 export * from './Saml2CallbackParams';

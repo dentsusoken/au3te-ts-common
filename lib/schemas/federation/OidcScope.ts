@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 import { z } from 'zod';
-import { federationConfigSchema } from './FederationConfig';
 
-/**
- * Schema for federation registry.
- * This represents a collection of federation configurations.
- */
-export const federationRegistrySchema = z.object({
-  /**
-   * Array of federation configurations.
-   */
-  federations: z.array(federationConfigSchema),
-}).nullish();
+export const oidcScopeEnumSchema = z.union([
+  z.literal('openid'),
+  z.literal('email'),
+  z.literal('profile'),
+  z.literal('address'),
+  z.literal('phone'),
+]);
 
-/**
- * Type definition for FederationRegistry.
- */
-export type FederationRegistry = z.input<typeof federationRegistrySchema>;
+export const oidcScopeSchema = z.array(oidcScopeEnumSchema).nonempty();
+
+export type OidcScopeEnum = z.infer<typeof oidcScopeEnumSchema>;
+
+export type OidcScope = z.input<typeof oidcScopeSchema>;

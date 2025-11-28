@@ -1,18 +1,21 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import {
   federationRegistrySchema,
   type FederationRegistry,
 } from '../FederationRegistry';
+import { FederationConfig } from '../FederationConfig';
 
 describe('FederationRegistry', () => {
   describe('federationRegistrySchema', () => {
-    const validFederationConfig = {
+    const validFederationConfig: FederationConfig = {
       id: 'federation1',
       protocol: 'oidc' as const,
       client: {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       },
       server: {
         name: 'Test Server',
@@ -22,7 +25,10 @@ describe('FederationRegistry', () => {
 
     it('should accept a valid FederationRegistry object with multiple federations', () => {
       const validConfig: FederationRegistry = {
-        federations: [validFederationConfig, { ...validFederationConfig, id: 'federation2' }],
+        federations: [
+          validFederationConfig,
+          { ...validFederationConfig, id: 'federation2' },
+        ],
       };
       const result = federationRegistrySchema.parse(validConfig);
       expect(result).toEqual(validConfig);
@@ -135,7 +141,7 @@ describe('FederationRegistry', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationRegistrySchema._type;
+      type SchemaType = z.input<typeof federationRegistrySchema>;
       type ExpectedType = FederationRegistry;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
@@ -144,4 +150,3 @@ describe('FederationRegistry', () => {
     });
   });
 });
-

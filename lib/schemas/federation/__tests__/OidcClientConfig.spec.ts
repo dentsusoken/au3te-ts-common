@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import {
   oidcClientConfigSchema,
   type OidcClientConfig,
@@ -12,6 +13,7 @@ describe('OidcClientConfig', () => {
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
         idTokenSignedResponseAlg: 'RS256',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       };
       const result = oidcClientConfigSchema.parse(validConfig);
       expect(result).toEqual(validConfig);
@@ -22,6 +24,7 @@ describe('OidcClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       };
       const result = oidcClientConfigSchema.parse(minimalConfig);
       expect(result).toEqual(minimalConfig);
@@ -32,6 +35,7 @@ describe('OidcClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         idTokenSignedResponseAlg: null,
       };
       const result = oidcClientConfigSchema.parse(configWithNulls);
@@ -43,6 +47,7 @@ describe('OidcClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         idTokenSignedResponseAlg: undefined,
       };
       const result = oidcClientConfigSchema.parse(configWithUndefined);
@@ -164,6 +169,7 @@ describe('OidcClientConfig', () => {
           clientId: 'client123',
           clientSecret: 'secret123',
           redirectUri: url,
+          scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         };
         const result = oidcClientConfigSchema.parse(validConfig);
         expect(result.redirectUri).toBe(url);
@@ -171,7 +177,7 @@ describe('OidcClientConfig', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof oidcClientConfigSchema._type;
+      type SchemaType = z.input<typeof oidcClientConfigSchema>;
       type ExpectedType = OidcClientConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

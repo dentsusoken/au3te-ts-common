@@ -15,10 +15,10 @@
  */
 
 import { z } from 'zod';
-import { oidcClientConfigSchema, type OidcClientConfig } from './OidcClientConfig';
-import { oidcServerConfigSchema, type OidcServerConfig } from './OidcServerConfig';
-import { saml2ClientConfigSchema, type Saml2ClientConfig } from './Saml2ClientConfig';
-import { saml2ServerConfigSchema, type Saml2ServerConfig } from './Saml2ServerConfig';
+import { oidcClientConfigSchema } from './OidcClientConfig';
+import { oidcServerConfigSchema } from './OidcServerConfig';
+import { saml2ClientConfigSchema } from './Saml2ClientConfig';
+import { saml2ServerConfigSchema } from './Saml2ServerConfig';
 
 /**
  * Schema for federation configuration.
@@ -68,16 +68,4 @@ export const federationConfigSchema = z.discriminatedUnion('protocol', [
  * Type definition for FederationConfig.
  * This is a discriminated union that supports both OIDC and SAML 2.0 protocols.
  */
-export type FederationConfig =
-  | {
-      id: string;
-      protocol: 'oidc';
-      client: OidcClientConfig;
-      server: OidcServerConfig;
-    }
-  | {
-      id: string;
-      protocol: 'saml2';
-      client: Saml2ClientConfig;
-      server: Saml2ServerConfig;
-    };
+export type FederationConfig = z.input<typeof federationConfigSchema>;

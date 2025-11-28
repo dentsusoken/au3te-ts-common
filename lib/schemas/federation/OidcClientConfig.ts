@@ -15,6 +15,7 @@
  */
 
 import { z } from 'zod';
+import { oidcScopeSchema } from './OidcScope';
 
 /**
  * Schema for OpenID Connect client configuration used in federation flows.
@@ -36,6 +37,11 @@ export const oidcClientConfigSchema = z.object({
   redirectUri: z.string().url(),
 
   /**
+   * The scopes requested by the client.
+   */
+  scopes: oidcScopeSchema,
+
+  /**
    * The algorithm used to sign the ID token.
    */
   idTokenSignedResponseAlg: z.string().nullish(),
@@ -44,5 +50,4 @@ export const oidcClientConfigSchema = z.object({
 /**
  * Type definition for OidcClientConfig.
  */
-export type OidcClientConfig = z.infer<typeof oidcClientConfigSchema>;
-
+export type OidcClientConfig = z.input<typeof oidcClientConfigSchema>;

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import { federationClientConfigSchema, type FederationClientConfig } from '../FederationClientConfig';
 
 describe('FederationClientConfig', () => {
@@ -8,6 +9,7 @@ describe('FederationClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         idTokenSignedResponseAlg: 'RS256',
       };
       const result = federationClientConfigSchema.parse(validConfig);
@@ -19,6 +21,7 @@ describe('FederationClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       };
       const result = federationClientConfigSchema.parse(minimalConfig);
       expect(result).toEqual(minimalConfig);
@@ -29,6 +32,7 @@ describe('FederationClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         idTokenSignedResponseAlg: null,
       };
       const result = federationClientConfigSchema.parse(configWithNulls);
@@ -40,6 +44,7 @@ describe('FederationClientConfig', () => {
         clientId: 'client123',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         idTokenSignedResponseAlg: undefined,
       };
       const result = federationClientConfigSchema.parse(configWithUndefined);
@@ -51,6 +56,7 @@ describe('FederationClientConfig', () => {
         clientId: '',
         clientSecret: 'secret123',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       };
       const result = federationClientConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
@@ -61,6 +67,7 @@ describe('FederationClientConfig', () => {
         clientId: 'client123',
         clientSecret: '',
         redirectUri: 'https://example.com/callback',
+        scopes: ['openid', 'email', 'profile', 'address', 'phone'],
       };
       const result = federationClientConfigSchema.safeParse(invalidConfig);
       expect(result.success).toBe(false);
@@ -161,6 +168,7 @@ describe('FederationClientConfig', () => {
           clientId: 'client123',
           clientSecret: 'secret123',
           redirectUri: url,
+          scopes: ['openid', 'email', 'profile', 'address', 'phone'],
         };
         const result = federationClientConfigSchema.parse(validConfig);
         if ('redirectUri' in result) {
@@ -170,7 +178,7 @@ describe('FederationClientConfig', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationClientConfigSchema._type;
+      type SchemaType = z.input<typeof federationClientConfigSchema>;
       type ExpectedType = FederationClientConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

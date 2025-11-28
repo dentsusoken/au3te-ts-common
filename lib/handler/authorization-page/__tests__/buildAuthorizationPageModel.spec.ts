@@ -161,6 +161,7 @@ describe('buildAuthorizationPageModel', () => {
               clientId: 'client1',
               clientSecret: 'secret1',
               redirectUri: 'https://example.com/redirect',
+              scopes: ['openid', 'email', 'profile', 'address', 'phone'],
             },
             server: {
               name: 'Server 1',

@@ -1,15 +1,18 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import {
   federationConfigSchema,
   type FederationConfig,
 } from '../FederationConfig';
+import { OidcClientConfig } from '../OidcClientConfig';
 
 describe('FederationConfig', () => {
   describe('federationConfigSchema', () => {
-    const validClientConfig = {
+    const validClientConfig: OidcClientConfig = {
       clientId: 'client123',
       clientSecret: 'secret123',
       redirectUri: 'https://example.com/callback',
+      scopes: ['openid', 'email', 'profile', 'address', 'phone'],
     };
 
     const validServerConfig = {
@@ -44,8 +47,16 @@ describe('FederationConfig', () => {
         {},
         { id: 'federation1' },
         { id: 'federation1', protocol: 'oidc' as const },
-        { id: 'federation1', protocol: 'oidc' as const, client: validClientConfig },
-        { id: 'federation1', protocol: 'oidc' as const, server: validServerConfig },
+        {
+          id: 'federation1',
+          protocol: 'oidc' as const,
+          client: validClientConfig,
+        },
+        {
+          id: 'federation1',
+          protocol: 'oidc' as const,
+          server: validServerConfig,
+        },
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
@@ -197,7 +208,7 @@ describe('FederationConfig', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationConfigSchema._type;
+      type SchemaType = z.input<typeof federationConfigSchema>;
       type ExpectedType = FederationConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
@@ -206,4 +217,3 @@ describe('FederationConfig', () => {
     });
   });
 });
-
