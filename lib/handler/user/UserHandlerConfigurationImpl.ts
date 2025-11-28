@@ -16,12 +16,14 @@
  */
 
 import { UserHandlerConfiguration } from './UserHandlerConfiguration';
+import { AddUser } from './addUser';
 import { GetByCredentials } from './getByCredentials';
 import { GetBySubject } from './getBySubject';
 import { GetMdocClaimsBySubjectAndDoctype } from './getMdocClaimsBySubjectAndDoctype';
 import { mockGetByCredentials } from './mockGetByCredentials';
 import { mockGetBySubject } from './mockGetBySubject';
 import { mockGetMdocClaimsBySubjectAndDoctype } from './mockGetMdocClaimsBySubjectAndDoctype';
+import { User } from '../../schemas/common/User';
 
 /**
  * Default implementation of UserHandlerConfiguration interface.
@@ -38,7 +40,11 @@ import { mockGetMdocClaimsBySubjectAndDoctype } from './mockGetMdocClaimsBySubje
  * // Lookup user by subject
  * const user2 = await userHandler.getBySubject('1004');
  */
-export class UserHandlerConfigurationImpl implements UserHandlerConfiguration {
+export class UserHandlerConfigurationImpl<
+  U extends User = User,
+  T extends keyof Omit<U, 'loginId' | 'password'> = never
+> implements UserHandlerConfiguration<U, T>
+{
   /**
    * Implementation of user authentication by credentials.
    * Uses a mock implementation that searches a predefined set of users.
@@ -47,7 +53,7 @@ export class UserHandlerConfigurationImpl implements UserHandlerConfiguration {
    * @type {GetByCredentials}
    * @see mockGetByCredentials
    */
-  getByCredentials: GetByCredentials = mockGetByCredentials;
+  getByCredentials: GetByCredentials<U, T> = mockGetByCredentials as GetByCredentials<U, T>;
 
   /**
    * Implementation of user lookup by subject identifier.
@@ -57,7 +63,7 @@ export class UserHandlerConfigurationImpl implements UserHandlerConfiguration {
    * @type {GetBySubject}
    * @see mockGetBySubject
    */
-  getBySubject: GetBySubject = mockGetBySubject;
+  getBySubject: GetBySubject<U> = mockGetBySubject as GetBySubject<U>;
 
   /**
    * Implementation of mdoc claims retrieval by subject and document type.
@@ -67,5 +73,16 @@ export class UserHandlerConfigurationImpl implements UserHandlerConfiguration {
    * @see mockGetMdocClaimsBySubjectAndDoctype
    */
   getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype =
-    mockGetMdocClaimsBySubjectAndDoctype;
+    mockGetMdocClaimsBySubjectAndDoctype as GetMdocClaimsBySubjectAndDoctype;
+
+  /**
+   * Implementation of user addition.
+   * Uses a mock implementation that does nothing.
+   *
+   * @type {AddUser}
+   * @see mockAddUser
+   */
+  addUser: AddUser = async () => {
+    return Promise.resolve();
+  };
 }

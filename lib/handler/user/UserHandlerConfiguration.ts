@@ -16,6 +16,7 @@
  */
 
 import { User } from '../../schemas/common';
+import { AddUser } from './addUser';
 import { GetByCredentials } from './getByCredentials';
 import { GetBySubject } from './getBySubject';
 import { GetMdocClaimsBySubjectAndDoctype } from './getMdocClaimsBySubjectAndDoctype';
@@ -85,4 +86,5 @@ export interface UserHandlerConfiguration<
   getByCredentials: GetByCredentials<U, T>;
   getBySubject: GetBySubject<U>;
   getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype;
+  addUser: AddUser<U>;
 }
