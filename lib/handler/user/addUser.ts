@@ -14,13 +14,15 @@
  * language governing permissions and limitations under the
  * License.
  */
-export * from './addUser';
-export * from './getByCredentials';
-export * from './getBySubject';
-export * from './getMdocClaimsBySubjectAndDoctype';
-export * from './mockGetByCredentials';
-export * from './mockGetBySubject';
-export * from './mockGetMdocClaimsBySubjectAndDoctype';
-export * from './types';
-export * from './UserHandlerConfiguration';
-export * from './UserHandlerConfigurationImpl';
+import { User } from '../../schemas/common/User';
+
+/**
+ * Type definition for a function that adds a user to the user store.
+ *
+ * @typeParam U - The user type that extends the base User type. Defaults to User.
+ *
+ * @param user - The user to add to the user store.
+ *
+ * @returns A Promise that resolves when the user is added to the user store.
+ */
+export type AddUser<U extends User = User> = (user: U) => Promise<void>;

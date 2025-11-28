@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
@@ -8,16 +7,7 @@ export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, __dirname, '') };
 
   return {
-    plugins: [
-      nodePolyfills({
-        globals: {
-          Buffer: 'build',
-          global: 'build',
-          process: 'build',
-        },
-        exclude: ['fs', 'crypto'],
-      }),
-    ],
+    plugins: [],
     test: {},
   };
 });

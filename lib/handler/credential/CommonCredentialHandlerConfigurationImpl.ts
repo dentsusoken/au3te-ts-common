@@ -27,13 +27,17 @@ import { UserHandlerConfiguration } from '../user/UserHandlerConfiguration';
 import { createToOrder } from './toOrder';
 import { createCreateOrder } from './createOrder';
 import { defaultMdocBuildRequestedCredential } from './mdoc/mdocBuildRequestedCredential';
+import { User } from '../../schemas/common/User';
 
 /**
  * Parameter type definition for the constructor of CommonCredentialHandlerConfigurationImpl
  */
-export type CommonCredentialHandlerConfigurationImplConstructorParams = {
+export type CommonCredentialHandlerConfigurationImplConstructorParams<
+  U extends User = User,
+  T extends keyof Omit<U, 'loginId' | 'password'> = never
+> = {
   /** User handler configuration */
-  userHandlerConfiguration: UserHandlerConfiguration;
+  userHandlerConfiguration: UserHandlerConfiguration<U, T>;
 };
 
 /**
@@ -41,8 +45,10 @@ export type CommonCredentialHandlerConfigurationImplConstructorParams = {
  * Provides all necessary handlers for mDoc credential operations
  * @implements {CommonCredentialHandlerConfiguration}
  */
-export class CommonCredentialHandlerConfigurationImpl
-  implements CommonCredentialHandlerConfiguration
+export class CommonCredentialHandlerConfigurationImpl<
+  U extends User = User,
+  T extends keyof Omit<U, 'loginId' | 'password'> = never
+> implements CommonCredentialHandlerConfiguration
 {
   /** Function to check if requested mDoc claims are contained */
   containsRequestedMdocClaims;
@@ -73,9 +79,7 @@ export class CommonCredentialHandlerConfigurationImpl
    */
   constructor({
     userHandlerConfiguration,
-  }: {
-    userHandlerConfiguration: UserHandlerConfiguration;
-  }) {
+  }: CommonCredentialHandlerConfigurationImplConstructorParams<U, T>) {
     // Initialization of each property (comments omitted)
     this.containsRequestedMdocClaims = createContainsRequestedMdocClaims(10);
 
