@@ -16,20 +16,18 @@
 
 import { z } from 'zod';
 import { oidcServerConfigSchema, type OidcServerConfig } from './OidcServerConfig';
-import { saml2ServerConfigSchema, type Saml2ServerConfig } from './Saml2ServerConfig';
 
 /**
  * Schema for server configuration used in federation flows.
- * Supports both OpenID Connect and SAML 2.0 protocols.
+ * Supports OpenID Connect protocol.
  * Note: The protocol is determined by the parent FederationConfig.
  */
 export const federationServerConfigSchema = z.union([
   oidcServerConfigSchema,
-  saml2ServerConfigSchema,
 ]);
 
 /**
  * Type definition for FederationServerConfig.
- * This is a union that supports both OIDC and SAML 2.0 protocols.
+ * This is a union that supports OIDC protocol.
  */
-export type FederationServerConfig = OidcServerConfig | Saml2ServerConfig;
+export type FederationServerConfig = OidcServerConfig;

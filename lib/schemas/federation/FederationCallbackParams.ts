@@ -18,25 +18,19 @@ import {
   oidcCallbackParamsSchema,
   type OidcCallbackParams,
 } from './OidcCallbackParams';
-import {
-  saml2CallbackParamsSchema,
-  type Saml2CallbackParams,
-} from './Saml2CallbackParams';
 
 /**
  * Schema for federation callback parameters.
  * These parameters are stored in session before redirecting to IdP and reused after callback.
- * Supports both OpenID Connect and SAML 2.0 protocols.
+ * Supports OpenID Connect protocol.
  */
 export const federationCallbackParamsSchema = z.discriminatedUnion('protocol', [
   z.object({ protocol: z.literal('oidc') }).merge(oidcCallbackParamsSchema),
-  z.object({ protocol: z.literal('saml2') }).merge(saml2CallbackParamsSchema),
 ]);
 
 /**
  * Type definition for FederationCallbackParams.
- * This is a discriminated union that supports both OIDC and SAML 2.0 protocols.
+ * This is a discriminated union that supports OIDC protocol.
  */
 export type FederationCallbackParams =
-  | ({ protocol: 'oidc' } & OidcCallbackParams)
-  | ({ protocol: 'saml2' } & Saml2CallbackParams);
+  | ({ protocol: 'oidc' } & OidcCallbackParams);

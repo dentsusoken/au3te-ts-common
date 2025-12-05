@@ -19,24 +19,18 @@ import {
   oidcAuthenticationRequestSchema,
   type OidcAuthenticationRequest,
 } from './OidcAuthenticationRequest';
-import {
-  saml2AuthenticationRequestSchema,
-  type Saml2AuthenticationRequest,
-} from './Saml2AuthenticationRequest';
 
 /**
  * Schema for authentication request parameters used in federation flows.
- * Supports both OpenID Connect and SAML 2.0 protocols.
+ * Supports OpenID Connect protocol.
  */
 export const federationAuthenticationRequestSchema = z.discriminatedUnion('protocol', [
   z.object({ protocol: z.literal('oidc') }).merge(oidcAuthenticationRequestSchema),
-  z.object({ protocol: z.literal('saml2') }).merge(saml2AuthenticationRequestSchema),
 ]);
 
 /**
  * Type definition for FederationAuthenticationRequest.
- * This is a discriminated union that supports both OIDC and SAML 2.0 protocols.
+ * This is a discriminated union that supports OIDC protocol.
  */
 export type FederationAuthenticationRequest =
-  | ({ protocol: 'oidc' } & OidcAuthenticationRequest)
-  | ({ protocol: 'saml2' } & Saml2AuthenticationRequest);
+  | ({ protocol: 'oidc' } & OidcAuthenticationRequest);
