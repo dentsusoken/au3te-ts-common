@@ -15,7 +15,7 @@
  */
 
 import { z } from 'zod';
-import { oidcServerConfigSchema, type OidcServerConfig } from './OidcServerConfig';
+import { oidcServerConfigSchema, type OidcServerConfig } from './oidc';
 
 /**
  * Schema for server configuration used in federation flows.

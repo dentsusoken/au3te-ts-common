@@ -13,21 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { z } from 'zod';
-import { oidcClientConfigSchema } from './oidc';
-
-/**
- * Schema for client configuration used in federation flows.
- * Supports OpenID Connect protocol.
- * Note: The protocol is determined by the parent FederationConfig.
- */
-export const federationClientConfigSchema = z.union([
-  oidcClientConfigSchema,
-]);
-
-/**
- * Type definition for FederationClientConfig.
- * This is a union that supports OIDC protocol.
- */
-export type FederationClientConfig = z.input<typeof federationClientConfigSchema>;
+export * from './OidcAuthenticationRequest';
+export * from './OidcCallbackParams';
+export * from './OidcClientConfig';
+export * from './OidcScope';
+export * from './OidcServerConfig';

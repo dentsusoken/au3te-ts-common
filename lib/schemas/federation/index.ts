@@ -20,10 +20,6 @@ export * from './FederationConfig';
 export * from './FederationProtocol';
 export * from './FederationRegistry';
 export * from './FederationServerConfig';
-export * from './OidcAuthenticationRequest';
-export * from './OidcCallbackParams';
-export * from './OidcClientConfig';
-export * from './OidcScope';
-export * from './OidcServerConfig';
 
+export * from './oidc';
 export * from './saml2';

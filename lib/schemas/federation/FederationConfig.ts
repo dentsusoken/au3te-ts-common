@@ -15,8 +15,8 @@
  */
 
 import { z } from 'zod';
-import { oidcClientConfigSchema } from './OidcClientConfig';
-import { oidcServerConfigSchema } from './OidcServerConfig';
+import { oidcClientConfigSchema } from './oidc';
+import { oidcServerConfigSchema } from './oidc';
 import { saml2IdpConfigSchemas, saml2SpConfigSchemas } from './saml2';
 
 /**

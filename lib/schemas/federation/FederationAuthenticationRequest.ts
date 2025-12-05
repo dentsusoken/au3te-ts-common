@@ -18,7 +18,7 @@ import { z } from 'zod';
 import {
   oidcAuthenticationRequestSchema,
   type OidcAuthenticationRequest,
-} from './OidcAuthenticationRequest';
+} from './oidc';
 
 /**
  * Schema for authentication request parameters used in federation flows.

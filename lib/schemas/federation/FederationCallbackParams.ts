@@ -17,7 +17,7 @@ import { z } from 'zod';
 import {
   oidcCallbackParamsSchema,
   type OidcCallbackParams,
-} from './OidcCallbackParams';
+} from './oidc';
 
 /**
  * Schema for federation callback parameters.
