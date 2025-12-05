@@ -30,3 +30,4 @@ export * from './Saml2CallbackParams';
 export * from './Saml2ClientConfig';
 export * from './Saml2ServerConfig';
 
+export * from './saml2';
