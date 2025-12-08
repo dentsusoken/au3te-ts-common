@@ -24,7 +24,7 @@ export const federationRegistrySchema = z.object({
   /**
    * Array of federation configurations.
    */
-  federations: z.array(federationConfigSchema),
+  federations: z.array(federationConfigSchema).nullish(),
 }).nullish();
 
 /**
