@@ -4,7 +4,7 @@ import {
   federationConfigSchema,
   type FederationConfig,
 } from '../FederationConfig';
-import { OidcClientConfig } from '../OidcClientConfig';
+import { OidcClientConfig } from '../oidc';
 
 describe('FederationConfig', () => {
   describe('federationConfigSchema', () => {

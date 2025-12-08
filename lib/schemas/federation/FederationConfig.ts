@@ -15,10 +15,9 @@
  */
 
 import { z } from 'zod';
-import { oidcClientConfigSchema } from './OidcClientConfig';
-import { oidcServerConfigSchema } from './OidcServerConfig';
-import { saml2ClientConfigSchema } from './Saml2ClientConfig';
-import { saml2ServerConfigSchema } from './Saml2ServerConfig';
+import { oidcClientConfigSchema } from './oidc';
+import { oidcServerConfigSchema } from './oidc';
+import { saml2IdpConfigSchemas, saml2SpConfigSchemas } from './saml2';
 
 /**
  * Schema for federation configuration.
@@ -54,13 +53,23 @@ export const federationConfigSchema = z.discriminatedUnion('protocol', [
      */
     protocol: z.literal('saml2'),
     /**
-     * Client configuration for the federation.
+     * The display name for saml federation.
      */
-    client: saml2ClientConfigSchema,
+    name: z.string(),
     /**
-     * Server configuration for the federation.
+     * Service Provider (SP) configuration for SAML 2.0 federation.
      */
-    server: saml2ServerConfigSchema,
+    sp: saml2SpConfigSchemas,
+    /**
+     * Identity Provider (IdP) configuration for SAML 2.0 federation.
+     * Can be either a partial configuration with metadataUrl or a complete configuration.
+     */
+    idp: z.union([
+      saml2IdpConfigSchemas.partial().extend({
+        metadataUrl: z.string().url(),
+      }),
+      saml2IdpConfigSchemas,
+    ]),
   }),
 ]);
 

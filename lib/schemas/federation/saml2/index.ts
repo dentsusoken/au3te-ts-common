@@ -13,9 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './FederationConfig';
-export * from './FederationProtocol';
-export * from './FederationRegistry';
+export * from './Saml2AttributeStatementTemplate';
+export * from './Saml2AttributeTemplate';
+export * from './Saml2BaseSAMLTemplate';
+export * from './Saml2LoginResponse';
+export * from './Saml2LoginResponseAdditionalTemplates';
+export * from './Saml2LoginResponseAttribute';
+export * from './Saml2LoginResponseTemplate';
+export * from './Saml2IdpConfigs';
+export * from './Saml2SpConfig';
+export * from './Saml2SamlDocumentTemplate';
+export * from './Saml2SignatureConfig';
+export * from './Saml2SsoService';
 
-export * from './oidc';
-export * from './saml2';

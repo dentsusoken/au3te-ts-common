@@ -13,9 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './FederationConfig';
-export * from './FederationProtocol';
-export * from './FederationRegistry';
+import { z } from 'zod';
+import { saml2BaseSAMLTemplateSchema } from './Saml2BaseSAMLTemplate';
 
-export * from './oidc';
-export * from './saml2';
+/**
+ * Schema for SAML 2.0 attribute statement template.
+ * Used for customizing attribute statement rendering in SAML responses.
+ */
+export const saml2AttributeStatementTemplateSchema = saml2BaseSAMLTemplateSchema;
+
+/**
+ * Type definition for Saml2AttributeStatementTemplate.
+ * Template for rendering SAML 2.0 attribute statements.
+ */
+export type Saml2AttributeStatementTemplate = z.infer<
+  typeof saml2AttributeStatementTemplateSchema
+>;

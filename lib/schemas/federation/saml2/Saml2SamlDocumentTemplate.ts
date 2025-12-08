@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './FederationConfig';
-export * from './FederationProtocol';
-export * from './FederationRegistry';
+import { z } from 'zod';
 
-export * from './oidc';
-export * from './saml2';
+/**
+ * Schema for SAML 2.0 document template.
+ * Provides a template structure for SAML documents with optional context.
+ */
+export const saml2SamlDocumentTemplateSchema = z.object({
+  /**
+   * Template context string used for rendering SAML documents.
+   */
+  context: z.string().optional(),
+});
+
+/**
+ * Type definition for Saml2SamlDocumentTemplate.
+ * Template structure for SAML 2.0 documents.
+ */
+export type Saml2SamlDocumentTemplate = z.infer<typeof saml2SamlDocumentTemplateSchema>;

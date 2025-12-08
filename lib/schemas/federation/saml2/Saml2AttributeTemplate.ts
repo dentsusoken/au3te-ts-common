@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { z } from 'zod';
+import { saml2BaseSAMLTemplateSchema } from './Saml2BaseSAMLTemplate';
 
 /**
- * Schema for SAML 2.0 authentication request parameters used in federation flows.
+ * Schema for SAML 2.0 attribute template.
+ * Used for customizing attribute rendering in SAML responses.
  */
-export const saml2AuthenticationRequestSchema = z.object({
-  /**
-   * The relay state used to maintain state between the request and callback.
-   */
-  relayState: z.string(),
-
-  /**
-   * The SAML binding type to use for the authentication request.
-   * Default: 'HTTP-POST' if not specified.
-   */
-  binding: z.enum(['HTTP-POST', 'HTTP-Redirect']).nullish(),
-});
+export const saml2AttributeTemplateSchema = saml2BaseSAMLTemplateSchema;
 
 /**
- * Type definition for Saml2AuthenticationRequest.
+ * Type definition for Saml2AttributeTemplate.
+ * Template for rendering SAML 2.0 attributes.
  */
-export type Saml2AuthenticationRequest = z.infer<typeof saml2AuthenticationRequestSchema>;
-
+export type Saml2AttributeTemplate = z.infer<typeof saml2AttributeTemplateSchema>;
