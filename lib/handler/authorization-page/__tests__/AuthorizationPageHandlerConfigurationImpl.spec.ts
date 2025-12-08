@@ -2,10 +2,12 @@ import { describe, expect, it, vi } from 'vitest';
 import { AuthorizationPageHandlerConfigurationImpl } from '../AuthorizationPageHandlerConfigurationImpl';
 import { defaultComputeScopes } from '../computeScopes';
 import { defaultExtractRequestedClaims } from '../extractRequestedClaims';
+import { createBuildAuthorizationPageModel } from '../buildAuthorizationPageModel';
 import type { Scope } from '../../../schemas/common/Scope';
 import type { DynamicScope } from '../../../schemas/common/DynamicScope';
 import type { AuthorizationResponse } from '../../../schemas/authorization/AuthorizationResponse';
 import type { User } from '../../../schemas/common/User';
+import type { FederationRegistry } from '../../../schemas/federation';
 
 describe('AuthorizationPageHandlerConfigurationImpl', () => {
   describe('initialization', () => {
@@ -304,6 +306,69 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
       expect(result.loginId).toBe('hint123');
       expect(result.loginIdReadOnly).toBeUndefined();
     });
+
+    it('should include federationRegistry when set', () => {
+      // Arrange
+      const config = new AuthorizationPageHandlerConfigurationImpl();
+      const federationRegistry: FederationRegistry = {
+        federations: [
+          {
+            id: 'federation1',
+            protocol: 'oidc',
+            client: {
+              clientId: 'client1',
+              clientSecret: 'secret1',
+              redirectUri: 'https://example.com/redirect',
+              scopes: ['openid', 'email', 'profile', 'address', 'phone'],
+            },
+            server: {
+              name: 'Server 1',
+              issuer: 'https://server1.example.com',
+            },
+          },
+        ],
+      };
+      config.federationRegistry = federationRegistry;
+      // Create a new buildAuthorizationPageModel with federationRegistry
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: config.computeScopes,
+        extractRequestedClaims: config.extractRequestedClaims,
+        federationRegistry: config.federationRegistry,
+      });
+      const mockAuthorizationResponse: AuthorizationResponse = {
+        action: 'INTERACTION',
+        service: { serviceName: 'Test Service' },
+        client: { clientName: 'Test Client' },
+      } as AuthorizationResponse;
+
+      // Act
+      const result = buildAuthorizationPageModel(
+        mockAuthorizationResponse,
+        undefined
+      );
+
+      // Assert
+      expect(result.federationRegistry).toEqual(federationRegistry);
+    });
+
+    it('should handle undefined federationRegistry', () => {
+      // Arrange
+      const config = new AuthorizationPageHandlerConfigurationImpl();
+      const mockAuthorizationResponse: AuthorizationResponse = {
+        action: 'INTERACTION',
+        service: { serviceName: 'Test Service' },
+        client: { clientName: 'Test Client' },
+      } as AuthorizationResponse;
+
+      // Act
+      const result = config.buildAuthorizationPageModel(
+        mockAuthorizationResponse,
+        undefined
+      );
+
+      // Assert
+      expect(result.federationRegistry).toBeUndefined();
+    });
   });
 
   describe('function types', () => {
@@ -348,11 +413,11 @@ describe('AuthorizationPageHandlerConfigurationImpl', () => {
       const mockUser: User = { subject: 'test' } as User;
 
       // Act & Assert - should not throw
-      expect(() =>
-        config.buildAuthorizationPageModel(mockResponse, mockUser)
+      expect(
+        () => config.buildAuthorizationPageModel(mockResponse, mockUser)
       ).not.toThrow();
-      expect(() =>
-        config.buildAuthorizationPageModel(mockResponse, undefined)
+      expect(
+        () => config.buildAuthorizationPageModel(mockResponse, undefined)
       ).not.toThrow();
     });
   });

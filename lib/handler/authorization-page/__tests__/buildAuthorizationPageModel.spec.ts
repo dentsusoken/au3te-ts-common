@@ -5,6 +5,7 @@ import {
 } from '../buildAuthorizationPageModel';
 import { AuthorizationResponse } from '../../../schemas/authorization/AuthorizationResponse';
 import { User } from '../../../schemas/common/User';
+import { FederationRegistry } from '../../../schemas/federation';
 
 describe('buildAuthorizationPageModel', () => {
   const mockUser: User = { subject: 'mockSubject' };
@@ -61,6 +62,7 @@ describe('buildAuthorizationPageModel', () => {
         verifiedClaimsForUserInfo: [{ key: 'mockClaim', value: 'mockValue' }],
         identityAssuranceRequired: true,
         claimsForUserInfo: ['mockClaimsAtUserInfo'],
+        federationRegistry: undefined,
       });
 
       expect(mockComputeScopes).toHaveBeenCalledWith(
@@ -132,7 +134,10 @@ describe('buildAuthorizationPageModel', () => {
         computeScopes: mockComputeScopes,
         extractRequestedClaims: mockExtractRequestedClaims,
       });
-      const result = buildAuthorizationPageModel(emptyAuthzRes, undefined);
+      const result = buildAuthorizationPageModel(
+        emptyAuthzRes,
+        undefined
+      );
       expect(result.serviceName).toBe('');
       expect(result.clientName).toBe('');
       expect(result.scopes).toEqual([]);
@@ -142,6 +147,68 @@ describe('buildAuthorizationPageModel', () => {
         JSON.stringify({ elements: [] })
       );
       expect(result.claimsForUserInfo).toEqual([]);
+    });
+
+    it('should include federationRegistry when provided', () => {
+      const mockComputeScopes = vi.fn(() => []);
+      const mockExtractRequestedClaims = vi.fn(() => undefined);
+      const federationRegistry: FederationRegistry = {
+        federations: [
+          {
+            id: 'federation1',
+            protocol: 'oidc',
+            client: {
+              clientId: 'client1',
+              clientSecret: 'secret1',
+              redirectUri: 'https://example.com/redirect',
+              scopes: ['openid', 'email', 'profile', 'address', 'phone'],
+            },
+            server: {
+              name: 'Server 1',
+              issuer: 'https://server1.example.com',
+            },
+          },
+        ],
+      };
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: mockComputeScopes,
+        extractRequestedClaims: mockExtractRequestedClaims,
+        federationRegistry,
+      });
+
+      const result = buildAuthorizationPageModel(mockAuthzRes, mockUser);
+
+      expect(result.federationRegistry).toEqual(federationRegistry);
+    });
+
+    it('should handle undefined federationRegistry', () => {
+      const mockComputeScopes = vi.fn(() => []);
+      const mockExtractRequestedClaims = vi.fn(() => undefined);
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: mockComputeScopes,
+        extractRequestedClaims: mockExtractRequestedClaims,
+      });
+
+      const result = buildAuthorizationPageModel(mockAuthzRes, mockUser);
+
+      expect(result.federationRegistry).toBeUndefined();
+    });
+
+    it('should handle empty federations array', () => {
+      const mockComputeScopes = vi.fn(() => []);
+      const mockExtractRequestedClaims = vi.fn(() => undefined);
+      const federationRegistry: FederationRegistry = {
+        federations: [],
+      };
+      const buildAuthorizationPageModel = createBuildAuthorizationPageModel({
+        computeScopes: mockComputeScopes,
+        extractRequestedClaims: mockExtractRequestedClaims,
+        federationRegistry,
+      });
+
+      const result = buildAuthorizationPageModel(mockAuthzRes, mockUser);
+
+      expect(result.federationRegistry).toEqual({ federations: [] });
     });
   });
 
@@ -189,7 +256,10 @@ describe('buildAuthorizationPageModel', () => {
       } as AuthorizationResponse;
       // Should not throw
       expect(() =>
-        defaultBuildAuthorizationPageModel(authzRes, undefined)
+        defaultBuildAuthorizationPageModel(
+          authzRes,
+          undefined
+        )
       ).not.toThrow();
     });
   });

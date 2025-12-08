@@ -169,6 +169,11 @@
       "types": "./dist/schemas/credential-issuer-jwks/index.d.ts",
       "import": "./dist/schemas/credential-issuer-jwks/index.mjs",
       "require": "./dist/schemas/credential-issuer-jwks/index.cjs"
+    },
+    "./schemas.federation": {
+      "types": "./dist/schemas/federation/index.d.ts",
+      "import": "./dist/schemas/federation/index.mjs",
+      "require": "./dist/schemas/federation/index.cjs"
     }
   },
   "scripts": {
@@ -180,9 +185,9 @@
   "devDependencies": {
     "@types/node": "^20.12.7",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10",
+    "vite": "^7.2.6",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^1.4.0"
+    "vitest": "^4.0.15"
   },
   "peerDependencies": {
     "@vecrea/oid4vc-core": "^0.1.0",
