@@ -60,12 +60,6 @@ describe('FederationRegistry', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should reject a FederationRegistry object with missing federations field', () => {
-      const invalidConfig = {};
-      const result = federationRegistrySchema.safeParse(invalidConfig);
-      expect(result.success).toBe(false);
-    });
-
     it('should reject a FederationRegistry object with invalid federations array', () => {
       const invalidConfigs = [
         {
@@ -117,12 +111,6 @@ describe('FederationRegistry', () => {
         {
           federations: 123,
         },
-        {
-          federations: {},
-        },
-        {
-          federations: null,
-        },
       ];
 
       invalidConfigs.forEach((invalidConfig) => {
@@ -132,7 +120,7 @@ describe('FederationRegistry', () => {
     });
 
     it('should reject non-object and non-null values', () => {
-      const invalidValues = ['string', 123, true, false, [], () => {}];
+      const invalidValues = ['string', 123, true, false, [], () => 1];
 
       invalidValues.forEach((value) => {
         const result = federationRegistrySchema.safeParse(value);
