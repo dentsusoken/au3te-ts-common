@@ -180,7 +180,8 @@
     "build": "npm run typecheck && vite build",
     "test": "vitest --run",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
