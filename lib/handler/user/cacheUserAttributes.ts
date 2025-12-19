@@ -14,16 +14,13 @@
  * language governing permissions and limitations under the
  * License.
  */
-export * from './addUser';
-export * from './cacheUserAttributes';
-export * from './getByCredentials';
-export * from './getBySubject';
-export * from './getMdocClaimsBySubjectAndDoctype';
-export * from './mockGetByCredentials';
-export * from './mockGetBySubject';
-export * from './mockGetMdocClaimsBySubjectAndDoctype';
-export * from './types';
-export * from './UserHandlerConfiguration';
-export * from './UserHandlerConfigurationImpl';
-export * from './mapUserAttributesToMdoc';
-export * from './deleteUserAttributesCache';
+import { User } from '../../schemas/common/User';
+import { MapUserAttributesToMdoc } from './mapUserAttributesToMdoc';
+
+export interface CacheUserAttributes<U extends User = User> {
+  (user: U, protocol: 'oidc' | 'saml2', ttl: number): Promise<void>;
+}
+
+export interface CreateCacheUserAttributes<U extends User = User> {
+  (mapUserAttributesToMdoc: MapUserAttributesToMdoc): CacheUserAttributes<U>;
+}

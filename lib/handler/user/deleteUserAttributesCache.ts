@@ -14,16 +14,11 @@
  * language governing permissions and limitations under the
  * License.
  */
-export * from './addUser';
-export * from './cacheUserAttributes';
-export * from './getByCredentials';
-export * from './getBySubject';
-export * from './getMdocClaimsBySubjectAndDoctype';
-export * from './mockGetByCredentials';
-export * from './mockGetBySubject';
-export * from './mockGetMdocClaimsBySubjectAndDoctype';
-export * from './types';
-export * from './UserHandlerConfiguration';
-export * from './UserHandlerConfigurationImpl';
-export * from './mapUserAttributesToMdoc';
-export * from './deleteUserAttributesCache';
+
+export interface DeleteUserAttributesCache {
+  (subject: string): Promise<void>;
+}
+
+export interface CreateDeleteUserAttributesCache {
+  (): DeleteUserAttributesCache;
+}

@@ -17,6 +17,8 @@
 
 import { User } from '../../schemas/common';
 import { AddUser } from './addUser';
+import { CacheUserAttributes } from './cacheUserAttributes';
+import { DeleteUserAttributesCache } from './deleteUserAttributesCache';
 import { GetByCredentials } from './getByCredentials';
 import { GetBySubject } from './getBySubject';
 import { GetMdocClaimsBySubjectAndDoctype } from './getMdocClaimsBySubjectAndDoctype';
@@ -87,4 +89,6 @@ export interface UserHandlerConfiguration<
   getBySubject: GetBySubject<U>;
   getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype;
   addUser: AddUser<U>;
+  cacheUserAttributes: CacheUserAttributes<U>;
+  deleteUserAttributesCache: DeleteUserAttributesCache;
 }

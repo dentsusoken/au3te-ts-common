@@ -24,6 +24,8 @@ import { mockGetByCredentials } from './mockGetByCredentials';
 import { mockGetBySubject } from './mockGetBySubject';
 import { mockGetMdocClaimsBySubjectAndDoctype } from './mockGetMdocClaimsBySubjectAndDoctype';
 import { User } from '../../schemas/common/User';
+import { CacheUserAttributes } from './cacheUserAttributes';
+import { DeleteUserAttributesCache } from './deleteUserAttributesCache';
 
 /**
  * Default implementation of UserHandlerConfiguration interface.
@@ -53,7 +55,8 @@ export class UserHandlerConfigurationImpl<
    * @type {GetByCredentials}
    * @see mockGetByCredentials
    */
-  getByCredentials: GetByCredentials<U, T> = mockGetByCredentials as GetByCredentials<U, T>;
+  getByCredentials: GetByCredentials<U, T> =
+    mockGetByCredentials as GetByCredentials<U, T>;
 
   /**
    * Implementation of user lookup by subject identifier.
@@ -83,6 +86,13 @@ export class UserHandlerConfigurationImpl<
    * @see mockAddUser
    */
   addUser: AddUser = async () => {
+    return Promise.resolve();
+  };
+
+  cacheUserAttributes: CacheUserAttributes = async () => {
+    return Promise.resolve();
+  };
+  deleteUserAttributesCache: DeleteUserAttributesCache = async () => {
     return Promise.resolve();
   };
 }
