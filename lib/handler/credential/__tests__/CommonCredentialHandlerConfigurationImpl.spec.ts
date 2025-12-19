@@ -10,6 +10,8 @@ describe('CommonCredentialHandlerConfigurationImpl', () => {
       getBySubject: vi.fn(),
       getMdocClaimsBySubjectAndDoctype: vi.fn(),
       addUser: vi.fn(),
+      cacheUserAttributes: vi.fn(),
+      deleteUserAttributesCache: vi.fn(),
     };
 
     // Create instance

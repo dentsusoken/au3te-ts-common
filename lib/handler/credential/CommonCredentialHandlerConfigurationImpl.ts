@@ -103,6 +103,7 @@ export class CommonCredentialHandlerConfigurationImpl<
       getMdocClaimsBySubjectAndDoctype:
         userHandlerConfiguration.getMdocClaimsBySubjectAndDoctype,
       buildMdocClaims: this.buildMdocClaims,
+      deleteUserAttributesCache: userHandlerConfiguration.deleteUserAttributesCache,
     });
 
     this.mdocComputeCredentialDuration = defaultMdocComputeCredentialDuration;

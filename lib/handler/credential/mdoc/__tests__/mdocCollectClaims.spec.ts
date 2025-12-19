@@ -17,6 +17,7 @@ describe('createMdocCollectClaims', () => {
   const collectClaims = createMdocCollectClaims({
     getMdocClaimsBySubjectAndDoctype: mockGetMdocClaimsBySubjectAndDoctype,
     buildMdocClaims: mockBuildMdocClaims,
+    deleteUserAttributesCache: vi.fn(),
   });
 
   beforeEach(() => {

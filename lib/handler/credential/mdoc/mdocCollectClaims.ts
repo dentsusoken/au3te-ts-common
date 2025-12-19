@@ -21,6 +21,7 @@ import { BuildMdocClaims } from './buildMdocClaims';
 import { GetMdocClaimsBySubjectAndDoctype } from '../../user/getMdocClaimsBySubjectAndDoctype';
 import { BadRequestError } from '../../BadRequestError';
 import type { Claims } from '../types';
+import { DeleteUserAttributesCache } from '../../user';
 
 /**
  * Parameters for creating an mDoc claim collector function.
@@ -30,6 +31,8 @@ type CreateMdocCollectClaimsParams = {
   getMdocClaimsBySubjectAndDoctype: GetMdocClaimsBySubjectAndDoctype;
   /** Function to build mDoc claims */
   buildMdocClaims: BuildMdocClaims;
+  /** Function to delete user attributes cache */
+  deleteUserAttributesCache: DeleteUserAttributesCache;
 };
 
 /**
@@ -43,6 +46,7 @@ export const createMdocCollectClaims =
   ({
     getMdocClaimsBySubjectAndDoctype,
     buildMdocClaims,
+    deleteUserAttributesCache,
   }: CreateMdocCollectClaimsParams): CollectClaims =>
   /**
    * Collects mDoc claims for the specified user and requested credential.
@@ -87,6 +91,8 @@ export const createMdocCollectClaims =
       requestedClaims,
       doctype,
     });
+    // Delete user attributes cache after building mDoc claims
+    await deleteUserAttributesCache(user.subject);
 
     return { doctype, claims };
   };
