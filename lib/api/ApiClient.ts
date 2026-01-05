@@ -125,6 +125,12 @@ export interface ApiClient {
   readonly credentialIssuerJwksPath: string;
 
   /**
+   * The path for standard introspection requests.
+   * @readonly
+   */
+  readonly standardIntrospectionPath: string;
+  
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - The type of the request object.
    * @template RES - The type of the response object.
