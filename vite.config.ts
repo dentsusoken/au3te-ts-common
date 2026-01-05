@@ -13,6 +13,7 @@ export default defineConfig({
           './lib/handler/authorization-page/index.ts',
         'handler/credential': './lib/handler/credential/index.ts',
         'handler/user': './lib/handler/user/index.ts',
+        'handler/resourceServer': './lib/handler/resourceServer/index.ts',
         'schemas/common': './lib/schemas/common/index.ts',
         'schemas/par': './lib/schemas/par/index.ts',
         'schemas/authorization': './lib/schemas/authorization/index.ts',
@@ -42,6 +43,8 @@ export default defineConfig({
         'schemas/credential-issuer-jwks':
           './lib/schemas/credential-issuer-jwks/index.ts',
         'schemas/federation': './lib/schemas/federation/index.ts',
+        'schemas/standard-introspection':
+          './lib/schemas/standard-introspection/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',

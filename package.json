@@ -60,6 +60,11 @@
       "import": "./dist/handler/user/index.mjs",
       "require": "./dist/handler/user/index.cjs"
     },
+    "./handler.resourceServer": {
+      "types": "./dist/handler/resourceServer/index.d.ts",
+      "import": "./dist/handler/resourceServer/index.mjs",
+      "require": "./dist/handler/resourceServer/index.cjs"
+    },
     "./api": {
       "types": "./dist/api/index.d.ts",
       "import": "./dist/api/index.mjs",
@@ -174,6 +179,11 @@
       "types": "./dist/schemas/federation/index.d.ts",
       "import": "./dist/schemas/federation/index.mjs",
       "require": "./dist/schemas/federation/index.cjs"
+    },
+    "./schemas.standard-introspection": {
+      "types": "./dist/schemas/standard-introspection/index.d.ts",
+      "import": "./dist/schemas/standard-introspection/index.mjs",
+      "require": "./dist/schemas/standard-introspection/index.cjs"
     }
   },
   "scripts": {
