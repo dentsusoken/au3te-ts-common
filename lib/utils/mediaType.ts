@@ -33,6 +33,12 @@ export const MediaType = {
   /** Media type for URL-encoded form data */
   APPLICATION_FORM_URLENCODED: 'application/x-www-form-urlencoded',
 
+  /**
+   * Media type for Introspection JWT.
+   * @see {@link https://datatracker.ietf.org/doc/html/draft-ietf-oauth-jwt-introspection-response JWT Response for OAuth Token Introspection}
+   */
+  APPLICATION_INTROSPECTION_JWT: 'application/token-introspection+jwt',
+
   /** Media type for HTML content */
   TEXT_HTML: 'text/html',
 
