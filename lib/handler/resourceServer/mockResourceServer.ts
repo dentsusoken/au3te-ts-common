@@ -19,6 +19,7 @@ import { ResourceServer } from '../../schemas/common';
 export const mockResourceServers: ResourceServer[] = [
   {
     id: 'rs0',
+    authenticationType: 'BASIC',
     secret: 'rs0-secret',
     uri: 'https//rs0.example.com',
     introspectionSignAlg: 'ES256',

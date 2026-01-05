@@ -10,7 +10,11 @@ describe('standardIntrospectionRequestSchema', () => {
     const result = standardIntrospectionRequestSchema.safeParse(validRequest);
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data).toEqual(validRequest);
+      // Default value for withHiddenProperties is false
+      expect(result.data).toEqual({
+        ...validRequest,
+        withHiddenProperties: false,
+      });
     }
   });
 
@@ -44,6 +48,36 @@ describe('standardIntrospectionRequestSchema', () => {
 
     const result = standardIntrospectionRequestSchema.safeParse(validRequest);
     expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.withHiddenProperties).toBeNull();
+    }
+  });
+
+  it('should treat undefined withHiddenProperties as false (default)', () => {
+    const validRequest = {
+      parameters: 'token=someToken',
+      withHiddenProperties: undefined,
+    };
+    const result = standardIntrospectionRequestSchema.safeParse(validRequest);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.withHiddenProperties).toBe(false);
+    }
+  });
+
+  it('should allow null for withHiddenProperties', () => {
+    // Note: nullish().default(false) usually means undefined -> false, but null stays null.
+    // However, the intention of "default" often implies fallback.
+    // Let's assume standard Zod behavior: null remains null.
+    const validRequest = {
+      parameters: 'token=someToken',
+      withHiddenProperties: null,
+    };
+    const result = standardIntrospectionRequestSchema.safeParse(validRequest);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.withHiddenProperties).toBeNull();
+    }
   });
 
   it('should reject invalid fields', () => {

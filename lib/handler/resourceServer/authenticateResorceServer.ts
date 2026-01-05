@@ -14,19 +14,19 @@
  * language governing permissions and limitations under the
  * License.
  */
-import { ResourceServer } from '../../schemas/common';
+import { AuthenticationType, ResourceServer } from '../../schemas/common';
 
 /**
  * Interface for authenticating a resource server.
  *
- * @param type - The authentication type (e.g., 'BASIC').
+ * @param type - The authentication type (e.g., 'BASIC' or 'BEARER').
  * @param resourceServer - The resource server object.
  * @param secret - The secret provided for authentication.
  * @returns A promise that resolves to `true` if authentication is successful, `false` otherwise.
  */
 export interface AuthenticateResourceServer {
   (
-    type: 'BASIC',
+    type: AuthenticationType,
     resourceServer: ResourceServer,
     secret: string
   ): Promise<boolean>;

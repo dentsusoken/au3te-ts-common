@@ -5,6 +5,7 @@ describe('resourceServerSchema', () => {
   it('should validate a valid resource server', () => {
     const validResourceServer = {
       id: 'rs1',
+      authenticationType: 'BASIC',
       secret: 'secret',
       uri: 'https://rs1.example.com',
       introspectionSignAlg: 'RS256',
@@ -25,6 +26,7 @@ describe('resourceServerSchema', () => {
   it('should validate a valid resource server with minimal fields', () => {
     const validResourceServer = {
       id: 'rs1',
+      authenticationType: 'BEARER',
       secret: 'secret',
       uri: 'https://rs1.example.com',
     };
@@ -39,6 +41,7 @@ describe('resourceServerSchema', () => {
   it('should validate with null/undefined optional fields', () => {
     const validResourceServer = {
       id: 'rs1',
+      authenticationType: 'BASIC',
       secret: 'secret',
       uri: 'https://rs1.example.com',
       introspectionSignAlg: null,
@@ -52,6 +55,7 @@ describe('resourceServerSchema', () => {
   it('should reject invalid URI', () => {
     const invalidResourceServer = {
       id: 'rs1',
+      authenticationType: 'BASIC',
       secret: 'secret',
       uri: 'not-a-url',
     };
@@ -63,9 +67,22 @@ describe('resourceServerSchema', () => {
   it('should reject invalid algorithms', () => {
     const invalidResourceServer = {
       id: 'rs1',
+      authenticationType: 'BASIC',
       secret: 'secret',
       uri: 'https://rs1.example.com',
       introspectionSignAlg: 'INVALID_ALG',
+    };
+
+    const result = resourceServerSchema.safeParse(invalidResourceServer);
+    expect(result.success).toBe(false);
+  });
+
+  it('should reject invalid authentication type', () => {
+    const invalidResourceServer = {
+      id: 'rs1',
+      authenticationType: 'INVALID_TYPE',
+      secret: 'secret',
+      uri: 'https://rs1.example.com',
     };
 
     const result = resourceServerSchema.safeParse(invalidResourceServer);

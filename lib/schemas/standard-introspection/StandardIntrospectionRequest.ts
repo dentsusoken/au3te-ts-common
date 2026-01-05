@@ -190,7 +190,7 @@ import { jweEncSchema } from '../jose/JWEEnc';
  */
 export const standardIntrospectionRequestSchema = z.object({
   parameters: z.string(),
-  withHiddenProperties: z.boolean().nullish(),
+  withHiddenProperties: z.boolean().nullish().default(false),
   rsUri: z.string().nullish(),
   httpAcceptHeader: z.string().nullish(),
   introspectionSignAlg: jwsAlgSchema.nullish(),
@@ -216,6 +216,6 @@ export const standardIntrospectionRequestSchema = z.object({
  * @property {string|null|undefined} [sharedKeyForEncryption] - Shared key for encryption.
  * @property {string|null|undefined} [publicKeyForEncryption] - Public key for encryption.
  */
-export type StandardIntrospectionRequest = z.infer<
+export type StandardIntrospectionRequest = z.input<
   typeof standardIntrospectionRequestSchema
 >;

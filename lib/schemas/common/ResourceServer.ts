@@ -19,6 +19,10 @@ import { jwsAlgSchema } from '../jose/JWSAlg';
 import { jweAlgSchema } from '../jose/JWEAlg';
 import { jweEncSchema } from '../jose/JWEEnc';
 
+export const authenticationTypeSchema = z.enum(['BASIC', 'BEARER']);
+
+export type AuthenticationType = z.infer<typeof authenticationTypeSchema>;
+
 /**
  * Zod schema for Resource Server.
  *
@@ -44,6 +48,7 @@ import { jweEncSchema } from '../jose/JWEEnc';
  */
 export const resourceServerSchema = z.object({
   id: z.string(),
+  authenticationType: authenticationTypeSchema,
   secret: z.string(),
   uri: z.string().url(),
   introspectionSignAlg: jwsAlgSchema.nullish(),
