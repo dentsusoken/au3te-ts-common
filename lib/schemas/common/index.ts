@@ -13,6 +13,7 @@ export * from './GrantType';
 export * from './Pair';
 export * from './Prompt';
 export * from './Property';
+export * from './ResourceServer';
 export * from './Scope';
 export * from './Service';
 export * from './stringArrayArraySchema';
@@ -21,3 +22,4 @@ export * from './TaggedValue';
 export * from './TokenInfo';
 export * from './TokenType';
 export * from './User';
+
