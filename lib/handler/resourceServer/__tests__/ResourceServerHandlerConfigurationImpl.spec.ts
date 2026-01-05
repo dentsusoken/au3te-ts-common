@@ -13,6 +13,7 @@ describe('ResourceServerHandlerConfigurationImpl', () => {
 
   it('should allow overriding implementations', () => {
     const config = new ResourceServerHandlerConfigurationImpl();
+    // @ts-ignore
     const customGet = async (id: string) => null;
     const customAuth = async () => false;
 
