@@ -161,6 +161,13 @@ export abstract class AbstractApiClient implements ApiClient {
   abstract standardIntrospectionPath: string;
 
   /**
+   * The path for client registration requests.
+   * @abstract
+   * @type {string}
+   */
+  abstract clientRegistrationPath: string;
+
+  /**
    * Makes a POST API call to the specified path.
    * @template REQ - Type of the request object.
    * @template RES - Type of the response object.

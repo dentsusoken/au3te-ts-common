@@ -129,6 +129,13 @@ export interface ApiClient {
    * @readonly
    */
   readonly standardIntrospectionPath: string;
+
+
+  /**
+   * The path for client registration requests.
+   * @readonly
+   */
+  readonly clientRegistrationPath: string;
   
   /**
    * Makes a POST API call to the specified path.
