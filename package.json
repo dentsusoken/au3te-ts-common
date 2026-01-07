@@ -184,6 +184,11 @@
       "types": "./dist/schemas/standard-introspection/index.d.ts",
       "import": "./dist/schemas/standard-introspection/index.mjs",
       "require": "./dist/schemas/standard-introspection/index.cjs"
+    },
+    "./schemas.client-registration": {
+      "types": "./dist/schemas/client-registration/index.d.ts",
+      "import": "./dist/schemas/client-registration/index.mjs",
+      "require": "./dist/schemas/client-registration/index.cjs"
     }
   },
   "scripts": {

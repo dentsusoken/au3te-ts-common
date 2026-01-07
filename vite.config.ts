@@ -45,6 +45,8 @@ export default defineConfig({
         'schemas/federation': './lib/schemas/federation/index.ts',
         'schemas/standard-introspection':
           './lib/schemas/standard-introspection/index.ts',
+        'schemas/client-registration':
+          './lib/schemas/client-registration/index.ts',
         utils: './lib/utils/index.ts',
       },
       name: 'au3te-ts-common',

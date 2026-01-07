@@ -14,3 +14,5 @@
  * language governing permissions and limitations under the
  * License.
  */
+export * from './ClientRegistrationRequest';
+export * from './ClientRegistrationResponse';
