@@ -68,7 +68,7 @@ describe('authzDetailsSchema', () => {
   });
 
   it('should infer the correct output type', () => {
-    type SchemaType = typeof authzDetailsSchema._type;
+    type SchemaType = ReturnType<typeof authzDetailsSchema.parse>;
     type ExpectedType = AuthzDetails;
 
     const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;

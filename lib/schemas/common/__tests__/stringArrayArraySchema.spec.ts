@@ -74,7 +74,7 @@ describe('StringArrayArraySchema', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof stringArrayArraySchema._type;
+      type SchemaType = ReturnType<typeof stringArrayArraySchema.parse>;
       type ExpectedType = StringArrayArray;
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;

@@ -128,7 +128,7 @@ describe('OidcServerConfig', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof oidcServerConfigSchema._type;
+      type SchemaType = ReturnType<typeof oidcServerConfigSchema.parse>;
       type ExpectedType = OidcServerConfig;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

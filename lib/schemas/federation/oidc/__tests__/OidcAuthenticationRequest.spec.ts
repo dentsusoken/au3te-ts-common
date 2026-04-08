@@ -178,7 +178,7 @@ describe('OidcAuthenticationRequest', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof oidcAuthenticationRequestSchema._type;
+      type SchemaType = ReturnType<typeof oidcAuthenticationRequestSchema.parse>;
       type ExpectedType = OidcAuthenticationRequest;
 
       const assertTypeCompatibility = (

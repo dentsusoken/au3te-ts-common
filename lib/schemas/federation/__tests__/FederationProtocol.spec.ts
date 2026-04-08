@@ -39,7 +39,7 @@ describe('FederationProtocol', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof federationProtocolSchema._type;
+      type SchemaType = ReturnType<typeof federationProtocolSchema.parse>;
       type ExpectedType = FederationProtocol;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

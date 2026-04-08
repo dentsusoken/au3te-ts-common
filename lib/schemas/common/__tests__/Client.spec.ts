@@ -144,7 +144,7 @@ describe('clientSchema', () => {
   });
 
   it('should infer the correct output type', () => {
-    type SchemaType = typeof clientSchema._type;
+    type SchemaType = ReturnType<typeof clientSchema.parse>;
     type ExpectedType = Client;
 
     const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;

@@ -103,7 +103,7 @@ describe('OidcCallbackParams', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof oidcCallbackParamsSchema._type;
+      type SchemaType = ReturnType<typeof oidcCallbackParamsSchema.parse>;
       type ExpectedType = OidcCallbackParams;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

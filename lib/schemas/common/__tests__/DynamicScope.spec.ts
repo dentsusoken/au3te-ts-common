@@ -80,7 +80,7 @@ describe('dynamicScopeSchema', () => {
   });
 
   it('should infer the correct output type', () => {
-    type SchemaType = typeof dynamicScopeSchema._type;
+    type SchemaType = ReturnType<typeof dynamicScopeSchema.parse>;
     type ExpectedType = DynamicScope;
 
     const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;

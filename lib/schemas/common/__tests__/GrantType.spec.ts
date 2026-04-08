@@ -87,7 +87,7 @@ describe('GrantType', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof grantTypeSchema._type;
+      type SchemaType = ReturnType<typeof grantTypeSchema.parse>;
       type ExpectedType = GrantType;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

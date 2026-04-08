@@ -246,7 +246,7 @@ describe('TokenCreateRequest', () => {
       if (!result.success) {
         expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['grantType']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -518,9 +518,9 @@ describe('TokenCreateRequest', () => {
       if (!result.success) {
         expect(result.error.issues).toHaveLength(2); // Both URLs are invalid
         expect(result.error.issues[0].path).toEqual(['resources', 0]);
-        expect(result.error.issues[0].code).toBe('invalid_string');
+        expect(result.error.issues[0].code).toBe('invalid_format');
         expect(result.error.issues[1].path).toEqual(['resources', 1]);
-        expect(result.error.issues[1].code).toBe('invalid_string');
+        expect(result.error.issues[1].code).toBe('invalid_format');
       }
     });
 

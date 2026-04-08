@@ -87,7 +87,7 @@ describe('Pair', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof pairSchema._type;
+      type SchemaType = ReturnType<typeof pairSchema.parse>;
       type ExpectedType = Pair;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

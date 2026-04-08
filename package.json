@@ -207,6 +207,6 @@
   "peerDependencies": {
     "@vecrea/oid4vc-core": "^0.1.0",
     "u8a-utils": "^1.0.12",
-    "zod": "^3.23.8"
+    "zod": "^4.3.6"
   }
 }

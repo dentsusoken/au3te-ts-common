@@ -149,7 +149,7 @@ describe('Scope', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof scopeSchema._type;
+      type SchemaType = ReturnType<typeof scopeSchema.parse>;
       type ExpectedType = Scope;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

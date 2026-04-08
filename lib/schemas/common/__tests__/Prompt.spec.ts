@@ -75,7 +75,7 @@ describe('Prompt', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof promptSchema._type;
+      type SchemaType = ReturnType<typeof promptSchema.parse>;
       type ExpectedType = Prompt;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

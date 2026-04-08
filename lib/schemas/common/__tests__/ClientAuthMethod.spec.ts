@@ -76,7 +76,7 @@ describe('clientAuthMethodSchema', () => {
   });
 
   it('should infer the correct output type', () => {
-    type SchemaType = typeof clientAuthMethodSchema._type;
+    type SchemaType = ReturnType<typeof clientAuthMethodSchema.parse>;
     type ExpectedType = ClientAuthMethod;
 
     const assertTypeCompatibility = (value: SchemaType): ExpectedType => value;

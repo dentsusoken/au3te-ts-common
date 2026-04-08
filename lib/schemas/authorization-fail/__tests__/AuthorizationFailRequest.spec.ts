@@ -63,7 +63,7 @@ describe('authorizationFailRequestSchema', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['reason']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -75,7 +75,7 @@ describe('authorizationFailRequestSchema', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['reason']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -87,7 +87,7 @@ describe('authorizationFailRequestSchema', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['reason']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 

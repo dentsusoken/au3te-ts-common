@@ -68,7 +68,7 @@ describe('Service', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof serviceSchema._type;
+      type SchemaType = ReturnType<typeof serviceSchema.parse>;
       type ExpectedType = Service;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

@@ -230,7 +230,7 @@ describe('TokenCreateResponse', () => {
       if (!result.success) {
         expect(result.error.issues).toHaveLength(1);
         expect(result.error.issues[0].path).toEqual(['action']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 

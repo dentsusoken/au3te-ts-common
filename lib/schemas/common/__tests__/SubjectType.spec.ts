@@ -55,7 +55,7 @@ describe('SubjectType and related schemas', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof subjectTypeSchema._type;
+      type SchemaType = ReturnType<typeof subjectTypeSchema.parse>;
       type ExpectedType = string;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

@@ -323,7 +323,7 @@ describe('TokenInfo', () => {
 
   describe('type inference and compatibility', () => {
     it('should infer the correct output type', () => {
-      type SchemaType = typeof tokenInfoSchema._type;
+      type SchemaType = ReturnType<typeof tokenInfoSchema.parse>;
       type ExpectedType = TokenInfo;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

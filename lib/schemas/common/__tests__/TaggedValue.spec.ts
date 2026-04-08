@@ -87,7 +87,7 @@ describe('TaggedValue', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof taggedValueSchema._type;
+      type SchemaType = ReturnType<typeof taggedValueSchema.parse>;
       type ExpectedType = TaggedValue;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

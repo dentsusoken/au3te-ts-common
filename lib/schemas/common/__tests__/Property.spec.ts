@@ -113,7 +113,7 @@ describe('Property', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof propertySchema._type;
+      type SchemaType = ReturnType<typeof propertySchema.parse>;
       type ExpectedType = Property;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

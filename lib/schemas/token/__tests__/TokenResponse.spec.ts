@@ -231,7 +231,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['action']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -245,7 +245,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['action']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -455,7 +455,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['clientEntityId']);
-        expect(result.error.issues[0].code).toBe('invalid_string');
+        expect(result.error.issues[0].code).toBe('invalid_format');
       }
     });
 
@@ -539,7 +539,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['clientAuthMethod']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -553,7 +553,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['resources', 0]);
-        expect(result.error.issues[0].code).toBe('invalid_string');
+        expect(result.error.issues[0].code).toBe('invalid_format');
       }
     });
 
@@ -570,7 +570,7 @@ describe('TokenResponse', () => {
           'accessTokenResources',
           0,
         ]);
-        expect(result.error.issues[0].code).toBe('invalid_string');
+        expect(result.error.issues[0].code).toBe('invalid_format');
       }
     });
 
@@ -654,7 +654,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['requestedTokenType']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -682,7 +682,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['subjectTokenType']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 
@@ -710,7 +710,7 @@ describe('TokenResponse', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['actorTokenType']);
-        expect(result.error.issues[0].code).toBe('invalid_enum_value');
+        expect(result.error.issues[0].code).toBe('invalid_value');
       }
     });
 

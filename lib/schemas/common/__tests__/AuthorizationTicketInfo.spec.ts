@@ -57,7 +57,7 @@ describe('Authorization Ticket Info Schemas and Types', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof authorizationTicketInfoSchema._type;
+      type SchemaType = ReturnType<typeof authorizationTicketInfoSchema.parse>;
       type ExpectedType = AuthorizationTicketInfo;
 
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>

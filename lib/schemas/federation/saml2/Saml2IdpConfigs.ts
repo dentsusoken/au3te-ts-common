@@ -42,7 +42,7 @@ export const saml2IdpConfigSchemas = z.object({
   /**
    * Function to generate unique IDs for SAML messages.
    */
-  generateID: z.function().returns(z.string()),
+  generateID: z.function().output(z.string()),
   /**
    * Entity ID of the IdP.
    */

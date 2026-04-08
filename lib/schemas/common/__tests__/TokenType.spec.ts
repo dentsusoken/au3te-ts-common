@@ -86,7 +86,7 @@ describe('TokenType', () => {
     });
 
     it('should infer the correct output type', () => {
-      type SchemaType = typeof tokenTypeSchema._type;
+      type SchemaType = ReturnType<typeof tokenTypeSchema.parse>;
       type ExpectedType = TokenType;
       const assertTypeCompatibility = (value: SchemaType): ExpectedType =>
         value;
