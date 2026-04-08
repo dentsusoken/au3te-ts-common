@@ -198,7 +198,7 @@
     "prepublishOnly": "npm test && npm run build"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^25.5.0",
     "typescript": "^5.3.3",
     "vite": "^7.2.6",
     "vite-plugin-dts": "^4.5.4",
